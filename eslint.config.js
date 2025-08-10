@@ -1,24 +1,52 @@
-import js from '@eslint/js';
 import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
-import { globalIgnores } from 'eslint/config';
+import { FlatCompat } from '@eslint/eslintrc';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-export default tseslint.config([
-  globalIgnores(['dist']),
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  resolvePluginsRelativeTo: __dirname,
+});
+
+export default [
+  { ignores: ['dist'] },
+
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-      'prettier',
-    ],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: globals.browser,
     },
   },
-]);
+
+  ...compat.extends('airbnb', 'airbnb/hooks', 'airbnb-typescript'),
+
+  reactRefresh.configs.vite,
+
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
+      },
+    },
+    settings: {
+      'import/resolver': { typescript: { project: ['./tsconfig.json'] } },
+      react: { version: 'detect' },
+    },
+    rules: {
+      'import/no-relative-parent-imports': 'error',
+      'prefer-destructuring': ['error', { object: true, array: true }],
+      'no-restricted-syntax': [
+        'error',
+        { selector: 'ForInStatement', message: 'for..in 금지' },
+        { selector: 'LabeledStatement', message: 'label 금지' },
+        { selector: 'WithStatement', message: 'with 금지' },
+      ],
+      'arrow-body-style': 'off',
+    },
+  },
+];
