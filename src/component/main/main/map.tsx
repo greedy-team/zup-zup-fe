@@ -1,9 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useKakaoLoader } from '../../../hooks/main/useKakaoLoader';
 
-const KakaoMap = () => {
+type Props = {
+  setSelectedLat: (lat: number | null) => void;
+  setSelectedLng: (lng: number | null) => void;
+  setSelectedArea: (area: string) => void;
+  selectedArea: string;
+};
+
+const KakaoMap = ({ setSelectedLat, setSelectedLng, setSelectedArea, selectedArea }: Props) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [selectedPolygon, setSelectedPolygon] = useState<string>('');
+  const markerRef = useRef<any>(null);
+  const clickedOverlayRef = useRef(false);
+
   const loaded = useKakaoLoader();
 
   useEffect(() => {
@@ -12,8 +21,21 @@ const KakaoMap = () => {
     const kakao = window.kakao;
     const map = new kakao.maps.Map(mapRef.current, {
       center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
-      level: 3,
+      level: 2,
     });
+
+    const place = (latlng: kakao.maps.LatLng) => {
+      const lat = latlng.getLat();
+      const lng = latlng.getLng();
+      if (!markerRef.current) {
+        markerRef.current = new kakao.maps.Marker({ position: latlng });
+        markerRef.current.setMap(map);
+      } else {
+        markerRef.current.setPosition(latlng);
+      }
+      setSelectedLat(lat);
+      setSelectedLng(lng);
+    };
 
     const studentCenterPolygonPath = [
       new kakao.maps.LatLng(37.54931182018081, 127.07481842704466),
@@ -80,47 +102,70 @@ const KakaoMap = () => {
       fillOpacity: 0.7,
     };
 
-    kakao.maps.event.addListener(studentCenterPolygon, 'mouseover', () => {
-      studentCenterPolygon.setOptions(mouseoverOption);
-    });
+    const onStudentOver = () => studentCenterPolygon.setOptions(mouseoverOption);
+    const onStudentOut = () => studentCenterPolygon.setOptions(mouseoutOption);
+    const onLibraryOver = () => libraryPolygon.setOptions(mouseoverOption);
+    const onLibraryOut = () => libraryPolygon.setOptions(mouseoutOption);
+    const onAiOver = () => aiCenterPolygon.setOptions(mouseoverOption);
+    const onAiOut = () => aiCenterPolygon.setOptions(mouseoutOption);
 
-    kakao.maps.event.addListener(studentCenterPolygon, 'mouseout', () => {
-      studentCenterPolygon.setOptions(mouseoutOption);
-    });
+    kakao.maps.event.addListener(studentCenterPolygon, 'mouseover', onStudentOver);
+    kakao.maps.event.addListener(studentCenterPolygon, 'mouseout', onStudentOut);
+    kakao.maps.event.addListener(libraryPolygon, 'mouseover', onLibraryOver);
+    kakao.maps.event.addListener(libraryPolygon, 'mouseout', onLibraryOut);
+    kakao.maps.event.addListener(aiCenterPolygon, 'mouseover', onAiOver);
+    kakao.maps.event.addListener(aiCenterPolygon, 'mouseout', onAiOut);
 
-    kakao.maps.event.addListener(studentCenterPolygon, 'mousedown', () => {
-      setSelectedPolygon('studentCenter');
-    });
+    const onMapClick = (e: any) => {
+      if (clickedOverlayRef.current) {
+        clickedOverlayRef.current = false;
+        return;
+      }
+      place(e.latLng);
+      setSelectedArea('전체');
+    };
+    const onStudentClick = (e: any) => {
+      clickedOverlayRef.current = true;
+      setSelectedArea('학생회관');
+      place(e.latLng);
+    };
+    const onLibraryClick = (e: any) => {
+      clickedOverlayRef.current = true;
+      setSelectedArea('학술정보원');
+      place(e.latLng);
+    };
+    const onAiClick = (e: any) => {
+      clickedOverlayRef.current = true;
+      setSelectedArea('대양ai센터');
+      place(e.latLng);
+    };
 
-    kakao.maps.event.addListener(libraryPolygon, 'mousedown', () => {
-      setSelectedPolygon('library');
-    });
+    kakao.maps.event.addListener(map, 'click', onMapClick);
+    kakao.maps.event.addListener(studentCenterPolygon, 'click', onStudentClick);
+    kakao.maps.event.addListener(libraryPolygon, 'click', onLibraryClick);
+    kakao.maps.event.addListener(aiCenterPolygon, 'click', onAiClick);
 
-    kakao.maps.event.addListener(libraryPolygon, 'mouseover', () => {
-      libraryPolygon.setOptions(mouseoverOption);
-    });
+    return () => {
+      kakao.maps.event.removeListener(map, 'click', onMapClick);
+      kakao.maps.event.removeListener(studentCenterPolygon, 'click', onStudentClick);
+      kakao.maps.event.removeListener(libraryPolygon, 'click', onLibraryClick);
+      kakao.maps.event.removeListener(aiCenterPolygon, 'click', onAiClick);
 
-    kakao.maps.event.addListener(libraryPolygon, 'mouseout', () => {
-      libraryPolygon.setOptions(mouseoutOption);
-    });
-
-    kakao.maps.event.addListener(aiCenterPolygon, 'mousedown', () => {
-      setSelectedPolygon('aiCenter');
-    });
-
-    kakao.maps.event.addListener(aiCenterPolygon, 'mouseover', () => {
-      aiCenterPolygon.setOptions(mouseoverOption);
-    });
-
-    kakao.maps.event.addListener(aiCenterPolygon, 'mouseout', () => {
-      aiCenterPolygon.setOptions(mouseoutOption);
-    });
-  }, [loaded]);
+      kakao.maps.event.removeListener(studentCenterPolygon, 'mouseover', onStudentOver);
+      kakao.maps.event.removeListener(studentCenterPolygon, 'mouseout', onStudentOut);
+      kakao.maps.event.removeListener(libraryPolygon, 'mouseover', onLibraryOver);
+      kakao.maps.event.removeListener(libraryPolygon, 'mouseout', onLibraryOut);
+      kakao.maps.event.removeListener(aiCenterPolygon, 'mouseover', onAiOver);
+      kakao.maps.event.removeListener(aiCenterPolygon, 'mouseout', onAiOut);
+    };
+  }, [loaded, setSelectedLat, setSelectedLng]);
 
   return (
     <div>
-      <div ref={mapRef} style={{ width: '100%', height: '70vh', marginBottom: '12px' }} />
-      <div>클릭 {selectedPolygon}</div>
+      <div ref={mapRef} className="absolute inset-0" />
+      <div className="absolute left-3 bottom-3 z-10 rounded-md bg-white/90 px-3 py-2 text-sm shadow">
+        선택: {selectedArea || '전체'}
+      </div>
     </div>
   );
 };
