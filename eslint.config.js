@@ -1,8 +1,5 @@
-import js from '@eslint/js';
 import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,22 +13,29 @@ const compat = new FlatCompat({
 export default [
   { ignores: ['dist'] },
 
+  {
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.browser,
+    },
+  },
+
   ...compat.extends('airbnb', 'airbnb/hooks', 'airbnb-typescript'),
 
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  reactHooks.configs['recommended-latest'],
   reactRefresh.configs.vite,
 
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: { project: './tsconfig.json' },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
+      },
     },
     settings: {
       'import/resolver': { typescript: { project: ['./tsconfig.json'] } },
+      react: { version: 'detect' },
     },
     rules: {
       'import/no-relative-parent-imports': 'error',
