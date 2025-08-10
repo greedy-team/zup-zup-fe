@@ -19,7 +19,7 @@ export function seedLostItems() {
       ],
       description: '투명 케이스, 후면 스티커',
       foundDate: '2025-08-08T09:00:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1001.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/d5/8d/89/d58d8968d81b7a5e1ee07e70dbeeda4f.jpg',
     },
     {
       lostItemId: 1002,
@@ -35,7 +35,7 @@ export function seedLostItems() {
         { featureId: 3, optionId: 20 },
       ],
       foundDate: '2025-08-07T11:30:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1002.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/f6/bd/39/f6bd39ed30f641d742e850cd0d15f02a.jpg',
     },
     {
       lostItemId: 1003,
@@ -52,7 +52,7 @@ export function seedLostItems() {
       ],
       description: '이니셜 있음',
       foundDate: '2025-08-09T10:00:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1003.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/af/26/73/af2673d55d077878940b874b9ea9b4e4.jpg',
     },
     {
       lostItemId: 1004,
@@ -68,7 +68,7 @@ export function seedLostItems() {
         { featureId: 5, optionId: 41 },
       ],
       foundDate: '2025-08-06T13:20:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1004.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/46/1b/48/461b48b53e2fe95a6ca4e03beda75ad6.jpg',
     },
     {
       lostItemId: 1005,
@@ -84,7 +84,7 @@ export function seedLostItems() {
         { featureId: 7, optionId: 61 },
       ],
       foundDate: '2025-08-08T15:45:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1005.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/ab/78/94/ab7894293dc0ed98caac14ad387e4059.jpg',
     },
     {
       lostItemId: 1006,
@@ -101,7 +101,7 @@ export function seedLostItems() {
         { featureId: 1, optionId: 3 },
       ],
       foundDate: '2025-08-10T09:10:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1006.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/3b/45/d7/3b45d7e56c16934a544c654bfdb79f49.jpg',
     },
     {
       lostItemId: 1007,
@@ -117,7 +117,7 @@ export function seedLostItems() {
         { featureId: 3, optionId: 22 },
       ],
       foundDate: '2025-08-05T16:00:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1007.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/0a/ae/74/0aae74c012a6f97643b2065d11b65000.jpg',
     },
     {
       lostItemId: 1008,
@@ -133,7 +133,7 @@ export function seedLostItems() {
         { featureId: 2, optionId: 10 },
       ],
       foundDate: '2025-08-08T18:20:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1008.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/42/a5/76/42a5761c2efb4910e30817b1059a68c7.jpg',
     },
     {
       lostItemId: 1009,
@@ -149,7 +149,7 @@ export function seedLostItems() {
         { featureId: 5, optionId: 40 },
       ],
       foundDate: '2025-08-07T12:05:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1009.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/9f/28/8f/9f288fe6b2532411d5fdf27a00416870.jpg',
     },
     {
       lostItemId: 1010,
@@ -165,7 +165,7 @@ export function seedLostItems() {
         { featureId: 4, optionId: 30 },
       ],
       foundDate: '2025-08-06T09:40:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1010.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/7d/52/ee/7d52ee7d38f7880a7c5fef57c447e517.jpg',
     },
     {
       lostItemId: 1011,
@@ -181,7 +181,7 @@ export function seedLostItems() {
         { featureId: 7, optionId: 60 },
       ],
       foundDate: '2025-08-05T11:25:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1011.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/4c/cd/bd/4ccdbdf694dc9ca00673a4a234faee78.jpg',
     },
     {
       lostItemId: 1012,
@@ -198,7 +198,7 @@ export function seedLostItems() {
         { featureId: 1, optionId: 4 },
       ],
       foundDate: '2025-08-09T19:30:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1012.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/29/89/0c/29890c52f06c86957a4cac977f669144.jpg',
     },
     {
       lostItemId: 1013,
@@ -214,7 +214,7 @@ export function seedLostItems() {
         { featureId: 3, optionId: 24 },
       ],
       foundDate: '2025-08-08T13:00:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1013.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/2d/97/cb/2d97cbc6b817bcfb652ea3b7adf29b17.jpg',
     },
     {
       lostItemId: 1014,
@@ -230,7 +230,7 @@ export function seedLostItems() {
         { featureId: 2, optionId: 12 },
       ],
       foundDate: '2025-08-06T17:10:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1014.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/46/42/7f/46427f1ffaf86221455e76b3f156ca12.jpg',
     },
     {
       lostItemId: 1015,
@@ -246,7 +246,7 @@ export function seedLostItems() {
         { featureId: 5, optionId: 42 },
       ],
       foundDate: '2025-08-10T08:20:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1015.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/1a/46/8b/1a468bc8266de62daafaef7beacdfe7b.jpg',
     },
     {
       lostItemId: 1016,
@@ -262,7 +262,7 @@ export function seedLostItems() {
         { featureId: 4, optionId: 32 },
       ],
       foundDate: '2025-08-05T09:55:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1016.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/f3/cc/f1/f3ccf18626b21341320f057cb69fbd73.jpg',
     },
     {
       lostItemId: 1017,
@@ -278,7 +278,7 @@ export function seedLostItems() {
         { featureId: 7, optionId: 62 },
       ],
       foundDate: '2025-08-07T20:10:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1017.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/9e/46/b5/9e46b599ab31571e31971f154cf4c9d4.jpg',
     },
     {
       lostItemId: 1018,
@@ -295,7 +295,7 @@ export function seedLostItems() {
         { featureId: 1, optionId: 3 },
       ],
       foundDate: '2025-08-09T08:40:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1018.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/24/0a/24/240a248c42941abedd57e6f4067cb379.jpg',
     },
     {
       lostItemId: 1019,
@@ -311,7 +311,7 @@ export function seedLostItems() {
         { featureId: 3, optionId: 21 },
       ],
       foundDate: '2025-08-08T21:25:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1019.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/a6/60/8c/a6608cd4dda9481a010b1c95fda1856f.jpg',
     },
     {
       lostItemId: 1020,
@@ -322,9 +322,9 @@ export function seedLostItems() {
       foundAreaName: '학술정보원',
       detailLocation: '정문',
       storageName: '세종대 학생회관 1층',
-      description: '파손 없음',
+      description: '회색 후드 집업',
       foundDate: '2025-08-10T12:00:00Z',
-      imageUrl: 'https://cdn.example.com/images/lost-items/1020.jpg',
+      imageUrl: 'https://i.pinimg.com/736x/b8/1d/d2/b81dd239483278aee5f6ee4309400da1.jpg',
     },
   ];
 
