@@ -3,13 +3,13 @@ import ListItem, { type LostItem } from './lostListItem';
 type Props = {
   items: LostItem[];
   selectedCategory: string;
-  area?: string | null;
+  selectedArea?: string | null;
 };
 
 const normKo = (s?: string | null) => (s ?? '').normalize('NFC').trim();
 
-export default function List({ items, selectedCategory, area }: Props) {
-  const areaNorm = normKo(area);
+export default function LostList({ items, selectedCategory, selectedArea }: Props) {
+  const areaNorm = normKo(selectedArea);
   const areaApplied = !!areaNorm && areaNorm !== '전체';
   const categoryApplied = selectedCategory !== '전체';
 
@@ -25,13 +25,13 @@ export default function List({ items, selectedCategory, area }: Props) {
   const totalCount = items.length;
   const areaCount = areaApplied ? items.filter(matchArea).length : totalCount;
 
-  const data = items
+  const filteredLostItems = items
     .filter(matchCategory)
     .filter(matchArea)
     .slice()
     .sort((a, b) => +new Date(b.foundDate) - +new Date(a.foundDate));
 
-  const empty = data.length === 0;
+  const empty = filteredLostItems.length === 0;
 
   if (empty) {
     let message = '';
@@ -55,10 +55,10 @@ export default function List({ items, selectedCategory, area }: Props) {
   return (
     <div className="px-4 py-4">
       <h2 className="text-sm font-semibold text-emerald-700 mb-2">분실물 목록</h2>
-      <div className="text-xs text-gray-500 mb-3">{data.length}개 항목</div>
+      <div className="text-xs text-gray-500 mb-3">{filteredLostItems.length}개 항목</div>
 
       <ul className="space-y-3 pb-6">
-        {data.map((item) => (
+        {filteredLostItems.map((item) => (
           <ListItem key={item.lostItemId} item={item} />
         ))}
       </ul>

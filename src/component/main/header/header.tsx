@@ -14,7 +14,7 @@ const Header = ({ categories, selectedCategory, onChangeCategory }: Props) => {
           <div className="size-10 rounded bg-emerald-600 grid place-items-center">
             <img src="/logo.png" alt="logo" className="size-7 object-contain" />
           </div>
-          <span className="text-[30px] font-bold text-black">줍줍</span>
+          <h1 className="text-[30px] font-bold text-black">줍줍</h1>
         </div>
 
         <div className="flex items-center gap-2">
@@ -30,24 +30,24 @@ const Header = ({ categories, selectedCategory, onChangeCategory }: Props) => {
       <fieldset className="bg-white px-4 py-3 overflow-x-auto border-0">
         <legend className="sr-only">카테고리 선택</legend>
         <div className="flex gap-2 min-w-max">
-          {categories.map((c) => {
-            const id = `category-${c}`;
+          {categories.map((category) => {
+            const id = category;
             return (
-              <div key={c}>
+              <div key={category}>
                 <input
                   type="radio"
                   id={id}
                   name="category"
-                  value={c}
-                  checked={c === selectedCategory}
-                  onChange={() => onChangeCategory(c)}
+                  value={category}
+                  checked={category === selectedCategory}
+                  onChange={() => onChangeCategory(category)}
                   className="hidden peer"
                 />
                 <label
                   htmlFor={id}
                   className="px-3 py-1.5 rounded-full text-sm border border-black/20 cursor-pointer peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-black/20 hover:bg-emerald-50 peer-checked:hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 >
-                  {c}
+                  {category}
                 </label>
               </div>
             );

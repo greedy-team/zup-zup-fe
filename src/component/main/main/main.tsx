@@ -1,4 +1,4 @@
-import List from './lostList';
+import LostList from './lostList';
 import Map from './map';
 import type { Category } from '../../../types/main/category';
 import type { LostItem } from './lostListItem';
@@ -32,7 +32,7 @@ const Main = ({
     <main className="flex-1 min-h-0">
       <div className="h-full min-h-0 grid grid-cols-[360px_1fr]">
         <aside className="h-full overflow-y-auto border-r">
-          <List items={items} selectedCategory={selectedCategory} area={selectedArea} />
+          <LostList items={items} selectedCategory={selectedCategory} selectedArea={selectedArea} />
         </aside>
         <section className="relative h-full min-h-0">
           <Map
