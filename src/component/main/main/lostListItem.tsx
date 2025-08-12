@@ -59,11 +59,13 @@ export default function ListItem({ item, className = '' }: Props) {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium truncate">{item.categoryName}</span>
+            <span className="text-sm font-medium truncate" title={item.categoryName}>
+              {item.categoryName}
+            </span>
             <StatusBadge status={item.status} />
           </div>
 
-          <div className="text-xs text-gray-500 mt-1 truncate">
+          <div className="text-xs text-gray-500 mt-1 truncate" title={item.foundLocation}>
             {item.foundLocation} · {formatKST(item.foundDate)}
           </div>
 
