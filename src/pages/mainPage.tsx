@@ -48,19 +48,17 @@ const MainPage = () => {
     <>
       <div className="h-screen flex flex-col">
         <Header categories={CATEGORIES} category={category} onChangeCategory={setCategory} />
-        <div className="flex-1 min-h-0">
-          <Main
-            category={category}
-            items={items}
-            selectedLat={selectedLat}
-            setSelectedLat={setSelectedLat}
-            selectedLng={selectedLng}
-            setSelectedLng={setSelectedLng}
-            setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
-            setSelectedArea={setSelectedArea}
-            selectedArea={selectedArea}
-          />
-        </div>
+        <Main
+          category={category}
+          items={items}
+          selectedLat={selectedLat}
+          setSelectedLat={setSelectedLat}
+          selectedLng={selectedLng}
+          setSelectedLng={setSelectedLng}
+          setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
+          setSelectedArea={setSelectedArea}
+          selectedArea={selectedArea}
+        />
       </div>
       <RegisterConfirmModal
         isOpen={isRegisterConfirmModalOpen}

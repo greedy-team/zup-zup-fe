@@ -27,29 +27,33 @@ const Header = ({ categories, category, onChangeCategory }: Props) => {
         </div>
       </div>
 
-      <div role="radiogroup" className="bg-white px-4 py-3 overflow-x-auto">
+      <fieldset className="bg-white px-4 py-3 overflow-x-auto border-0">
+        <legend className="sr-only">카테고리 선택</legend>
         <div className="flex gap-2 min-w-max">
           {categories.map((c) => {
-            const selected = c === category;
+            const id = `category-${c}`;
             return (
-              <button
-                key={c}
-                role="radio"
-                aria-checked={selected}
-                onClick={() => onChangeCategory(c)}
-                className={[
-                  'px-3 py-1.5 rounded-full text-sm border border-black/20',
-                  selected
-                    ? 'bg-emerald-600 text-white border-black/20 focus:ring-emerald-400'
-                    : 'bg-white text-emerald-700 border-black/20 hover:bg-emerald-50 focus:ring-emerald-300',
-                ].join(' ')}
-              >
-                {c}
-              </button>
+              <div key={c}>
+                <input
+                  type="radio"
+                  id={id}
+                  name="category"
+                  value={c}
+                  checked={c === category}
+                  onChange={() => onChangeCategory(c)}
+                  className="hidden peer"
+                />
+                <label
+                  htmlFor={id}
+                  className="px-3 py-1.5 rounded-full text-sm border border-black/20 cursor-pointer peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-black/20 hover:bg-emerald-50 peer-checked:hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                >
+                  {c}
+                </label>
+              </div>
             );
           })}
         </div>
-      </div>
+      </fieldset>
     </header>
   );
 };
