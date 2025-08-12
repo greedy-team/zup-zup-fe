@@ -5,5 +5,5 @@ export function getSchoolAreas(): SchoolArea[] {
 }
 
 export function getSchoolAreaById(id: number): SchoolArea | undefined {
-  return schoolAreas.find(area => area.id === id);
+  return schoolAreas.find((area) => area.id === id);
 }
