@@ -3,6 +3,7 @@ import { categoryFeatures, resetCategoryFeatures, type CategoryFeatures } from '
 const COLOR = {
   featureId: 1,
   featureText: '색상',
+  quizQuestion: '다음 중 분실물의 색상으로 가장 적절한 것은 무엇인가요?',
   options: [
     { optionId: 1, text: '빨강' },
     { optionId: 2, text: '파랑' },
@@ -16,6 +17,7 @@ const COLOR = {
 const BRAND = {
   featureId: 2,
   featureText: '브랜드',
+  quizQuestion: '이 분실물의 브랜드는 무엇인가요?',
   options: [
     { optionId: 10, text: '애플' },
     { optionId: 11, text: '삼성' },
@@ -28,6 +30,7 @@ const BRAND = {
 const BAG_TYPE = {
   featureId: 3,
   featureText: '종류',
+  quizQuestion: '이 가방의 종류는 무엇인가요?',
   options: [
     { optionId: 20, text: '백팩' },
     { optionId: 21, text: '메신저/크로스백' },
@@ -42,6 +45,7 @@ const BAG_TYPE = {
 const BANK = {
   featureId: 4,
   featureText: '은행',
+  quizQuestion: '카드의 은행사는 어디인가요?',
   options: [
     { optionId: 30, text: '국민' },
     { optionId: 31, text: '신한' },
@@ -55,6 +59,7 @@ const BANK = {
 const WALLET_TYPE = {
   featureId: 5,
   featureText: '종류',
+  quizQuestion: '이 지갑의 종류는 무엇인가요?',
   options: [
     { optionId: 40, text: '장지갑' },
     { optionId: 41, text: '반지갑' },
@@ -67,6 +72,7 @@ const WALLET_TYPE = {
 const ACC_TYPE = {
   featureId: 6,
   featureText: '종류',
+  quizQuestion: '이 악세서리의 종류는 무엇인가요?',
   options: [
     { optionId: 50, text: '팔찌' },
     { optionId: 51, text: '반지' },
@@ -79,6 +85,7 @@ const ACC_TYPE = {
 const ACC_COLOR = {
   featureId: 7,
   featureText: '색상',
+  quizQuestion: '이 악세서리의 색상은 무엇인가요?',
   options: [
     { optionId: 60, text: '골드' },
     { optionId: 61, text: '실버' },
@@ -90,10 +97,12 @@ const ACC_COLOR = {
 const DEVICE_TYPE = {
   featureId: 8,
   featureText: '종류',
+  quizQuestion: '이 기기의 종류는 무엇인가요?',
   options: [
     { optionId: 70, text: '패드' },
     { optionId: 71, text: '노트북' },
     { optionId: 72, text: '전자 음향기기' },
+    { optionId: 73, text: '기타' },
   ],
 };
 

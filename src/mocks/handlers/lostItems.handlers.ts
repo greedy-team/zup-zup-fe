@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { getSummary, getDetail } from '../selectors/lostItems.selectors'; 
+import { getSummary, getDetail } from '../selectors/lostItems.selectors';
 
 function toInt(value: string | null | undefined): number | undefined {
   if (!value) return undefined;
@@ -26,7 +26,7 @@ export const lostItemsHandlers = [
     if (page <= 0 || limit <= 0) {
       return HttpResponse.json(
         { error: 'page and limit must be positive integers' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
