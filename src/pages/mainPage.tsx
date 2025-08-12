@@ -38,7 +38,7 @@ const MOCK: LostItem[] = [
 ];
 
 const MainPage = () => {
-  const [category, setCategory] = useState<Category>('전체');
+  const [selectedCategory, setSelectedCategory] = useState<Category>('전체');
   const items: LostItem[] = MOCK;
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
@@ -47,9 +47,13 @@ const MainPage = () => {
   return (
     <>
       <div className="h-screen flex flex-col">
-        <Header categories={CATEGORIES} category={category} onChangeCategory={setCategory} />
+        <Header
+          categories={CATEGORIES}
+          selectedCategory={selectedCategory}
+          onChangeCategory={setSelectedCategory}
+        />
         <Main
-          category={category}
+          selectedCategory={selectedCategory}
           items={items}
           selectedLat={selectedLat}
           setSelectedLat={setSelectedLat}

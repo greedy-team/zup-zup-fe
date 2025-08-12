@@ -2,11 +2,11 @@ import type { Category } from '../../../types/main/category';
 
 type Props = {
   categories: Category[];
-  category: Category;
+  selectedCategory: Category;
   onChangeCategory: (c: Category) => void;
 };
 
-const Header = ({ categories, category, onChangeCategory }: Props) => {
+const Header = ({ categories, selectedCategory, onChangeCategory }: Props) => {
   return (
     <header className="shrink-0 border-b">
       <div className="bg-white text-black px-4 h-20 flex items-center justify-between">
@@ -39,7 +39,7 @@ const Header = ({ categories, category, onChangeCategory }: Props) => {
                   id={id}
                   name="category"
                   value={c}
-                  checked={c === category}
+                  checked={c === selectedCategory}
                   onChange={() => onChangeCategory(c)}
                   className="hidden peer"
                 />

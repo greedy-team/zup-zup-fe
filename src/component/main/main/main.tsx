@@ -4,7 +4,7 @@ import type { Category } from '../../../types/main/category';
 import type { LostItem } from './lostListItem';
 
 type Props = {
-  category: Category;
+  selectedCategory: Category;
   items: LostItem[];
   selectedLat: number | null;
   setSelectedLat: (lat: number | null) => void;
@@ -16,7 +16,7 @@ type Props = {
 };
 
 const Main = ({
-  category,
+  selectedCategory,
   items,
   selectedLat,
   setSelectedLat,
@@ -32,7 +32,7 @@ const Main = ({
     <main className="flex-1 min-h-0">
       <div className="h-full min-h-0 grid grid-cols-[360px_1fr]">
         <aside className="h-full overflow-y-auto border-r">
-          <List items={items} category={category} area={selectedArea} />
+          <List items={items} selectedCategory={selectedCategory} area={selectedArea} />
         </aside>
         <section className="relative h-full min-h-0">
           <Map

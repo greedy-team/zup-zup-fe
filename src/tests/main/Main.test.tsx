@@ -16,7 +16,7 @@ describe('Main submit button disabled state', () => {
   it('좌표가 없으면 버튼 비활성화', () => {
     render(
       <Main
-        category="전체"
+        selectedCategory="전체"
         items={items}
         selectedLat={null}
         selectedLng={null}
@@ -37,7 +37,7 @@ describe('Main submit button disabled state', () => {
   it('좌표가 있으면 버튼 활성화', () => {
     render(
       <Main
-        category="전체"
+        selectedCategory="전체"
         items={items}
         selectedLat={37.55}
         selectedLng={127.07}

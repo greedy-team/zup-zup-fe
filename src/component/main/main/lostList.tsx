@@ -2,19 +2,19 @@ import ListItem, { type LostItem } from './lostListItem';
 
 type Props = {
   items: LostItem[];
-  category: string;
+  selectedCategory: string;
   area?: string | null;
 };
 
 const normKo = (s?: string | null) => (s ?? '').normalize('NFC').trim();
 
-export default function List({ items, category, area }: Props) {
+export default function List({ items, selectedCategory, area }: Props) {
   const areaNorm = normKo(area);
   const areaApplied = !!areaNorm && areaNorm !== '전체';
-  const categoryApplied = category !== '전체';
+  const categoryApplied = selectedCategory !== '전체';
 
   const matchCategory = (i: LostItem) =>
-    !categoryApplied || i.categoryName === category || i.categoryId === category;
+    !categoryApplied || i.categoryName === selectedCategory || i.categoryId === selectedCategory;
 
   const matchArea = (i: LostItem) => {
     if (!areaApplied) return true;

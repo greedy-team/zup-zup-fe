@@ -27,22 +27,22 @@ const itemsBase: LostItem[] = [
 
 describe('List filtering & empty messages', () => {
   test('전체 데이터가 0개 → 전체 없음 메시지', () => {
-    render(<List items={[]} category="전체" area={null} />);
+    render(<List items={[]} selectedCategory="전체" area={null} />);
     expect(screen.getByText('현재 확인된 분실물이 존재하지 않습니다.')).toBeInTheDocument();
   });
 
   test('데이터는 있음 + area 적용했는데 해당 지역 없음 → 지역 없음 메시지', () => {
-    render(<List items={itemsBase} category="전체" area="AI센터" />);
+    render(<List items={itemsBase} selectedCategory="전체" area="AI센터" />);
     expect(screen.getByText('선택한 지역에 분실물이 존재하지 않습니다.')).toBeInTheDocument();
   });
 
   test('지역에는 존재 + 카테고리에는 없음 → 카테고리 없음 메시지', () => {
-    render(<List items={itemsBase} category="휴대폰" area="광개토관" />);
+    render(<List items={itemsBase} selectedCategory="휴대폰" area="광개토관" />);
     expect(screen.getByText('선택한 카테고리에 분실물이 존재하지 않습니다.')).toBeInTheDocument();
   });
 
   test('카테고리/지역 모두 매칭 → 리스트 렌더', () => {
-    render(<List items={itemsBase} category="가방" area="학술정보원" />);
+    render(<List items={itemsBase} selectedCategory="가방" area="학술정보원" />);
     expect(screen.getByText('분실물 목록')).toBeInTheDocument();
     expect(screen.getByText(/개 항목/)).toBeInTheDocument();
   });
