@@ -46,7 +46,7 @@ export default function LostList({ items, selectedCategory, selectedArea, onFind
 
     return (
       <div className="px-4 py-6">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-sm text-emerald-700">
+        <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-sm text-teal-700">
           {message}
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function LostList({ items, selectedCategory, selectedArea, onFind
 
   return (
     <div className="px-4 py-4">
-      <h2 className="mb-2 text-sm font-semibold text-emerald-700">분실물 목록</h2>
+      <h2 className="mb-2 text-xl font-semibold text-teal-700">분실물 목록</h2>
       <div className="mb-3 text-xs text-gray-500">{filteredLostItems.length}개 항목</div>
 
       <ul className="space-y-3 pb-6">

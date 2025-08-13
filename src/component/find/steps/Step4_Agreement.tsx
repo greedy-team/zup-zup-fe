@@ -31,13 +31,13 @@ const Step4_Agreement = ({
         저에게 있음을 확인합니다.
       </p>
       <div className="rounded-lg bg-gray-100 p-4">
-        <p className="font-semibold text-emerald-700">{PLEDGE_TEXT}</p>
+        <p className="font-semibold text-teal-700">{PLEDGE_TEXT}</p>
       </div>
       <input
         ref={agreementRef}
         type="text"
         onPaste={handlePaste}
-        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
         placeholder="상단 문구를 똑같이 입력해주세요."
       />
     </div>

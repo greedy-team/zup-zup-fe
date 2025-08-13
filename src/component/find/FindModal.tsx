@@ -86,7 +86,7 @@ const FindModal = ({ item, onClose }: Props) => {
         <div className="mt-8">
           <button
             onClick={handleNextStep}
-            className="w-full rounded-lg bg-emerald-600 py-3 text-base font-bold text-white transition hover:bg-emerald-700"
+            className="w-full rounded-lg bg-teal-500 py-3 text-base font-bold text-white transition hover:bg-teal-600"
           >
             {getButtonText()}
           </button>

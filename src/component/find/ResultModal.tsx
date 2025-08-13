@@ -6,7 +6,7 @@ import type { ResultModalProps } from '../../types/find/index';
 const ICONS = {
   success: { component: <CheckIcon />, bg: 'bg-green-500' },
   error: { component: <WrongIcon />, bg: 'bg-red-500' },
-  info: { component: <InfoIcon />, bg: 'bg-emerald-500' },
+  info: { component: <InfoIcon />, bg: 'bg-teal-500' },
 };
 
 const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultModalProps) => {
@@ -25,7 +25,7 @@ const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultMo
         <p className="mt-2 text-gray-600">{message}</p>
         <button
           onClick={onConfirm}
-          className="mt-8 w-full rounded-lg bg-emerald-600 py-3 text-base font-bold text-white transition hover:bg-emerald-700"
+          className="mt-8 w-full rounded-lg bg-teal-600 py-3 text-base font-bold text-white transition hover:bg-teal-700"
         >
           {buttonText}
         </button>

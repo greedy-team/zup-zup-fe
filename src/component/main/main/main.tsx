@@ -66,7 +66,7 @@ const Main = ({
           />
           <button
             disabled={!canSubmit}
-            className="absolute right-5 bottom-5 z-10 rounded-full bg-emerald-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+            className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-700 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             onClick={() => {
               setIsRegisterConfirmModalOpen(true);
             }}

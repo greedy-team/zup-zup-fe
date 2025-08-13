@@ -19,7 +19,7 @@ const Step2_Quiz = ({ quiz, selectedChoiceId, onSelect }: Props) => {
             key={choice.id}
             className={`block cursor-pointer rounded-lg border-2 p-4 transition-all ${
               selectedChoiceId === choice.id
-                ? 'border-emerald-600 bg-emerald-50'
+                ? 'border-teal-600 bg-teal-50'
                 : 'border-gray-200 hover:border-gray-400'
             }`}
           >
