@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import ProgressBar from '../../component/find/ProgressBar';
+import ProgressBar from '../../component/common/ProgressBar';
 
 const mockSteps = ['물건 정보', '인증 퀴즈', '약관 동의'];
 

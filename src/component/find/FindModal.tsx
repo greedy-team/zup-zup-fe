@@ -2,13 +2,13 @@ import type { LostItem } from '../main/main/lostListItem';
 import { useFindProcess } from '../../hooks/find/useFindProcess';
 import { FIND_PROCESS_STEPS } from '../../constants/find';
 
-import ResultModal from './ResultModal';
-import ProgressBar from './ProgressBar';
+import ResultModal from '../common/ResultModal';
+import ProgressBar from '../common/ProgressBar';
 import Step1_ItemInfo from './steps/Step1_ItemInfo';
 import Step2_Quiz from './steps/Step2_Quiz';
 import Step4_Agreement from './steps/Step4_Agreement';
-import CloseIcon from './Icons/CloseIcon';
-import SpinnerIcon from './Icons/SpinnerIcon';
+import CloseIcon from '../common/Icons/CloseIcon';
+import SpinnerIcon from '../common/Icons/SpinnerIcon';
 import Step3_DetailInfo from './steps/Step3_DetailInfo';
 
 type Props = {

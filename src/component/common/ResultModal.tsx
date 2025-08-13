@@ -1,6 +1,6 @@
-import InfoIcon from './Icons/InfoIcon';
-import CheckIcon from './Icons/CheckIcon';
-import WrongIcon from './Icons/WrongIcon';
+import InfoIcon from '../common/Icons/InfoIcon';
+import CheckIcon from '../common/Icons/CheckIcon';
+import WrongIcon from '../common/Icons/WrongIcon';
 import type { ResultModalProps } from '../../types/find/index';
 
 const ICONS = {

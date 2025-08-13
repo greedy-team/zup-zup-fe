@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import ResultModal from '../../component/find/ResultModal';
+import ResultModal from '../../component/common/ResultModal';
 import type { ResultModalProps } from '../../types/find';
 
 describe('ResultModal 컴포넌트 테스트', () => {
