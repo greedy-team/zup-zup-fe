@@ -11,12 +11,12 @@ const categoryIcons: Record<number, string> = {
 };
 
 export function getLostItemById(id: number): LostItem | undefined {
-  return lostItems.find(li => li.lostItemId === id);
+  return lostItems.find((li) => li.lostItemId === id);
 }
 
 export function getSummary(categoryId?: number): { schoolAreaId: number; count: number }[] {
   const filtered = lostItems.filter(
-    li => li.status === 'registered' && (!categoryId || li.categoryId === categoryId),
+    (li) => li.status === 'registered' && (!categoryId || li.categoryId === categoryId),
   );
   const map = new Map<number, number>();
   for (const li of filtered) map.set(li.schoolAreaId, (map.get(li.schoolAreaId) ?? 0) + 1);
@@ -47,10 +47,9 @@ export function getDetail(params: {
   if (categoryId) list = list.filter((li) => li.categoryId === categoryId);
   if (schoolAreaId) list = list.filter((li) => li.schoolAreaId === schoolAreaId);
 
-  list = list.slice().sort(
-    (a, b) =>
-      new Date(b.foundDate).getTime() - new Date(a.foundDate).getTime()
-  );
+  list = list
+    .slice()
+    .sort((a, b) => new Date(b.foundDate).getTime() - new Date(a.foundDate).getTime());
 
   const total = list.length;
   const start = Math.max(0, (page - 1) * limit);
@@ -66,4 +65,17 @@ export function getDetail(params: {
   }));
 
   return { items, total };
+}
+
+export function getEtcDetail(
+  lostItemId: number,
+): { imageUrl: string; description?: string | null } | { error: 'NOT_FOUND' | 'FORBIDDEN' } {
+  const item = lostItems.find((x) => x.lostItemId === lostItemId);
+  if (!item) return { error: 'NOT_FOUND' };
+  if (item.categoryId !== 99) return { error: 'FORBIDDEN' };
+
+  return {
+    imageUrl: item.imageUrl,
+    description: item.description ?? null,
+  };
 }
