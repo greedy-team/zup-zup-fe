@@ -1,9 +1,11 @@
 import { http, HttpResponse } from 'msw';
-import { getSummary, getDetail } from '../selectors/lostItems.selectors';
+import { getSummary, getDetail, getEtcDetail } from '../selectors/lostItems.selectors';
 
-function toInt(value: string | null | undefined): number | undefined {
-  if (!value) return undefined;
-  const n = Number(value);
+function toInt(value: unknown): number | undefined {
+  const v = Array.isArray(value) ? value[0] : value;
+  if (v == null) return undefined;
+  if (typeof v !== 'string') return undefined;
+  const n = Number(v);
   return Number.isFinite(n) ? n : undefined;
 }
 
@@ -38,5 +40,20 @@ export const lostItemsHandlers = [
     });
 
     return HttpResponse.json(data);
+  }),
+  http.get('/api/lost-items/:id', ({ params }) => {
+    const id = toInt(params.id);
+    if (!id) return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
+
+    const result = getEtcDetail(id);
+
+    if ('error' in result) {
+      if (result.error === 'NOT_FOUND') {
+        return HttpResponse.json({ error: 'Not Found' }, { status: 404 });
+      }
+      return HttpResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    return HttpResponse.json(result, { status: 200 });
   }),
 ];
