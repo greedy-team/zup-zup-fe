@@ -47,43 +47,33 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
   };
 
   // 2단계: 퀴즈 제출 처리
-  const handleQuizSubmit = () => {
-    if (!selectedChoiceId) {
-      alert('정답을 선택해주세요.');
-      return;
-    }
+  const handleStep2 = () => {
+    if (!selectedChoiceId) alert('정답을 선택해주세요.');
 
     const isCorrect = selectedChoiceId === quiz?.correctChoiceId;
-
-    if (isCorrect) {
-      setResultModal({
-        isOpen: true,
-        status: 'success',
-        title: '정답 일치!',
-        message: '인증 퀴즈를 성공적으로 맞히셨습니다.',
-        buttonText: '서약 작성하기',
-        onConfirm: () => {
-          setResultModal((prev) => ({ ...prev, isOpen: false }));
-          setCurrentStep(3);
-        },
-      });
-    } else {
-      setResultModal({
-        isOpen: true,
-        status: 'error',
-        title: '오답!',
-        message: '인증 퀴즈를 풀지 못하셨습니다. 위 분실물을 더 이상 찾을 수 없습니다.',
-        buttonText: '홈으로',
-        onConfirm: () => {
-          setResultModal((prev) => ({ ...prev, isOpen: false }));
-          onClose();
-        },
-      });
-    }
+    setResultModal({
+      isOpen: true,
+      status: isCorrect ? 'success' : 'error',
+      title: isCorrect ? '정답 일치!' : '오답!',
+      message: isCorrect
+        ? '인증 퀴즈를 성공적으로 맞히셨습니다.'
+        : '인증 퀴즈를 풀지 못하셨습니다. 위 분실물을 더 이상 찾을 수 없습니다.',
+      buttonText: isCorrect ? '상세 정보 확인하기' : '홈으로',
+      onConfirm: () => {
+        setResultModal((prev) => ({ ...prev, isOpen: false }));
+        if (isCorrect) setCurrentStep(3);
+        else onClose();
+      },
+    });
   };
 
-  // 3단계: 서약 입력 처리
-  const handleAgreementSubmit = () => {
+  // 3단계: 상세 정보 조회
+  const handleStep3 = () => {
+    setCurrentStep(4);
+  };
+
+  // 4단계: 서약 입력 처리
+  const handleStep4 = () => {
     const userInput = agreementRef.current?.value.trim() || '';
     if (userInput !== PLEDGE_TEXT) {
       alert('서약 문구를 정확히 입력해주세요.');
@@ -107,9 +97,11 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
     if (currentStep === 1) {
       handleStep1();
     } else if (currentStep === 2) {
-      handleQuizSubmit();
+      handleStep2();
     } else if (currentStep === 3) {
-      handleAgreementSubmit();
+      handleStep3();
+    } else if (currentStep === 4) {
+      handleStep4();
     } else {
       handleStep1();
     }
