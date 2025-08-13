@@ -1,0 +1,47 @@
+import { type RefObject } from 'react';
+import { PLEDGE_TEXT } from '../../../constants/find';
+
+const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  e.preventDefault();
+  alert('붙여넣기는 사용할 수 없습니다.');
+};
+
+const Step3_Agreement = ({
+  agreementRef,
+}: {
+  agreementRef: RefObject<HTMLInputElement | null>;
+}) => {
+  return (
+    <div className="space-y-4 text-center">
+      <h3 className="text-lg font-bold">✨ Zupzup 성실 이용 서약 ✨ </h3>
+      <p className="text-gray-600">
+        '줍줍'은 모두가 선한 마음으로 서로를 돕는 따뜻한 캠퍼스 문화를 만들어가고자 합니다. 분실물
+        찾기 기능을 이용하기 전, 아래 내용을 확인하고 동의해주세요.
+      </p>
+      <p className="text-gray-600">하나, 저는 본인 소유의 분실물만 찾을 것을 약속합니다.</p>
+      <p className="text-gray-600">
+        둘, 분실물 주인을 확인하는 과정(퀴즈 등)에서 거짓된 정보를 입력하지 않겠습니다.
+      </p>
+      <p className="text-gray-600">
+        셋, 장난, 사기, 타인에게 피해를 주는 등 부적절한 목적으로 분실물 찾기 서비스를 절대 악용하지
+        않겠습니다.
+      </p>
+      <p className="text-gray-600">
+        넷, 위 사항을 위반하여 문제가 발생할 경우, 서비스 이용 영구 제한 등의 조치 및 모든 책임은
+        저에게 있음을 확인합니다.
+      </p>
+      <div className="rounded-lg bg-gray-100 p-4">
+        <p className="font-semibold text-emerald-700">{PLEDGE_TEXT}</p>
+      </div>
+      <input
+        ref={agreementRef}
+        type="text"
+        onPaste={handlePaste}
+        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+        placeholder="상단 문구를 똑같이 입력해주세요."
+      />
+    </div>
+  );
+};
+
+export default Step3_Agreement;
