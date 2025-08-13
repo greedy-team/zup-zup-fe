@@ -6,7 +6,7 @@ import ResultModal from './ResultModal';
 import ProgressBar from './ProgressBar';
 import Step1_ItemInfo from './steps/Step1_ItemInfo';
 import Step2_Quiz from './steps/Step2_Quiz';
-import Step3_Agreement from './steps/Step3_Agreement';
+import Step4_Agreement from './steps/Step4_Agreement';
 import CloseIcon from './Icons/CloseIcon';
 import SpinnerIcon from './Icons/SpinnerIcon';
 
@@ -37,6 +37,8 @@ const FindModal = ({ item, onClose }: Props) => {
       case 2:
         return '정답 확인';
       case 3:
+        return '서약 작성하기';
+      case 4:
         return '보관 장소 조회하기';
       default:
         return '';
@@ -74,7 +76,7 @@ const FindModal = ({ item, onClose }: Props) => {
                   onSelect={setSelectedChoiceId}
                 />
               )}
-              {currentStep === 3 && <Step3_Agreement agreementRef={agreementRef} />}
+              {currentStep === 4 && <Step4_Agreement agreementRef={agreementRef} />}
             </>
           )}
         </div>

@@ -6,7 +6,7 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
   alert('붙여넣기는 사용할 수 없습니다.');
 };
 
-const Step3_Agreement = ({
+const Step4_Agreement = ({
   agreementRef,
 }: {
   agreementRef: RefObject<HTMLInputElement | null>;
@@ -44,4 +44,4 @@ const Step3_Agreement = ({
   );
 };
 
-export default Step3_Agreement;
+export default Step4_Agreement;
