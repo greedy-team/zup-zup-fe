@@ -29,6 +29,7 @@ export const lostItemsHandlers = [
       return HttpResponse.json(
         { error: 'page and limit must be positive integers' },
         { status: 400 },
+        { status: 400 },
       );
     }
 
