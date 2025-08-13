@@ -9,6 +9,7 @@ import Step2_Quiz from './steps/Step2_Quiz';
 import Step4_Agreement from './steps/Step4_Agreement';
 import CloseIcon from './Icons/CloseIcon';
 import SpinnerIcon from './Icons/SpinnerIcon';
+import Step3_DetailInfo from './steps/Step3_DetailInfo';
 
 type Props = {
   item: LostItem;
@@ -76,6 +77,7 @@ const FindModal = ({ item, onClose }: Props) => {
                   onSelect={setSelectedChoiceId}
                 />
               )}
+              {currentStep === 3 && <Step3_DetailInfo item={item} />}
               {currentStep === 4 && <Step4_Agreement agreementRef={agreementRef} />}
             </>
           )}

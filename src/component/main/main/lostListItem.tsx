@@ -8,6 +8,7 @@ export type LostItem = {
   foundLocation: string;
   foundDate: string; // ISO
   imageUrl?: string;
+  detail?: string;
 };
 
 function formatKST(iso: string) {
