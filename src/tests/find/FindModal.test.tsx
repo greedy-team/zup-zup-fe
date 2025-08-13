@@ -75,6 +75,15 @@ describe('FindModal 컴포넌트 테스트', () => {
   it('Step3 렌더링 및 버튼 확인', () => {
     useFindProcessSpy.mockReturnValue({ ...mockUseFindProcessDefaultValues, currentStep: 3 });
     render(<FindLostItemModal item={mockItem} onClose={mockOnClose} />);
+    expect(screen.getAllByText('상세 정보').length).toBe(2);
+
+    const nextButton = screen.getByRole('button', { name: '서약 작성하기' });
+    expect(nextButton).toBeInTheDocument();
+  });
+
+  it('Step4 렌더링 및 버튼 확인', () => {
+    useFindProcessSpy.mockReturnValue({ ...mockUseFindProcessDefaultValues, currentStep: 4 });
+    render(<FindLostItemModal item={mockItem} onClose={mockOnClose} />);
     expect(screen.getByPlaceholderText('상단 문구를 똑같이 입력해주세요.')).toBeInTheDocument();
 
     const lastButton = screen.getByRole('button', { name: '보관 장소 조회하기' });
