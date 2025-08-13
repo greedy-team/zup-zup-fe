@@ -70,12 +70,12 @@ export function getDetail(params: {
 export function getEtcDetail(
   lostItemId: number,
 ): { imageUrl: string; description?: string | null } | { error: 'NOT_FOUND' | 'FORBIDDEN' } {
-  const item = lostItems.find((x) => x.lostItemId === lostItemId);
-  if (!item) return { error: 'NOT_FOUND' };
-  if (item.categoryId !== 99) return { error: 'FORBIDDEN' };
+  const targetLostItem = lostItems.find((item) => item.lostItemId === lostItemId);
+  if (!targetLostItem) return { error: 'NOT_FOUND' };
+  if (targetLostItem.categoryId !== 99) return { error: 'FORBIDDEN' };
 
   return {
-    imageUrl: item.imageUrl,
-    description: item.description ?? null,
+    imageUrl: targetLostItem.imageUrl,
+    description: targetLostItem.description ?? null,
   };
 }
