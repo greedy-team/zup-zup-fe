@@ -91,7 +91,6 @@ export function usePolygons({
 
     polysRef.current = polys;
     polyByIdRef.current = byId;
-    console.log('selectedPolygonRef1', selectedPolygonRef.current);
 
     return () => {
       handlers.forEach(({ target, type, handler }) =>
@@ -113,9 +112,7 @@ export function usePolygons({
     }
     const poly = polyByIdRef.current.get(selectedAreaId) || null;
     if (poly) poly.setOptions(SELECTED_STYLE);
-    console.log('poly', poly);
     selectedPolygonRef.current = poly;
-    console.log('selectedPolygonRef', selectedPolygonRef.current);
   }, [selectedAreaId]);
 
   useEffect(() => {

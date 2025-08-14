@@ -3,6 +3,7 @@ import LostList from './list/lostList';
 import type { SchoolArea } from '../../../types/map/map';
 import type { MapSelectionState, ModeState, PaginationState } from '../../../types/main/main';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../../../types/main/mainApi';
+
 type Props = {
   pagination: PaginationState;
   mapSelection: MapSelectionState;

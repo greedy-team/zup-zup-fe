@@ -3,7 +3,7 @@ import type { SchoolArea } from '../../types/map/map';
 
 type LostItemDetailResponse = {
   items: LostItemListItem[];
-  total: number; // 필터 적용 후 전체 개수 (페이지 수 = Math.ceil(total/limit))
+  total: number;
 };
 
 type LostItemSummaryRow = {
@@ -11,32 +11,26 @@ type LostItemSummaryRow = {
   count: number;
 };
 
-// 1) 카테고리 목록 불러오기
 export const getCategories = async (): Promise<Category[]> => {
   const res = await fetch('/api/categories');
   const data: Category[] = await res.json();
-  console.log('getCategories', data);
   return data;
 };
 
-// 2) 학교 구역 목록
 export const getSchoolAreas = async (): Promise<{ schoolAreas: SchoolArea[] }> => {
   const res = await fetch('/api/school-areas');
   const { schoolAreas }: { schoolAreas: SchoolArea[] } = await res.json();
   return { schoolAreas };
 };
 
-// 3) 분실물 핀 요약
 export const getLostItemSummary = async (areaId?: number): Promise<LostItemSummaryRow[]> => {
   const qs = new URLSearchParams();
   if (areaId) qs.set('areaId', String(areaId));
   const res = await fetch(`/api/lost-items/summary?${qs.toString()}`);
   const data: LostItemSummaryRow[] = await res.json();
-  console.log('getLostItemSummary', data);
   return data;
 };
 
-// 4) 분실물 목록
 export const getLostItemDetail = async (
   page: number,
   limit: number,
@@ -54,6 +48,5 @@ export const getLostItemDetail = async (
   if (!res.ok) throw new Error('요청 실패');
 
   const { items, total }: LostItemDetailResponse = await res.json();
-  console.log('getLostItemDetail', items, total);
   return { items, total };
 };

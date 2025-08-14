@@ -1,4 +1,4 @@
-import ListItem from './lostListItem';
+import LostListItem from './lostListItem';
 import type { LostItemListItem } from '../../../../types/main/mainApi';
 import Pagenation from './pagenation';
 
@@ -11,7 +11,6 @@ type Props = {
 
 export default function LostList({ items, total, page, setPage }: Props) {
   const empty = total === 0;
-  const totalPages = Math.max(1, Math.ceil(total / 5));
 
   if (empty) {
     return (
@@ -30,12 +29,12 @@ export default function LostList({ items, total, page, setPage }: Props) {
 
       <ul className="space-y-3 pb-6">
         {items.map((item) => (
-          <ListItem key={item.lostItemId} item={item} />
+          <LostListItem key={item.lostItemId} item={item} />
         ))}
       </ul>
 
       <div className="flex items-center justify-center">
-        <Pagenation page={page} totalPages={totalPages} setPage={setPage} />
+        <Pagenation page={page} total={total} setPage={setPage} pageSize={5} />
       </div>
     </div>
   );

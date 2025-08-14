@@ -30,12 +30,12 @@ type Props = {
   className?: string;
 };
 
-export default function ListItem({ item, className = '' }: Props) {
+export default function LostListItem({ item, className = '' }: Props) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <li className={`rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
-      <div className="flex gap-3">
+    <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
+      <div className="flex gap-2">
         {item.imageUrl && !imgError ? (
           <img
             src={item.imageUrl}
@@ -49,7 +49,7 @@ export default function ListItem({ item, className = '' }: Props) {
         )}
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <span className="truncate text-sm font-medium" title={item.categoryName}>
               {item.categoryName}
             </span>
@@ -57,14 +57,15 @@ export default function ListItem({ item, className = '' }: Props) {
           </div>
 
           <div className="mt-1 truncate text-xs text-gray-500" title={item.foundLocation}>
-            {item.foundLocation} · {formatKST(item.foundDate)}
+            {item.foundLocation}
+          </div>
+          <div className="mt-1 truncate text-xs text-gray-500" title={item.foundDate}>
+            {formatKST(item.foundDate)}
           </div>
 
-          <div className="mt-2 flex gap-2">
-            <button className="rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50">
-              분실물 찾기
-            </button>
-          </div>
+          <button className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50">
+            분실물 찾기
+          </button>
         </div>
       </div>
     </li>
