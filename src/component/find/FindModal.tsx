@@ -88,7 +88,9 @@ const FindModal = ({ item, onClose }: Props) => {
                 />
               )}
               {currentStep === 3 && <Step3_DetailInfo item={item} />}
-              {currentStep === 4 && <Step4_Agreement agreementRef={agreementRef} />}
+              {currentStep === 4 && (
+                <Step4_Agreement agreementRef={agreementRef} onEnter={handleNextStep} />
+              )}
             </>
           )}
         </div>

@@ -1,16 +1,17 @@
 import { type RefObject } from 'react';
 import { PLEDGE_TEXT } from '../../../constants/find';
 
+type Props = {
+  agreementRef: RefObject<HTMLInputElement | null>;
+  onEnter: () => void;
+};
+
 const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
   e.preventDefault();
   alert('붙여넣기는 사용할 수 없습니다.');
 };
 
-const Step4_Agreement = ({
-  agreementRef,
-}: {
-  agreementRef: RefObject<HTMLInputElement | null>;
-}) => {
+const Step4_Agreement = ({ agreementRef, onEnter }: Props) => {
   return (
     <div className="flex flex-col items-center space-y-4">
       <h3 className="text-lg font-bold">✨ Zupzup 성실 이용 서약 ✨ </h3>
@@ -39,8 +40,14 @@ const Step4_Agreement = ({
       <input
         ref={agreementRef}
         type="text"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onEnter();
+          }
+        }}
         onPaste={handlePaste}
-        className="mt-2 w-full rounded-lg border-1 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
+        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
         placeholder="상단 문구를 똑같이 입력해주세요."
       />
     </div>
