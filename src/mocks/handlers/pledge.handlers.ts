@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { pledgeAndGetStorageName } from '../selectors/pledge.selectors';
+import { handlePledge } from '../selectors/pledge.selectors';
 
 export const pledgeHandlers = [
   http.post('/api/lost-items/:id/pledge', ({ params }) => {
@@ -8,7 +8,7 @@ export const pledgeHandlers = [
       return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
     }
 
-    const result = pledgeAndGetStorageName(id);
+    const result = handlePledge(id);
 
     if ('error' in result) {
       if (result.error === 'NOT_FOUND')
