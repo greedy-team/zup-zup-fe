@@ -9,7 +9,7 @@ type Props = {
   total: number;
   selectedCoordinates: { lat: number; lng: number } | null;
   setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
-  setIsRegisterConfirmModalOpen: () => void;
+  setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
@@ -17,14 +17,12 @@ type Props = {
   setPage: (page: number) => void;
   lostItemSummary: LostItemSummaryRow[];
   selectedMode: SelectedMode;
-  setSelectedMode: () => void;
   toggleMode: () => void;
 };
 
 const Main = ({
   items,
   total,
-  selectedCoordinates,
   setSelectedCoordinates,
   setIsRegisterConfirmModalOpen,
   setSelectedAreaId,
@@ -34,7 +32,6 @@ const Main = ({
   setPage,
   lostItemSummary,
   selectedMode,
-  setSelectedMode,
   toggleMode,
 }: Props) => {
   return (
@@ -47,13 +44,11 @@ const Main = ({
           <Map
             setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
             setSelectedCoordinates={setSelectedCoordinates}
-            selectedCoordinates={selectedCoordinates}
             schoolAreas={schoolAreas}
             setSelectedAreaId={setSelectedAreaId}
             selectedAreaId={selectedAreaId}
             lostItemSummary={lostItemSummary}
             selectedMode={selectedMode}
-            setSelectedMode={setSelectedMode}
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"

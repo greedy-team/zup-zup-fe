@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export function useKakaoLoader(): boolean {
+export function useLoader(): boolean {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const key = import.meta.env.VITE_KAKAO_MAP_API_KEY;

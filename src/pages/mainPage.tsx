@@ -95,7 +95,6 @@ const MainPage = () => {
           setPage={setPage}
           lostItemSummary={lostItemSummary}
           selectedMode={selectedMode}
-          setSelectedMode={setSelectedMode}
           toggleMode={toggleMode}
         />
       </div>
@@ -105,9 +104,7 @@ const MainPage = () => {
         onConfirm={() => {
           setIsRegisterConfirmModalOpen(false);
         }}
-        onCancel={() => {
-          setIsRegisterConfirmModalOpen(false);
-        }}
+        onCancel={() => setIsRegisterConfirmModalOpen(false)}
       />
     </>
   );
