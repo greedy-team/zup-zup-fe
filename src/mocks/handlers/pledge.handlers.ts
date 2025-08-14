@@ -1,10 +1,11 @@
 import { http, HttpResponse } from 'msw';
 import { pledgeAndGetStorageName } from '../selectors/pledge.selectors';
+import { toInt } from '../utils/toInt';
 
 export const pledgeHandlers = [
   http.post('/api/lost-items/:id/pledge', ({ params }) => {
-    const id = Number(params.id);
-    if (!Number.isFinite(id)) {
+    const id = toInt(params.id);
+    if (id === undefined) {
       return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
     }
 

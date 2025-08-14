@@ -1,12 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { getCategories } from '../selectors/categories.selectors';
 import { getFeaturesByCategoryId } from '../selectors/features.selectors';
-
-function toInt(v: unknown): number | undefined {
-  if (typeof v !== 'string') return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : undefined;
-}
+import { toInt } from '../utils/toInt';
 
 export const categoriesHandlers = [
   http.get('/api/categories', () => {
