@@ -16,7 +16,7 @@ function formatKST(iso: string) {
 function StatusBadge({ status }: { status: LostItemListItem['status'] }) {
   const isFound = status === 'found';
   const cls = isFound
-    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    ? 'bg-teal-50 text-teal-700 border-teal-200'
     : 'bg-gray-50 text-gray-700 border-gray-200';
   return (
     <span className={`rounded-full border px-2 py-0.5 text-[11px] ${cls}`}>
@@ -40,12 +40,12 @@ export default function ListItem({ item, className = '' }: Props) {
           <img
             src={item.imageUrl}
             alt={item.categoryName}
-            className="h-16 w-16 shrink-0 rounded-xl bg-emerald-50 object-cover"
+            className="h-16 w-16 shrink-0 rounded-xl bg-teal-50 object-cover"
             onError={() => setImgError(true)}
             loading="lazy"
           />
         ) : (
-          <div className="h-16 w-16 shrink-0 rounded-xl bg-emerald-50" />
+          <div className="h-16 w-16 shrink-0 rounded-xl bg-teal-50" />
         )}
 
         <div className="min-w-0 flex-1">
@@ -61,7 +61,7 @@ export default function ListItem({ item, className = '' }: Props) {
           </div>
 
           <div className="mt-2 flex gap-2">
-            <button className="rounded-lg border border-emerald-200 px-2.5 py-1 text-xs text-emerald-700 hover:bg-emerald-50">
+            <button className="rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50">
               분실물 찾기
             </button>
           </div>

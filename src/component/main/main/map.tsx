@@ -6,8 +6,8 @@ import type { SelectedMode } from '../../../types/main/mode';
 
 type Props = {
   setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
-  setSelectedLat: (lat: number | null) => void;
-  setSelectedLng: (lng: number | null) => void;
+  setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
+  selectedCoordinates: { lat: number; lng: number } | null;
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
@@ -18,8 +18,7 @@ type Props = {
 
 const KakaoMap = ({
   setIsRegisterConfirmModalOpen,
-  setSelectedLat,
-  setSelectedLng,
+  setSelectedCoordinates,
   setSelectedAreaId,
   selectedAreaId,
   schoolAreas,
@@ -46,8 +45,7 @@ const KakaoMap = ({
     const place = (latlng: kakao.maps.LatLng) => {
       const lat = latlng.getLat();
       const lng = latlng.getLng();
-      setSelectedLat(lat);
-      setSelectedLng(lng);
+      setSelectedCoordinates({ lat, lng });
     };
     map.setCursor('default');
 
@@ -127,7 +125,6 @@ const KakaoMap = ({
         if (area.id !== selectedAreaId) polygon.setOptions(BASE_STYLE);
       };
       const onClick = (e: any) => {
-        console.log('onClick', selectedMode);
         kakao.maps.event.preventMap?.();
         if (selectedMode === 'register') {
           setIsRegisterConfirmModalOpen(true);
@@ -154,7 +151,6 @@ const KakaoMap = ({
     });
 
     const onMapClick = (e: any) => {
-      console.log('onMapClick', selectedMode);
       if (selectedMode === 'register') {
         setIsRegisterConfirmModalOpen(true);
         return;
@@ -181,8 +177,7 @@ const KakaoMap = ({
   }, [
     loaded,
     schoolAreas,
-    setSelectedLat,
-    setSelectedLng,
+    setSelectedCoordinates,
     setSelectedAreaId,
     lostItemSummary,
     setSelectedMode,
