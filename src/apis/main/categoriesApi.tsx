@@ -16,6 +16,7 @@ type LostItemSummaryRow = {
 export const getCategories = async (): Promise<Category[]> => {
   const res = await fetch('/api/categories');
   const data: Category[] = await res.json();
+  console.log('getCategories', data);
   return data;
 };
 
@@ -23,15 +24,17 @@ export const getCategories = async (): Promise<Category[]> => {
 export const getSchoolAreas = async (): Promise<SchoolArea[]> => {
   const res = await fetch('/api/school-areas');
   const data: SchoolArea[] = await res.json();
+  console.log('getSchoolAreas', data);
   return data;
 };
 
-// 3) 분실물 핀 요약약
-export const getLostItemSummary = async (categoryId?: number): Promise<LostItemSummaryRow[]> => {
+// 3) 분실물 핀 요약
+export const getLostItemSummary = async (areaId?: number): Promise<LostItemSummaryRow[]> => {
   const qs = new URLSearchParams();
-  qs.set('categoryId', String(1)); // 선택적
+  if (areaId) qs.set('areaId', String(areaId));
   const res = await fetch(`/api/lost-items/summary?${qs.toString()}`);
   const data: LostItemSummaryRow[] = await res.json();
+  console.log('getLostItemSummary', data);
   return data;
 };
 
@@ -53,5 +56,6 @@ export const getLostItemDetail = async (
   if (!res.ok) throw new Error('요청 실패');
 
   const { items, total }: LostItemDetailResponse = await res.json();
+  console.log('getLostItemDetail', items, total);
   return { items, total };
 };
