@@ -3,7 +3,7 @@ import Map from './map';
 import type { LostItemListItem } from '../../../types/main/lostItemListItem';
 import type { SchoolArea } from '../../../types/map/map';
 import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
-
+import type { SelectedMode } from '../../../types/main/mode';
 type Props = {
   items: LostItemListItem[];
   total: number;
@@ -11,7 +11,7 @@ type Props = {
   setSelectedLat: (lat: number | null) => void;
   selectedLng: number | null;
   setSelectedLng: (lng: number | null) => void;
-  setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
+  setIsRegisterConfirmModalOpen: () => void;
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
@@ -19,6 +19,9 @@ type Props = {
   pageSize: number;
   setPage: (page: number) => void;
   lostItemSummary: LostItemSummaryRow[];
+  selectedMode: SelectedMode;
+  setSelectedMode: (mode: SelectedMode) => void;
+  toggleMode: () => void;
 };
 
 const Main = ({
@@ -36,6 +39,9 @@ const Main = ({
   pageSize,
   setPage,
   lostItemSummary,
+  selectedMode,
+  setSelectedMode,
+  toggleMode,
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
@@ -47,18 +53,19 @@ const Main = ({
         </aside>
         <section className="relative h-full min-h-0">
           <Map
+            setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
             setSelectedLat={setSelectedLat}
             setSelectedLng={setSelectedLng}
             schoolAreas={schoolAreas}
             setSelectedAreaId={setSelectedAreaId}
             selectedAreaId={selectedAreaId}
             lostItemSummary={lostItemSummary}
+            selectedMode={selectedMode}
+            setSelectedMode={setSelectedMode}
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-blue-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-            onClick={() => {
-              setIsRegisterConfirmModalOpen(true);
-            }}
+            onClick={toggleMode}
           >
             분실물 추가
           </button>

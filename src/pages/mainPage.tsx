@@ -12,6 +12,7 @@ import {
 import type { LostItemListItem } from '../types/main/lostItemListItem';
 import type { SchoolArea } from '../types/map/map';
 import type { LostItemSummaryRow } from '../types/main/lostItemSummeryRow';
+import type { SelectedMode } from '../types/main/mode';
 
 const MainPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -24,8 +25,13 @@ const MainPage = () => {
   const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
+  const [selectedMode, setSelectedMode] = useState<SelectedMode>('append');
   const pageSize = 5;
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
+
+  const toggleMode = () => {
+    setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -92,6 +98,9 @@ const MainPage = () => {
           pageSize={pageSize}
           setPage={setPage}
           lostItemSummary={lostItemSummary}
+          selectedMode={selectedMode}
+          setSelectedMode={setSelectedMode}
+          toggleMode={toggleMode}
         />
       </div>
 
