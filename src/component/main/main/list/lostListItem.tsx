@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { LostItemListItem } from '../../../types/main/lostItemListItem';
+import type { LostItemListItem } from '../../../../types/main/lostItemListItem';
 
 function formatKST(iso: string) {
   try {

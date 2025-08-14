@@ -3,6 +3,13 @@ import { useKakaoLoader } from '../../../hooks/main/useKakaoLoader';
 import type { SchoolArea } from '../../../types/map/map';
 import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
 import type { SelectedMode } from '../../../types/main/mode';
+import { BASE_STYLE, HOVER_STYLE, SELECTED_STYLE } from '../../../constants/map/polygonStyle';
+import {
+  extractCoords,
+  toKakaoPath,
+  createNumberedMarker,
+  resetPolygons,
+} from '../../../utils/Map/mapUtils';
 
 type Props = {
   setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
@@ -42,11 +49,7 @@ const KakaoMap = ({
       level: 2,
     });
 
-    const place = (latlng: kakao.maps.LatLng) => {
-      const lat = latlng.getLat();
-      const lng = latlng.getLng();
-      setSelectedCoordinates({ lat, lng });
-    };
+    const place = (latlng: kakao.maps.LatLng) => setSelectedCoordinates(extractCoords(latlng));
     map.setCursor('default');
 
     // 마커 스타일은 여기!!
@@ -67,47 +70,20 @@ const KakaoMap = ({
       return new kakao.maps.Marker({ map, position: pos, image: markerImage });
     };
 
-    const markerObjs = schoolAreas.map((item) => {
-      const number = Array.isArray(lostItemSummary)
-        ? (lostItemSummary.find((row) => row.schoolAreaId === item.id)?.count ?? 0)
-        : 0;
+    const markerObjs = schoolAreas.map((area) => {
       if (selectedMode === 'register') return null;
-      return addNumberedMarker(map, item.marker.lat, item.marker.lng, number);
+      const count = lostItemSummary.find((r) => r.schoolAreaId === area.id)?.count ?? 0;
+      return createNumberedMarker(map, area.marker, count);
     });
 
     // 폴리곤 스타일은 여기!!
-
-    const BASE_STYLE = {
-      strokeWeight: 0,
-      strokeColor: '#ffffff',
-      strokeOpacity: 0.001,
-      strokeStyle: 'solid' as const,
-      fillColor: '#ffffff',
-      fillOpacity: 0.001,
-    };
-    const HOVER_STYLE = {
-      strokeWeight: 1,
-      strokeColor: '#39DE2A',
-      strokeOpacity: 0.8,
-      strokeStyle: 'solid' as const,
-      fillColor: '#A2FF99',
-      fillOpacity: 0.001,
-    };
-    const SELECTED_STYLE = {
-      strokeWeight: 1,
-      strokeColor: '#39DE2A',
-      strokeOpacity: 0.8,
-      strokeStyle: 'solid' as const,
-      fillColor: '#A2FF99',
-      fillOpacity: 0.8,
-    };
 
     const polys: kakao.maps.Polygon[] = [];
     const handlers: Array<{ target: any; type: string; handler: (...a: any[]) => void }> = [];
     let selectedPolygon: kakao.maps.Polygon | null = null;
 
     schoolAreas.forEach((area) => {
-      const path = area.areaPolygon.coordinates.map((c) => new kakao.maps.LatLng(c.lat, c.lng));
+      const path = toKakaoPath(area);
       const polygon = new kakao.maps.Polygon({
         path,
         ...(area.id === selectedAreaId ? SELECTED_STYLE : BASE_STYLE),
@@ -155,11 +131,12 @@ const KakaoMap = ({
         setIsRegisterConfirmModalOpen(true);
         return;
       }
+      resetPolygons(polysRef.current, BASE_STYLE);
       if (clickedOverlayRef.current) {
         clickedOverlayRef.current = false;
         return;
       }
-      polys.forEach((p) => p.setOptions(BASE_STYLE));
+
       selectedPolygon = null;
       setSelectedAreaId(0);
       place(e.latLng);
@@ -184,16 +161,7 @@ const KakaoMap = ({
     selectedMode,
   ]);
   useEffect(() => {
-    const BASE_STYLE = {
-      strokeWeight: 0,
-      strokeColor: '#ffffff',
-      strokeOpacity: 0.001,
-      strokeStyle: 'solid' as const,
-      fillColor: '#ffffff',
-      fillOpacity: 0.001,
-    };
-
-    polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
+    resetPolygons(polysRef.current, BASE_STYLE);
     selectedPolygonRef.current = null;
   }, [selectedMode]);
 

@@ -1,5 +1,5 @@
-import LostList from './lostList';
 import Map from './map';
+import LostList from './list/lostList';
 import type { LostItemListItem } from '../../../types/main/lostItemListItem';
 import type { SchoolArea } from '../../../types/map/map';
 import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';

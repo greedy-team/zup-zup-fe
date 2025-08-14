@@ -1,5 +1,5 @@
 import ListItem from './lostListItem';
-import type { LostItemListItem } from '../../../types/main/lostItemListItem';
+import type { LostItemListItem } from '../../../../types/main/lostItemListItem';
 
 type Props = {
   items: LostItemListItem[];
