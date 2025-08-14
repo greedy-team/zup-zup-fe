@@ -20,8 +20,7 @@ export type RegisterFormData = {
 };
 
 export type CategoryGroup = {
-  groupName: string;
-  categories: Category[];
+  category: string;
 };
 
 export type Step2Props = {

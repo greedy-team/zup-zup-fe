@@ -12,16 +12,14 @@ describe('Step1_CategorySelect 컴포넌트', () => {
 
     fireEvent.click(firstCategoryButton);
 
-    expect(handleSelect).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'phone1', name: '휴대폰' }),
-    );
+    expect(handleSelect).toHaveBeenCalledWith('휴대폰');
   });
 
   it('선택된 카테고리에 하이라이트 스타일이 적용되어야 합니다', () => {
-    const selected = { id: 'bag1', name: '백팩' };
+    const selected = '가방';
     render(<Step1_CategorySelect selectedCategory={selected} onSelect={() => {}} />);
 
-    const selectedButton = screen.getByRole('button', { name: '백팩' });
+    const selectedButton = screen.getByRole('button', { name: '가방' });
     expect(selectedButton).toHaveClass('border-teal-500');
   });
 });
