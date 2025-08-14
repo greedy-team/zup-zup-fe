@@ -26,7 +26,7 @@ const CategoryRadio = ({
                 />
                 <label
                   htmlFor={name}
-                  className="cursor-pointer rounded-full border border-black/20 px-4.5 py-3 text-sm peer-checked:border-black/20 peer-checked:bg-emerald-600 peer-checked:text-white hover:bg-emerald-50 peer-checked:hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-400 focus:outline-none"
+                  className="cursor-pointer rounded-full border border-black/20 px-4.5 py-2 text-sm peer-checked:border-black/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
                 >
                   {name}
                 </label>
