@@ -20,7 +20,7 @@ type Props = {
   setPage: (page: number) => void;
   lostItemSummary: LostItemSummaryRow[];
   selectedMode: SelectedMode;
-  setSelectedMode: (mode: SelectedMode) => void;
+  setSelectedMode: () => void;
   toggleMode: () => void;
 };
 
@@ -67,7 +67,7 @@ const Main = ({
             className="absolute right-5 bottom-5 z-10 rounded-full bg-blue-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             onClick={toggleMode}
           >
-            분실물 추가
+            {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
       </div>

@@ -60,7 +60,6 @@ const MainPage = () => {
       setItems(items);
       setTotal(total);
     })();
-    console.log('total', total);
   }, [page, pageSize, selectedCategoryId, selectedAreaId]);
 
   useEffect(() => {
@@ -74,6 +73,10 @@ const MainPage = () => {
   useEffect(() => {
     setPage(1);
   }, [selectedCategoryId, selectedAreaId]);
+
+  useEffect(() => {
+    setSelectedAreaId(0);
+  }, [selectedMode]);
 
   return (
     <>
