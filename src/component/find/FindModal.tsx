@@ -46,8 +46,18 @@ const FindModal = ({ item, onClose }: Props) => {
     }
   };
 
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as Element).id === 'modal-overlay') {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={handleOutsideClick}
+    >
       {resultModal.isOpen && <ResultModal {...resultModal} />}
 
       <div className="relative w-full max-w-2xl rounded-2xl bg-white p-8 shadow-xl">
