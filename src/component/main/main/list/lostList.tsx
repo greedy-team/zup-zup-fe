@@ -1,5 +1,6 @@
 import ListItem from './lostListItem';
-import type { LostItemListItem } from '../../../../types/main/lostItemListItem';
+import type { LostItemListItem } from '../../../../types/main/mainApi';
+import Pagenation from './pagenation';
 
 type Props = {
   items: LostItemListItem[];
@@ -33,24 +34,8 @@ export default function LostList({ items, total, page, setPage }: Props) {
         ))}
       </ul>
 
-      <div className="flex items-center justify-center gap-2 pb-6">
-        <button
-          className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
-          disabled={page <= 1}
-          onClick={() => setPage(page - 1)}
-        >
-          이전
-        </button>
-        <span className="text-sm">
-          {page} / {totalPages}
-        </span>
-        <button
-          className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
-          disabled={page >= totalPages}
-          onClick={() => setPage(page + 1)}
-        >
-          다음
-        </button>
+      <div className="flex items-center justify-center">
+        <Pagenation page={page} totalPages={totalPages} setPage={setPage} />
       </div>
     </div>
   );

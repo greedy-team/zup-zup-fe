@@ -1,5 +1,4 @@
-import type { Category } from '../../types/main/category';
-import type { LostItemListItem } from '../../types/main/lostItemListItem';
+import type { Category, LostItemListItem } from '../../types/main/mainApi';
 import type { SchoolArea } from '../../types/map/map';
 
 type LostItemDetailResponse = {
@@ -21,11 +20,10 @@ export const getCategories = async (): Promise<Category[]> => {
 };
 
 // 2) 학교 구역 목록
-export const getSchoolAreas = async (): Promise<SchoolArea[]> => {
+export const getSchoolAreas = async (): Promise<{ schoolAreas: SchoolArea[] }> => {
   const res = await fetch('/api/school-areas');
-  const data: SchoolArea[] = await res.json();
-  console.log('getSchoolAreas', data);
-  return data;
+  const { schoolAreas }: { schoolAreas: SchoolArea[] } = await res.json();
+  return { schoolAreas };
 };
 
 // 3) 분실물 핀 요약

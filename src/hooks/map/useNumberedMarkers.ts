@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createNumberedMarker } from '../../utils/Map/mapUtils';
 import type { SchoolArea } from '../../types/map/map';
-import type { LostItemSummaryRow } from '../../types/main/lostItemSummeryRow';
+import type { LostItemSummaryRow } from '../../types/main/mainApi';
 
 export function useNumberedMarkers({
   map,

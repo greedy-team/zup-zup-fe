@@ -1,60 +1,52 @@
 import Map from './map';
 import LostList from './list/lostList';
-import type { LostItemListItem } from '../../../types/main/lostItemListItem';
 import type { SchoolArea } from '../../../types/map/map';
-import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
-import type { SelectedMode } from '../../../types/main/mode';
+import type { MapSelectionState, ModeState, PaginationState } from '../../../types/main/main';
+import type { Category, LostItemListItem, LostItemSummaryRow } from '../../../types/main/mainApi';
 type Props = {
-  items: LostItemListItem[];
-  total: number;
-  selectedCoordinates: { lat: number; lng: number } | null;
-  setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
-  setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
-  setSelectedAreaId: (areaId: number) => void;
-  selectedAreaId: number;
-  schoolAreas: SchoolArea[];
-  page: number;
-  setPage: (page: number) => void;
-  lostItemSummary: LostItemSummaryRow[];
-  selectedMode: SelectedMode;
-  toggleMode: () => void;
+  pagination: PaginationState;
+  mapSelection: MapSelectionState;
+  mode: ModeState;
+  lists: {
+    items: LostItemListItem[];
+    categories: Category[];
+  };
+  areas: {
+    schoolAreas: SchoolArea[];
+    lostItemSummary: LostItemSummaryRow[];
+  };
+  ui: {
+    setIsRegisterConfirmModalOpen: (b: boolean) => void;
+  };
 };
 
-const Main = ({
-  items,
-  total,
-  setSelectedCoordinates,
-  setIsRegisterConfirmModalOpen,
-  setSelectedAreaId,
-  selectedAreaId,
-  schoolAreas,
-  page,
-  setPage,
-  lostItemSummary,
-  selectedMode,
-  toggleMode,
-}: Props) => {
+const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: Props) => {
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">
         <aside className="h-full overflow-y-auto border-r">
-          <LostList items={items} total={total} page={page} setPage={setPage} />
+          <LostList
+            items={lists.items}
+            total={pagination.total}
+            page={pagination.page}
+            setPage={pagination.setPage}
+          />
         </aside>
         <section className="relative h-full min-h-0">
           <Map
-            setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
-            setSelectedCoordinates={setSelectedCoordinates}
-            schoolAreas={schoolAreas}
-            setSelectedAreaId={setSelectedAreaId}
-            selectedAreaId={selectedAreaId}
-            lostItemSummary={lostItemSummary}
-            selectedMode={selectedMode}
+            setIsRegisterConfirmModalOpen={ui.setIsRegisterConfirmModalOpen}
+            setSelectedCoordinates={mapSelection.setSelectedCoordinates}
+            schoolAreas={areas.schoolAreas}
+            setSelectedAreaId={mapSelection.setSelectedAreaId}
+            selectedAreaId={mapSelection.selectedAreaId}
+            lostItemSummary={areas.lostItemSummary}
+            selectedMode={mode.selectedMode}
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-            onClick={toggleMode}
+            onClick={mode.toggleMode}
           >
-            {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
+            {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
       </div>

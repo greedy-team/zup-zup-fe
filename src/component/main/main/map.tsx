@@ -3,8 +3,8 @@ import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
 import type { SchoolArea } from '../../../types/map/map';
-import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
-import type { SelectedMode } from '../../../types/main/mode';
+import type { LostItemSummaryRow } from '../../../types/main/mainApi';
+import type { lostItemMode } from '../../../types/main/main';
 import { extractCoords } from '../../../utils/Map/mapUtils';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
   lostItemSummary: LostItemSummaryRow[];
-  selectedMode: SelectedMode;
+  selectedMode: lostItemMode;
 };
 
 const Map = (props: Props) => {
@@ -44,7 +44,7 @@ const Map = (props: Props) => {
     return () => setMap(null);
   }, [loaded]);
 
-  const { polysRef, selectedPolygonRef, reset } = usePolygons({
+  const { reset } = usePolygons({
     map,
     schoolAreas,
     selectedAreaId,
@@ -69,7 +69,7 @@ const Map = (props: Props) => {
   useEffect(() => {
     if (!map) return;
     const kakao = window.kakao;
-    const onMapClick = (e: any) => {
+    const onMapClick = (e: kakao.maps.event.MouseEvent) => {
       if (selectedMode === 'register') {
         setIsRegisterConfirmModalOpen(true);
         return;

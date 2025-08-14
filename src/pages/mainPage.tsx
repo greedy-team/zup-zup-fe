@@ -2,17 +2,15 @@ import { useEffect, useState } from 'react';
 import Header from '../component/main/header/header';
 import Main from '../component/main/main/main';
 import RegisterConfirmModal from '../component/main/modal/registerConfirmModal';
-import type { Category } from '../types/main/category';
 import {
   getCategories,
   getLostItemDetail,
   getLostItemSummary,
   getSchoolAreas,
 } from '../apis/main/categoriesApi';
-import type { LostItemListItem } from '../types/main/lostItemListItem';
 import type { SchoolArea } from '../types/map/map';
-import type { LostItemSummaryRow } from '../types/main/lostItemSummeryRow';
-import type { SelectedMode } from '../types/main/mode';
+import type { lostItemMode } from '../types/main/main';
+import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/main/mainApi';
 
 const MainPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -27,7 +25,7 @@ const MainPage = () => {
   const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
-  const [selectedMode, setSelectedMode] = useState<SelectedMode>('append');
+  const [selectedMode, setSelectedMode] = useState<lostItemMode>('append');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
 
   const toggleMode = () => {
@@ -45,7 +43,8 @@ const MainPage = () => {
   useEffect(() => {
     const fetchSchoolAreas = async () => {
       const data = await getSchoolAreas();
-      setSchoolAreas(data.schoolAreas);
+      const schoolAreasData = data.schoolAreas;
+      setSchoolAreas(schoolAreasData);
     };
     fetchSchoolAreas();
   }, []);
@@ -83,19 +82,17 @@ const MainPage = () => {
           setSelectedCategoryId={setSelectedCategoryId}
         />
         <Main
-          items={items}
-          selectedCoordinates={selectedCoordinates}
-          setSelectedCoordinates={setSelectedCoordinates}
-          total={total}
-          setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
-          setSelectedAreaId={setSelectedAreaId}
-          schoolAreas={schoolAreas}
-          selectedAreaId={selectedAreaId}
-          page={page}
-          setPage={setPage}
-          lostItemSummary={lostItemSummary}
-          selectedMode={selectedMode}
-          toggleMode={toggleMode}
+          pagination={{ page, setPage, total, pageSize: 5 }}
+          mapSelection={{
+            selectedAreaId,
+            setSelectedAreaId,
+            selectedCoordinates,
+            setSelectedCoordinates,
+          }}
+          mode={{ selectedMode, toggleMode }}
+          lists={{ items, categories }}
+          areas={{ schoolAreas, lostItemSummary }}
+          ui={{ setIsRegisterConfirmModalOpen }}
         />
       </div>
 
