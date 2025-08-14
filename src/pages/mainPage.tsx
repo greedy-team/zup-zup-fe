@@ -3,9 +3,15 @@ import Header from '../component/main/header/header';
 import Main from '../component/main/main/main';
 import RegisterConfirmModal from '../component/main/modal/registerConfirmModal';
 import type { Category } from '../types/main/category';
-import { getCategories, getLostItemDetail, getSchoolAreas } from '../apis/main/categoriesApi';
+import {
+  getCategories,
+  getLostItemDetail,
+  getLostItemSummary,
+  getSchoolAreas,
+} from '../apis/main/categoriesApi';
 import type { LostItemListItem } from '../types/main/lostItemListItem';
 import type { SchoolArea } from '../types/map/map';
+import type { LostItemSummaryRow } from '../types/main/lostItemSummeryRow';
 
 const MainPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -19,6 +25,7 @@ const MainPage = () => {
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const pageSize = 5;
+  const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -51,6 +58,14 @@ const MainPage = () => {
   }, [page, pageSize, selectedCategoryId, selectedAreaId]);
 
   useEffect(() => {
+    const fetchLostItemSummary = async () => {
+      const data = await getLostItemSummary(selectedAreaId);
+      setLostItemSummary(data);
+    };
+    fetchLostItemSummary();
+  }, [selectedAreaId]);
+
+  useEffect(() => {
     setPage(1);
   }, [selectedCategoryId, selectedAreaId]);
 
@@ -76,8 +91,10 @@ const MainPage = () => {
           page={page}
           pageSize={pageSize}
           setPage={setPage}
+          lostItemSummary={lostItemSummary}
         />
       </div>
+
       <RegisterConfirmModal
         isOpen={isRegisterConfirmModalOpen}
         onConfirm={() => {

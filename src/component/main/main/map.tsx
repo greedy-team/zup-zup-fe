@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useKakaoLoader } from '../../../hooks/main/useKakaoLoader';
 import type { SchoolArea } from '../../../types/map/map';
+import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
 
 type Props = {
   setSelectedLat: (lat: number | null) => void;
@@ -8,6 +9,7 @@ type Props = {
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
+  lostItemSummary: LostItemSummaryRow[];
 };
 
 const KakaoMap = ({
@@ -16,6 +18,7 @@ const KakaoMap = ({
   setSelectedAreaId,
   selectedAreaId,
   schoolAreas,
+  lostItemSummary,
 }: Props) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<any>(null);
@@ -45,6 +48,35 @@ const KakaoMap = ({
       setSelectedLat(lat);
       setSelectedLng(lng);
     };
+
+    const addNumberedMarker = (map: kakao.maps.Map, lat: number, lng: number, number: number) => {
+      const pos = new kakao.maps.LatLng(lat, lng);
+
+      const imageSrc =
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
+      const imageSize = new kakao.maps.Size(36, 37);
+      const imgOptions = {
+        spriteSize: new kakao.maps.Size(36, 691),
+        // number는 1부터 시작한다고 가정, 스프라이트는 0부터 계산
+        spriteOrigin: new kakao.maps.Point(0, (number - 1) * 46 + 10),
+        offset: new kakao.maps.Point(13, 37),
+      };
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
+
+      return new kakao.maps.Marker({
+        map,
+        position: pos,
+        image: markerImage,
+      });
+    };
+
+    console.log('lostItemSummary', lostItemSummary);
+    const markers = schoolAreas.map((item, index) => {
+      const number = Array.isArray(lostItemSummary)
+        ? (lostItemSummary.find((row) => row.schoolAreaId === item.id)?.count ?? 0)
+        : 0;
+      return addNumberedMarker(map, item.marker.lat, item.marker.lng, number);
+    });
 
     const BASE_STYLE = {
       strokeWeight: 0,
@@ -116,6 +148,8 @@ const KakaoMap = ({
       polygons.forEach(({ polygon }) => polygon.setMap(null));
     };
   }, [loaded, schoolAreas, setSelectedLat, setSelectedLng, setSelectedAreaId]);
+
+  console.log('area', schoolAreas);
 
   return (
     <div>

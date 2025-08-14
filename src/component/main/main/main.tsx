@@ -2,6 +2,7 @@ import LostList from './lostList';
 import Map from './map';
 import type { LostItemListItem } from '../../../types/main/lostItemListItem';
 import type { SchoolArea } from '../../../types/map/map';
+import type { LostItemSummaryRow } from '../../../types/main/lostItemSummeryRow';
 
 type Props = {
   items: LostItemListItem[];
@@ -17,6 +18,7 @@ type Props = {
   page: number;
   pageSize: number;
   setPage: (page: number) => void;
+  lostItemSummary: LostItemSummaryRow[];
 };
 
 const Main = ({
@@ -33,6 +35,7 @@ const Main = ({
   page,
   pageSize,
   setPage,
+  lostItemSummary,
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
@@ -49,6 +52,7 @@ const Main = ({
             schoolAreas={schoolAreas}
             setSelectedAreaId={setSelectedAreaId}
             selectedAreaId={selectedAreaId}
+            lostItemSummary={lostItemSummary}
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-blue-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
