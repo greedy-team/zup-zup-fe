@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'Moneygraphy-Rounded';
+  src:
+    url('./Moneygraphy-Rounded.woff2') format('woff2'),
+    url('./Moneygraphy-Rounded.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ownglyph_corncorn-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2412-1@1.0/Ownglyph_corncorn-Rg.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
