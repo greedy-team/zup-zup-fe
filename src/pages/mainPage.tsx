@@ -16,6 +16,9 @@ const MainPage = () => {
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -26,22 +29,30 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const { items } = await getLostItemDetail(1, 20, selectedCategoryId, selectedAreaId);
-      setItems(items);
-    };
-    fetchItems();
-    console.log('selectedCategoryId', selectedCategoryId);
-    console.log('selectedAreaId', selectedAreaId);
-  }, [selectedCategoryId, selectedAreaId]);
-
-  useEffect(() => {
     const fetchSchoolAreas = async () => {
       const data = await getSchoolAreas();
       setSchoolAreas(data.schoolAreas);
     };
     fetchSchoolAreas();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { items, total } = await getLostItemDetail(
+        page,
+        pageSize,
+        selectedCategoryId,
+        selectedAreaId,
+      );
+      setItems(items);
+      setTotal(total);
+    })();
+    console.log('total', total);
+  }, [page, pageSize, selectedCategoryId, selectedAreaId]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategoryId, selectedAreaId]);
 
   return (
     <>
@@ -56,11 +67,15 @@ const MainPage = () => {
           selectedLat={selectedLat}
           setSelectedLat={setSelectedLat}
           selectedLng={selectedLng}
+          total={total}
           setSelectedLng={setSelectedLng}
           setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
           setSelectedAreaId={setSelectedAreaId}
           schoolAreas={schoolAreas}
           selectedAreaId={selectedAreaId}
+          page={page}
+          pageSize={pageSize}
+          setPage={setPage}
         />
       </div>
       <RegisterConfirmModal

@@ -47,16 +47,20 @@ const KakaoMap = ({
     };
 
     const BASE_STYLE = {
-      strokeWeight: 3,
+      strokeWeight: 0,
+      strokeColor: '#ffffff',
+      strokeOpacity: 0.001,
+      strokeStyle: 'solid' as const,
+      fillColor: '#ffffff',
+      fillOpacity: 0.001,
+    };
+    const HOVER_STYLE = {
+      strokeWeight: 1,
       strokeColor: '#39DE2A',
       strokeOpacity: 0.8,
       strokeStyle: 'solid' as const,
       fillColor: '#A2FF99',
-      fillOpacity: 0.7,
-    };
-    const HOVER_STYLE = {
-      fillColor: '#EFFFED',
-      fillOpacity: 0.8,
+      fillOpacity: 0.001,
     };
 
     const listeners: { target: any; type: string; handler: (...args: any[]) => void }[] = [];

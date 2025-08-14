@@ -5,6 +5,7 @@ import type { SchoolArea } from '../../../types/map/map';
 
 type Props = {
   items: LostItemListItem[];
+  total: number;
   selectedLat: number | null;
   setSelectedLat: (lat: number | null) => void;
   selectedLng: number | null;
@@ -13,10 +14,14 @@ type Props = {
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
+  page: number;
+  pageSize: number;
+  setPage: (page: number) => void;
 };
 
 const Main = ({
   items,
+  total,
   selectedLat,
   setSelectedLat,
   selectedLng,
@@ -25,6 +30,9 @@ const Main = ({
   setSelectedAreaId,
   selectedAreaId,
   schoolAreas,
+  page,
+  pageSize,
+  setPage,
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
@@ -32,7 +40,7 @@ const Main = ({
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">
         <aside className="h-full overflow-y-auto border-r">
-          <LostList items={items} />
+          <LostList items={items} total={total} page={page} pageSize={pageSize} setPage={setPage} />
         </aside>
         <section className="relative h-full min-h-0">
           <Map
@@ -43,7 +51,6 @@ const Main = ({
             selectedAreaId={selectedAreaId}
           />
           <button
-            disabled={!canSubmit}
             className="absolute right-5 bottom-5 z-10 rounded-full bg-blue-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             onClick={() => {
               setIsRegisterConfirmModalOpen(true);
