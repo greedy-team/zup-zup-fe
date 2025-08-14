@@ -6,8 +6,7 @@ export type FiltersState = {
 export type PaginationState = {
   page: number;
   setPage: (p: number) => void;
-  total: number;
-  pageSize: number;
+  totalCount: number;
 };
 
 export type MapSelectionState = {

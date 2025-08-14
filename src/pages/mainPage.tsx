@@ -15,18 +15,22 @@ import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/ma
 const MainPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<LostItemListItem[]>([]);
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
   const [selectedCoordinates, setSelectedCoordinates] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
-  const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
+
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
-  const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
+
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
+
   const [selectedMode, setSelectedMode] = useState<lostItemMode>('append');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
+  const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
 
   const toggleMode = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
@@ -53,7 +57,7 @@ const MainPage = () => {
     (async () => {
       const { items, total } = await getLostItemDetail(page, 5, selectedCategoryId, selectedAreaId);
       setItems(items);
-      setTotal(total);
+      setTotalCount(total);
     })();
   }, [page, selectedCategoryId, selectedAreaId]);
 
@@ -82,7 +86,7 @@ const MainPage = () => {
           setSelectedCategoryId={setSelectedCategoryId}
         />
         <Main
-          pagination={{ page, setPage, total, pageSize: 5 }}
+          pagination={{ page, setPage, totalCount: totalCount }}
           mapSelection={{
             selectedAreaId,
             setSelectedAreaId,

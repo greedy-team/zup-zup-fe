@@ -3,7 +3,6 @@ import LostList from './list/lostList';
 import type { SchoolArea } from '../../../types/map/map';
 import type { MapSelectionState, ModeState, PaginationState } from '../../../types/main/main';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../../../types/main/mainApi';
-
 type Props = {
   pagination: PaginationState;
   mapSelection: MapSelectionState;
@@ -28,7 +27,7 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: Props) => {
         <aside className="h-full overflow-y-auto border-r">
           <LostList
             items={lists.items}
-            total={pagination.total}
+            totalCount={pagination.totalCount}
             page={pagination.page}
             setPage={pagination.setPage}
           />

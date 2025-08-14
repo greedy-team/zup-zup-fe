@@ -4,13 +4,13 @@ import Pagenation from './pagenation';
 
 type Props = {
   items: LostItemListItem[];
-  total: number;
+  totalCount: number;
   page: number;
   setPage: (page: number) => void;
 };
 
-export default function LostList({ items, total, page, setPage }: Props) {
-  const empty = total === 0;
+export default function LostList({ items, totalCount, page, setPage }: Props) {
+  const empty = totalCount === 0;
 
   if (empty) {
     return (
@@ -25,7 +25,7 @@ export default function LostList({ items, total, page, setPage }: Props) {
   return (
     <div className="px-4 py-4">
       <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
-      <div className="mb-3 text-xs text-gray-500">총 {total}개</div>
+      <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
 
       <ul className="space-y-3 pb-6">
         {items.map((item) => (
@@ -34,7 +34,7 @@ export default function LostList({ items, total, page, setPage }: Props) {
       </ul>
 
       <div className="flex items-center justify-center">
-        <Pagenation page={page} total={total} setPage={setPage} pageSize={5} />
+        <Pagenation page={page} totalCount={totalCount} setPage={setPage} />
       </div>
     </div>
   );
