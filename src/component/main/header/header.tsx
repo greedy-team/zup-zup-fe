@@ -9,27 +9,27 @@ type Props = {
 const Header = ({ categories, selectedCategory, onChangeCategory }: Props) => {
   return (
     <header className="shrink-0 border-b">
-      <div className="bg-white text-black px-4 h-20 flex items-center justify-between">
+      <div className="flex h-20 items-center justify-between bg-white px-4 text-black">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded bg-emerald-600 grid place-items-center">
+          <div className="grid size-10 place-items-center rounded bg-teal-600">
             <img src="/logo.png" alt="logo" className="size-7 object-contain" />
           </div>
           <h1 className="text-[30px] font-bold text-black">줍줍</h1>
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="px-3 py-1.5 rounded-lg bg-white text-emerald-700 text-sm border border-black/20 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+          <button className="rounded-lg border border-black/20 bg-white px-3 py-1.5 text-sm text-teal-700 hover:bg-teal-50 focus:ring-2 focus:ring-teal-400 focus:outline-none">
             로그인
           </button>
-          <button className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700 border border-black/20 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+          <button className="rounded-lg border border-black/20 bg-teal-600 px-3 py-1.5 text-sm text-white hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none">
             회원가입
           </button>
         </div>
       </div>
 
-      <fieldset className="bg-white px-4 py-3 overflow-x-auto border-0">
+      <fieldset className="overflow-x-auto border-0 bg-white px-4 py-3">
         <legend className="sr-only">카테고리 선택</legend>
-        <div className="flex gap-2 min-w-max">
+        <div className="flex min-w-max gap-2">
           {categories.map((category) => {
             const id = category;
             return (
@@ -41,11 +41,11 @@ const Header = ({ categories, selectedCategory, onChangeCategory }: Props) => {
                   value={category}
                   checked={category === selectedCategory}
                   onChange={() => onChangeCategory(category)}
-                  className="hidden peer"
+                  className="peer hidden"
                 />
                 <label
                   htmlFor={id}
-                  className="px-3 py-1.5 rounded-full text-sm border border-black/20 cursor-pointer peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-black/20 hover:bg-emerald-50 peer-checked:hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="cursor-pointer rounded-full border border-black/20 px-3 py-1.5 text-sm peer-checked:border-black/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
                 >
                   {category}
                 </label>

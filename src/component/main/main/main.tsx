@@ -30,14 +30,35 @@ const Main = ({
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
-  // 등록 모달의 open, close를 관리하는 상태
+  // 분실물 등록 모달 상태 관리
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
+  // 분실물 찾기 모달 상태 관리
+  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
+  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItem | null>(null);
+
+  // ListItem에서 호출할 핸들러
+  const handleOpenFindModal = (item: LostItem) => {
+    setSelectedItemForFind(item);
+    setIsFindModalOpen(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleCloseFindModal = () => {
+    setIsFindModalOpen(false);
+    setSelectedItemForFind(null);
+  };
 
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">
         <aside className="h-full overflow-y-auto border-r">
-          <LostList items={items} selectedCategory={selectedCategory} selectedArea={selectedArea} />
+          <LostList
+            items={items}
+            selectedCategory={selectedCategory}
+            selectedArea={selectedArea}
+            onFindClick={handleOpenFindModal}
+          />
         </aside>
         <section className="relative h-full min-h-0">
           <Map
@@ -56,6 +77,11 @@ const Main = ({
             분실물 추가
           </button>
         </section>
+
+        {/* 모달 렌더링 */}
+        {isFindModalOpen && selectedItemForFind && (
+          <FindLostItemModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+        )}
       </div>
 
       {/* isRegisterModalOpen 상태에 따라 RegisterModal을 조건부 렌더링 */}
