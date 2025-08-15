@@ -114,7 +114,7 @@ export function seedCategoryFeatures() {
     { categoryId: 3, features: [COLOR, BANK] },
     { categoryId: 4, features: [COLOR, WALLET_TYPE] },
     { categoryId: 5, features: [ACC_TYPE, ACC_COLOR] },
-    { categoryId: 6, features: [DEVICE_TYPE, BRAND, COLOR] },
+    { categoryId: 6, features: [DEVICE_TYPE, COLOR] },
     { categoryId: 99, features: [] },
   ];
 
