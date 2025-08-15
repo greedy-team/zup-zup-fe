@@ -1,13 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { getSummary, getDetail, getEtcDetail } from '../selectors/lostItems.selectors';
-
-function toInt(value: unknown): number | undefined {
-  const v = Array.isArray(value) ? value[0] : value;
-  if (v == null) return undefined;
-  if (typeof v !== 'string') return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : undefined;
-}
+import { toInt } from '../utils/toInt';
+import { createLostItemFromFormData } from '../selectors/register.selectors';
 
 export const lostItemsHandlers = [
   http.get('/api/lost-items/summary', ({ request }) => {
@@ -55,5 +49,14 @@ export const lostItemsHandlers = [
     }
 
     return HttpResponse.json(result, { status: 200 });
+  }),
+  http.post('/api/lost-items', async ({ request }) => {
+    const formData = await request.formData();
+    const result = createLostItemFromFormData(formData);
+
+    if (!result.ok) {
+      return HttpResponse.json(result, { status: 400 });
+    }
+    return HttpResponse.json(result, { status: 201 });
   }),
 ];

@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+@import './assets/fonts/fonts.css';
+
+body {
+  font-family: 'Moneygraphy-Rounded', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Ownglyph_corncorn-Rg', sans-serif;
+}

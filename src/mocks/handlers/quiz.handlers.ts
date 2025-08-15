@@ -4,12 +4,7 @@ import {
   submitQuizForLostItem,
   type QuizSubmitBody,
 } from '../selectors/quiz.selectors';
-
-function toInt(v: unknown): number | undefined {
-  if (typeof v !== 'string') return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : undefined;
-}
+import { toInt } from '../utils/toInt';
 
 export const quizHandlers = [
   http.get('/api/lost-items/:id/quiz', ({ params }) => {
