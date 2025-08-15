@@ -2,6 +2,7 @@ import { lostItems, type LostItem, type FeatureSelection } from '../db/lostItems
 import { categories } from '../db/categories.db';
 import { schoolAreas } from '../db/schoolAreas.db';
 import { categoryFeatures, type FeatureDef } from '../db/features.db';
+import { ETC_CATEGORY_ID } from '../../constants/category';
 
 export type CreateLostItemBody = {
   imageUrl: string;
@@ -70,7 +71,7 @@ export function createLostItem(body: CreateLostItemBody): CreateLostItemResult {
   const foundAreaName = getAreaName(body.schoolAreaId);
   if (!foundAreaName) return { ok: false, error: 'INVALID_SCHOOL_AREA' };
 
-  const isEtc = body.categoryId === 99;
+  const isEtc = body.categoryId === ETC_CATEGORY_ID;
   const selections = body.features ?? [];
 
   if (!isEtc) {
