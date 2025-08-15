@@ -1,11 +1,7 @@
 import { http, HttpResponse } from 'msw';
-import { getSummary, getDetail } from '../selectors/lostItems.selectors';
-
-function toInt(value: string | null | undefined): number | undefined {
-  if (!value) return undefined;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : undefined;
-}
+import { getSummary, getDetail, getEtcDetail } from '../selectors/lostItems.selectors';
+import { toInt } from '../utils/toInt';
+import { createLostItemFromFormData } from '../selectors/register.selectors';
 
 export const lostItemsHandlers = [
   http.get('/api/lost-items/summary', ({ request }) => {
@@ -38,5 +34,29 @@ export const lostItemsHandlers = [
     });
 
     return HttpResponse.json(data);
+  }),
+  http.get('/api/lost-items/:id', ({ params }) => {
+    const id = toInt(params.id);
+    if (!id) return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
+
+    const result = getEtcDetail(id);
+
+    if ('error' in result) {
+      if (result.error === 'NOT_FOUND') {
+        return HttpResponse.json({ error: 'Not Found' }, { status: 404 });
+      }
+      return HttpResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    return HttpResponse.json(result, { status: 200 });
+  }),
+  http.post('/api/lost-items', async ({ request }) => {
+    const formData = await request.formData();
+    const result = createLostItemFromFormData(formData);
+
+    if (!result.ok) {
+      return HttpResponse.json(result, { status: 400 });
+    }
+    return HttpResponse.json(result, { status: 201 });
   }),
 ];

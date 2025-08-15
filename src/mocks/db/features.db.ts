@@ -1,5 +1,10 @@
 export type FeatureOption = { optionId: number; text: string };
-export type FeatureDef = { featureId: number; featureText: string; options: FeatureOption[] };
+export type FeatureDef = {
+  featureId: number;
+  featureText: string;
+  quizQuestion: string;
+  options: FeatureOption[];
+};
 
 export type CategoryFeatures = {
   categoryId: number;
