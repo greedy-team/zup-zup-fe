@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ListItemProps, StatusBadgeProps } from '../../../../types/main';
+import type { ListItemProps, StatusBadgeProps } from '../../../../types/main/components';
 
 function formatKST(iso: string) {
   try {
@@ -15,11 +15,11 @@ function formatKST(iso: string) {
 
 function StatusBadge({ status }: StatusBadgeProps) {
   const isFound = status === 'found';
-  const cls = isFound
+  const badgeClass = isFound
     ? 'bg-teal-50 text-teal-700 border-teal-200'
     : 'bg-gray-50 text-gray-700 border-gray-200';
   return (
-    <span className={`rounded-full border px-2 py-0.5 text-[11px] ${cls}`}>
+    <span className={`rounded-full border px-2 py-0.5 text-[11px] ${badgeClass}`}>
       {isFound ? '습득물' : '분실물'}
     </span>
   );

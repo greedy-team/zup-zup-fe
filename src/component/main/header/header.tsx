@@ -1,4 +1,4 @@
-import type { CategoryRadioProps } from '../../../types/main';
+import type { CategoryRadioProps } from '../../../types/main/components';
 import Authentication from './Authentication';
 import CategoryRadio from './categoryRadio';
 import Logo from './logo';

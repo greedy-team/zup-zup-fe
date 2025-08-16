@@ -1,4 +1,4 @@
-import type { PaginationProps } from '../../../../types/main';
+import type { PaginationProps } from '../../../../types/main/components';
 
 const Pagenation = ({ page, totalCount, setPage }: PaginationProps) => {
   return (

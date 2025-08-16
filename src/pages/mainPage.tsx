@@ -7,7 +7,7 @@ import {
   getLostItemDetail,
   getLostItemSummary,
   getSchoolAreas,
-} from '../apis/main/lostApi';
+} from '../apis/main/mainApi';
 import type { SchoolArea } from '../types/map/map';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/lost/lostApi';
 

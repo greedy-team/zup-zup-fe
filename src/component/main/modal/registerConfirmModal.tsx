@@ -1,4 +1,4 @@
-import type { ModalProps } from '../../../types/main';
+import type { ModalProps } from '../../../types/main/components';
 
 const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: ModalProps) => {
   if (!isOpen) return null;

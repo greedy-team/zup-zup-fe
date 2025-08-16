@@ -1,6 +1,6 @@
 import LostListItem from './lostListItem';
 import Pagenation from './pagenation';
-import type { LostListProps } from '../../../../types/main';
+import type { LostListProps } from '../../../../types/main/components';
 
 export default function LostList({ items, totalCount, page, setPage }: LostListProps) {
   const empty = totalCount === 0;

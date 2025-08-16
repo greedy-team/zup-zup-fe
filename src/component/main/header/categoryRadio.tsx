@@ -1,4 +1,4 @@
-import type { CategoryRadioProps } from '../../../types/main';
+import type { CategoryRadioProps } from '../../../types/main/components';
 
 const CategoryRadio = ({
   categories,

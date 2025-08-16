@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
-import type { MapProps } from '../../../../types/main/components';
+import type { MapProps } from '../../../types/main/components';
 import { extractCoords } from '../../../utils/Map/mapUtils';
 
 const Map = (props: MapProps) => {
