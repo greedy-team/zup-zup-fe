@@ -145,7 +145,7 @@ const Step2_DetailForm = ({
         />
       </FormSection>
 
-      <FormSection title="보관 장소">
+      <FormSection title="보관 장소 (예: 학생회관 401호)">
         <input
           id="storageLocation"
           type="text"
