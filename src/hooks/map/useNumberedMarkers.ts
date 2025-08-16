@@ -1,19 +1,13 @@
 import { useEffect } from 'react';
 import { createNumberedMarker } from '../../utils/Map/mapUtils';
-import type { SchoolArea } from '../../types/map/map';
-import type { LostItemSummaryRow } from '../../types/lost/lostApi';
+import type { UseNumberedMarkersHookOptions } from '../../types/hooks/map';
 
 export function useNumberedMarkers({
   map,
   schoolAreas,
   summary,
   enabled,
-}: {
-  map: kakao.maps.Map | null;
-  schoolAreas: SchoolArea[];
-  summary: LostItemSummaryRow[];
-  enabled: boolean;
-}) {
+}: UseNumberedMarkersHookOptions) {
   useEffect(() => {
     if (!map || !enabled) return;
 

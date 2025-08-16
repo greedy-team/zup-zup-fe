@@ -2,44 +2,44 @@ import type { Category, LostItemListItem, LostItemSummaryRow } from '../lost/los
 import type { PaginationState, MapSelectionState, ModeState } from './main';
 import type { SchoolArea } from '../map/map';
 
-export type CategoryRadioProps = {
+export type CategoryRadioComponentProps = {
   categories: Category[];
   selectedCategoryId: number;
   setSelectedCategoryId: (c: number) => void;
 };
 
-export type ModalProps = {
+export type ModalComponentProps = {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
 
-export type ButtonProps = {
+export type ButtonComponentProps = {
   onClick: () => void;
   disabled?: boolean;
   className?: string;
   children: React.ReactNode;
 };
 
-export type ListItemProps = {
+export type ListItemComponentProps = {
   item: LostItemListItem;
   className?: string;
 };
 
-export type PaginationProps = {
+export type PaginationComponentProps = {
   page: number;
   totalCount: number;
   setPage: (page: number) => void;
 };
 
-export type LostListProps = {
+export type LostListComponentProps = {
   items: LostItemListItem[];
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
 };
 
-export type MainProps = {
+export type MainComponentProps = {
   pagination: PaginationState;
   mapSelection: MapSelectionState;
   mode: ModeState;
@@ -56,7 +56,7 @@ export type MainProps = {
   };
 };
 
-export type MapProps = {
+export type MapComponentProps = {
   setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
   setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
   setSelectedAreaId: (areaId: number) => void;
@@ -66,6 +66,6 @@ export type MapProps = {
   selectedMode: 'register' | 'append';
 };
 
-export type StatusBadgeProps = {
+export type StatusBadgeComponentProps = {
   status: LostItemListItem['status'];
 };

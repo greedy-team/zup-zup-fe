@@ -1,12 +1,12 @@
 import Map from './map';
 import LostList from './list/lostList';
-import type { MainProps } from '../../../types/main/components';
+import type { MainComponentProps } from '../../../types/main/components';
 
-const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainProps) => {
+const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">
-        <aside className="h-full overflow-y-auto border-r">
+        <aside className="h-full border-r">
           <LostList
             items={lists.items}
             totalCount={pagination.totalCount}

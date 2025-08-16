@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export function useLoader(): boolean {
+import type { UseLoaderHookReturnValue } from '../../types/hooks/map';
+
+export function useLoader(): UseLoaderHookReturnValue {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const key = import.meta.env.VITE_KAKAO_MAP_API_KEY;

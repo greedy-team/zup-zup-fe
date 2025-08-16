@@ -1,8 +1,8 @@
 import LostListItem from './lostListItem';
 import Pagenation from './pagenation';
-import type { LostListProps } from '../../../../types/main/components';
+import type { LostListComponentProps } from '../../../../types/main/components';
 
-export default function LostList({ items, totalCount, page, setPage }: LostListProps) {
+export default function LostList({ items, totalCount, page, setPage }: LostListComponentProps) {
   const empty = totalCount === 0;
 
   if (empty) {
@@ -16,15 +16,17 @@ export default function LostList({ items, totalCount, page, setPage }: LostListP
   }
 
   return (
-    <div className="px-4 py-4">
+    <div className="overflow-y-auto px-4 py-4">
       <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
       <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
 
-      <ul className="space-y-3 pb-6">
-        {items.map((item) => (
-          <LostListItem key={item.lostItemId} item={item} />
-        ))}
-      </ul>
+      <div className="max-h-[61vh] min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 [scrollbar-gutter:stable]">
+        <ul className="m-0 list-none space-y-3 p-0 pb-6">
+          {items.map((item) => (
+            <LostListItem key={item.lostItemId} item={item} />
+          ))}
+        </ul>
+      </div>
 
       <div className="flex items-center justify-center">
         <Pagenation page={page} totalCount={totalCount} setPage={setPage} />

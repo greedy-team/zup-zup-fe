@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import type { ListItemProps, StatusBadgeProps } from '../../../../types/main/components';
+import type {
+  ListItemComponentProps,
+  StatusBadgeComponentProps,
+} from '../../../../types/main/components';
 
 function formatKST(iso: string) {
   try {
@@ -13,7 +16,7 @@ function formatKST(iso: string) {
   }
 }
 
-function StatusBadge({ status }: StatusBadgeProps) {
+function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
   const badgeClass = isFound
     ? 'bg-teal-50 text-teal-700 border-teal-200'
@@ -25,7 +28,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
   );
 }
 
-export default function LostListItem({ item, className = '' }: ListItemProps) {
+export default function LostListItem({ item, className = '' }: ListItemComponentProps) {
   const [imgError, setImgError] = useState(false);
 
   return (

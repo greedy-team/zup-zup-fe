@@ -1,10 +1,10 @@
-import type { CategoryRadioProps } from '../../../types/main/components';
+import type { CategoryRadioComponentProps } from '../../../types/main/components';
 
 const CategoryRadio = ({
   categories,
   selectedCategoryId,
   setSelectedCategoryId,
-}: CategoryRadioProps) => {
+}: CategoryRadioComponentProps) => {
   return (
     <>
       <fieldset className="overflow-x-auto border-0 bg-white px-4 py-3">

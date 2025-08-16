@@ -1,6 +1,6 @@
-import type { PaginationProps } from '../../../../types/main/components';
+import type { PaginationComponentProps } from '../../../../types/main/components';
 
-const Pagenation = ({ page, totalCount, setPage }: PaginationProps) => {
+const Pagenation = ({ page, totalCount, setPage }: PaginationComponentProps) => {
   return (
     <div className="fixed bottom-0 flex justify-center gap-2 rounded-full bg-white/90 px-4 py-2 backdrop-blur">
       <button

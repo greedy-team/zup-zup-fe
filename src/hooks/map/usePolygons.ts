@@ -1,16 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { BASE_STYLE, HOVER_STYLE, SELECTED_STYLE } from '../../constants/map/polygonStyle';
-import type { SchoolArea } from '../../types/map/map';
-
-type Opts = {
-  map: kakao.maps.Map | null;
-  schoolAreas: SchoolArea[];
-  selectedAreaId: number;
-  selectedMode: 'append' | 'register';
-  onOpenRegisterConfirm: () => void;
-  onSelectArea: (areaId: number) => void;
-  onPickLatLng: (latlng: kakao.maps.LatLng) => void;
-};
+import type { UsePolygonsHookOptions } from '../../types/hooks/map';
 
 export function usePolygons({
   map,
@@ -20,7 +10,7 @@ export function usePolygons({
   onOpenRegisterConfirm,
   onSelectArea,
   onPickLatLng,
-}: Opts) {
+}: UsePolygonsHookOptions) {
   const polysRef = useRef<kakao.maps.Polygon[]>([]);
   const polyByIdRef = useRef<Map<number, kakao.maps.Polygon>>(new Map());
   const selectedPolygonRef = useRef<kakao.maps.Polygon | null>(null);
