@@ -48,14 +48,18 @@ export function usePolygons({
     const kakao = window.kakao;
     const polys: kakao.maps.Polygon[] = [];
     const byId = new Map<number, kakao.maps.Polygon>();
-    const handlers: Array<{ target: any; type: string; handler: (...a: any[]) => void }> = [];
+    const handlers: Array<{
+      target: kakao.maps.Polygon;
+      type: 'click' | 'mouseover' | 'mouseout';
+      handler: (e: kakao.maps.event.MouseEvent) => void;
+    }> = [];
 
     schoolAreas.forEach((area) => {
       const path = area.areaPolygon.coordinates.map((c) => new kakao.maps.LatLng(c.lat, c.lng));
       const polygon = new kakao.maps.Polygon({ path, ...BASE_STYLE });
       polygon.setMap(map);
 
-      const onClick = (e: any) => {
+      const onClick = (e: kakao.maps.event.MouseEvent) => {
         kakao.maps.event.preventMap?.();
         if (modeRef.current === 'register') {
           openRef.current?.();
@@ -67,11 +71,11 @@ export function usePolygons({
         selectRef.current?.(area.id);
         pickRef.current?.(e.latLng);
       };
-      const onOver = () => {
+      const onOver = (e: kakao.maps.event.MouseEvent) => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(HOVER_STYLE);
       };
-      const onOut = () => {
+      const onOut = (e: kakao.maps.event.MouseEvent) => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(BASE_STYLE);
       };
