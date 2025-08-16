@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LostList from './lostList';
 import Map from './map';
 import RegisterModal from '../../register/RegisterModal';
 import type { Category } from '../../../types/main/category';
 import type { LostItem } from './lostListItem';
+import FindModal from '../../find/FindModal';
+import { fetchSchoolAreas } from '../../../api/register';
+import type { SchoolArea } from '../../../types/register';
 
 type Props = {
   selectedCategory: Category;
@@ -12,9 +15,6 @@ type Props = {
   setSelectedLat: (lat: number | null) => void;
   selectedLng: number | null;
   setSelectedLng: (lng: number | null) => void;
-  setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
-  setSelectedArea: (area: string) => void;
-  selectedArea: string;
 };
 
 const Main = ({
@@ -24,30 +24,31 @@ const Main = ({
   setSelectedLat,
   selectedLng,
   setSelectedLng,
-  setIsRegisterConfirmModalOpen,
-  setSelectedArea,
-  selectedArea,
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
-  // 분실물 등록 모달 상태 관리
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
+  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
 
-  // 분실물 찾기 모달 상태 관리
   const [isFindModalOpen, setIsFindModalOpen] = useState(false);
   const [selectedItemForFind, setSelectedItemForFind] = useState<LostItem | null>(null);
 
-  // ListItem에서 호출할 핸들러
+  useEffect(() => {
+    fetchSchoolAreas().then(setSchoolAreas).catch(console.error);
+  }, []);
+
   const handleOpenFindModal = (item: LostItem) => {
     setSelectedItemForFind(item);
     setIsFindModalOpen(true);
   };
 
-  // 모달 닫기 핸들러
   const handleCloseFindModal = () => {
     setIsFindModalOpen(false);
     setSelectedItemForFind(null);
   };
+
+  const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId)?.areaName || '전체';
 
   return (
     <main className="min-h-0 flex-1">
@@ -64,8 +65,8 @@ const Main = ({
           <Map
             setSelectedLat={setSelectedLat}
             setSelectedLng={setSelectedLng}
-            setSelectedArea={setSelectedArea}
-            selectedArea={selectedArea}
+            setSelectedAreaId={setSelectedAreaId}
+            selectedAreaId={selectedAreaId}
           />
           <button
             disabled={!canSubmit}
@@ -78,14 +79,17 @@ const Main = ({
           </button>
         </section>
 
-        {/* 모달 렌더링 */}
         {isFindModalOpen && selectedItemForFind && (
-          <FindLostItemModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+          <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+        )}
+
+        {isRegisterModalOpen && (
+          <RegisterModal
+            onClose={() => setIsRegisterModalOpen(false)}
+            schoolAreaId={selectedAreaId}
+          />
         )}
       </div>
-
-      {/* isRegisterModalOpen 상태에 따라 RegisterModal을 조건부 렌더링 */}
-      {isRegisterModalOpen && <RegisterModal onClose={() => setIsRegisterModalOpen(false)} />}
     </main>
   );
 };
