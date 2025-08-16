@@ -17,8 +17,9 @@ export function useNumberedMarkers({
   useEffect(() => {
     if (!map || !enabled) return;
 
+    const summaryMap = new Map(summary.map((item) => [item.schoolAreaId, item.count]));
     const markers = schoolAreas.map((area) => {
-      const count = summary.find((r) => r.schoolAreaId === area.id)?.count ?? 0;
+      const count = summaryMap.get(area.id) ?? 0;
       return createNumberedMarker(map, area.marker, count);
     });
 
