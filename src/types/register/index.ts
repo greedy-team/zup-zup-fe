@@ -1,32 +1,84 @@
+import type React from 'react';
+
 export type Category = {
-  id: string;
-  name: string;
-  icon?: string;
+  categoryId: number;
+  categoryName: string;
 };
 
-export type CategoryFeature = {
-  id: string;
-  question: string;
-  options: string[];
+export type Feature = {
+  featureId: number;
+  featureText: string;
+  options: FeatureOption[];
+};
+
+export type FeatureOption = {
+  id: number;
+  text: string;
+};
+
+export type FeatureSelection = {
+  featureId: number;
+  optionId: number;
+};
+
+export type Coordinate = { lat: number; lng: number };
+
+export type SchoolArea = {
+  id: number;
+  areaName: string;
+  areaPolygon: { coordinates: Coordinate[] };
+  marker: Coordinate;
 };
 
 export type RegisterFormData = {
-  featureAnswers: Record<string, string>;
-  building: string;
-  locationDetail: string;
-  description: string;
-  storageLocation: string;
+  schoolAreaId: number | null;
+  detailLocation: string;
+  storageName: string;
+  features: FeatureSelection[];
+  description?: string;
   images: File[];
 };
 
-export type CategoryGroup = {
-  category: string;
+export type ResultProps = {
+  onClose: () => void;
+  schoolAreaId: number | null;
+};
+
+export type ResultModalContent = {
+  status: 'success' | 'error' | 'info';
+  title: string;
+  message: string;
+  buttonText: string;
+  onConfirm: () => void;
+};
+
+export type Step1Props = {
+  categories: Category[];
+  selectedCategory: Category | null;
+  onSelect: (category: Category) => void;
 };
 
 export type Step2Props = {
   isLoading: boolean;
   formData: RegisterFormData;
   setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
-  categoryFeatures: CategoryFeature[];
-  selectedArea: string;
+  categoryFeatures: Feature[];
+  schoolAreas: SchoolArea[];
+  handleFeatureChange: (featureId: number, optionId: number) => void;
+};
+
+export type Step3Props = {
+  selectedCategory: Category | null;
+  formData: RegisterFormData;
+  categoryFeatures: Feature[];
+  schoolAreas: SchoolArea[];
+};
+
+export type LostItemRegisterRequest = {
+  categoryId: number;
+  schoolAreaId: number;
+  detailLocation: string;
+  storageName: string;
+  features: FeatureSelection[];
+  description?: string;
 };
