@@ -3,7 +3,6 @@ import { categories, resetCategories, type Category } from '../db/categories.db'
 export function seedCategories() {
   resetCategories();
   const rows: Category[] = [
-    { categoryId: 0, categoryName: '전체' },
     { categoryId: 1, categoryName: '핸드폰' },
     { categoryId: 2, categoryName: '가방' },
     { categoryId: 3, categoryName: '카드' },

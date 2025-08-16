@@ -5,12 +5,14 @@ const CategoryRadio = ({
   selectedCategoryId,
   setSelectedCategoryId,
 }: CategoryRadioComponentProps) => {
+  const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories];
+
   return (
     <>
       <fieldset className="overflow-x-auto border-0 bg-white px-4 py-3">
         <legend className="sr-only">카테고리 선택</legend>
         <div className="flex min-w-max gap-2">
-          {categories.map((category) => {
+          {tmpCategoryList.map((category) => {
             const id = category.categoryId;
             const name = category.categoryName;
             return (
