@@ -12,8 +12,6 @@ export type PaginationState = {
 export type MapSelectionState = {
   selectedAreaId: number;
   setSelectedAreaId: (id: number) => void;
-  selectedCoordinates: { lat: number; lng: number } | null;
-  setSelectedCoordinates: (c: { lat: number; lng: number } | null) => void;
 };
 
 export type ModeState = {

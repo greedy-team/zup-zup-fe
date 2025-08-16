@@ -8,7 +8,6 @@ export type UsePolygonsHookOptions = {
   selectedMode: 'append' | 'register';
   onOpenRegisterConfirm: () => void;
   onSelectArea: (areaId: number) => void;
-  onPickLatLng: (latlng: kakao.maps.LatLng) => void;
 };
 
 export type UseNumberedMarkersHookOptions = {

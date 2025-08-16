@@ -9,7 +9,6 @@ export function usePolygons({
   selectedMode,
   onOpenRegisterConfirm,
   onSelectArea,
-  onPickLatLng,
 }: UsePolygonsHookOptions) {
   const polysRef = useRef<kakao.maps.Polygon[]>([]);
   const polyByIdRef = useRef<Map<number, kakao.maps.Polygon>>(new Map());
@@ -17,7 +16,6 @@ export function usePolygons({
   const modeRef = useRef(selectedMode);
   const openRef = useRef(onOpenRegisterConfirm);
   const selectRef = useRef(onSelectArea);
-  const pickRef = useRef(onPickLatLng);
 
   useEffect(() => {
     modeRef.current = selectedMode;
@@ -28,9 +26,6 @@ export function usePolygons({
   useEffect(() => {
     selectRef.current = onSelectArea;
   }, [onSelectArea]);
-  useEffect(() => {
-    pickRef.current = onPickLatLng;
-  }, [onPickLatLng]);
 
   useEffect(() => {
     if (!map || !schoolAreas.length) return;
@@ -59,13 +54,12 @@ export function usePolygons({
         polygon.setOptions(SELECTED_STYLE);
         selectedPolygonRef.current = polygon;
         selectRef.current?.(area.id);
-        pickRef.current?.(e.latLng);
       };
-      const onOver = (e: kakao.maps.event.MouseEvent) => {
+      const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(HOVER_STYLE);
       };
-      const onOut = (e: kakao.maps.event.MouseEvent) => {
+      const onOut = () => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(BASE_STYLE);
       };

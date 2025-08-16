@@ -17,7 +17,6 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
         <section className="relative h-full min-h-0">
           <Map
             setIsRegisterConfirmModalOpen={ui.setIsRegisterConfirmModalOpen}
-            setSelectedCoordinates={mapSelection.setSelectedCoordinates}
             schoolAreas={areas.schoolAreas}
             setSelectedAreaId={mapSelection.setSelectedAreaId}
             selectedAreaId={mapSelection.selectedAreaId}

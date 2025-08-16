@@ -1,9 +1,5 @@
 import type { SchoolArea } from '../../types/map/map';
 
-export function extractCoords(latlng: kakao.maps.LatLng) {
-  return { lat: latlng.getLat(), lng: latlng.getLng() };
-}
-
 export function toKakaoPath(area: SchoolArea) {
   return area.areaPolygon.coordinates.map((c) => new kakao.maps.LatLng(c.lat, c.lng));
 }

@@ -17,10 +17,6 @@ const MainPage = () => {
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
-  const [selectedCoordinates, setSelectedCoordinates] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
 
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
 
@@ -89,8 +85,6 @@ const MainPage = () => {
           mapSelection={{
             selectedAreaId,
             setSelectedAreaId,
-            selectedCoordinates,
-            setSelectedCoordinates,
           }}
           mode={{ selectedMode, toggleMode }}
           lists={{ items, categories }}

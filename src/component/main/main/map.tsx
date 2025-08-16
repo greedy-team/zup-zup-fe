@@ -3,12 +3,10 @@ import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
 import type { MapComponentProps } from '../../../types/main/components';
-import { extractCoords } from '../../../utils/Map/mapUtils';
 
 const Map = (props: MapComponentProps) => {
   const {
     setIsRegisterConfirmModalOpen,
-    setSelectedCoordinates,
     setSelectedAreaId,
     selectedAreaId,
     schoolAreas,
@@ -39,7 +37,6 @@ const Map = (props: MapComponentProps) => {
     selectedMode,
     onOpenRegisterConfirm: () => setIsRegisterConfirmModalOpen(true),
     onSelectArea: setSelectedAreaId,
-    onPickLatLng: (latlng) => setSelectedCoordinates(extractCoords(latlng)),
   });
 
   useNumberedMarkers({
@@ -63,11 +60,10 @@ const Map = (props: MapComponentProps) => {
         return;
       }
       setSelectedAreaId(0);
-      setSelectedCoordinates(extractCoords(e.latLng));
     };
     kakao.maps.event.addListener(map, 'click', onMapClick);
     return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
-  }, [map, selectedMode, setSelectedAreaId, setSelectedCoordinates, setIsRegisterConfirmModalOpen]);
+  }, [map, selectedMode, setSelectedAreaId, setIsRegisterConfirmModalOpen]);
 
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
 

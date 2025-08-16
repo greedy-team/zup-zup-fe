@@ -58,7 +58,6 @@ export type MainComponentProps = {
 
 export type MapComponentProps = {
   setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
-  setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
   setSelectedAreaId: (areaId: number) => void;
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
