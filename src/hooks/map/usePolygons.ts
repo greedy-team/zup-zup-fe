@@ -46,14 +46,20 @@ export function usePolygons({
 
       const onClick = (e: kakao.maps.event.MouseEvent) => {
         kakao.maps.event.preventMap?.();
+
+        selectRef.current?.(area.id);
+
         if (modeRef.current === 'register') {
+          polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
+          polygon.setOptions(SELECTED_STYLE);
+          selectedPolygonRef.current = polygon;
           openRef.current?.();
           return;
         }
+
         polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
         polygon.setOptions(SELECTED_STYLE);
         selectedPolygonRef.current = polygon;
-        selectRef.current?.(area.id);
       };
       const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;
