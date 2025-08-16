@@ -1,26 +1,8 @@
 import Map from './map';
 import LostList from './list/lostList';
-import type { SchoolArea } from '../../../types/map/map';
-import type { MapSelectionState, ModeState, PaginationState } from '../../../types/main/main';
-import type { Category, LostItemListItem, LostItemSummaryRow } from '../../../types/main/mainApi';
-type Props = {
-  pagination: PaginationState;
-  mapSelection: MapSelectionState;
-  mode: ModeState;
-  lists: {
-    items: LostItemListItem[];
-    categories: Category[];
-  };
-  areas: {
-    schoolAreas: SchoolArea[];
-    lostItemSummary: LostItemSummaryRow[];
-  };
-  ui: {
-    setIsRegisterConfirmModalOpen: (b: boolean) => void;
-  };
-};
+import type { MainProps } from '../../../types/main/components';
 
-const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: Props) => {
+const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainProps) => {
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">

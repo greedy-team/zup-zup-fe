@@ -2,22 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
-import type { SchoolArea } from '../../../types/map/map';
-import type { LostItemSummaryRow } from '../../../types/main/mainApi';
-import type { lostItemMode } from '../../../types/main/main';
+import type { MapProps } from '../../../../types/main/components';
 import { extractCoords } from '../../../utils/Map/mapUtils';
 
-type Props = {
-  setIsRegisterConfirmModalOpen: (isOpen: boolean) => void;
-  setSelectedCoordinates: (coordinates: { lat: number; lng: number } | null) => void;
-  setSelectedAreaId: (areaId: number) => void;
-  selectedAreaId: number;
-  schoolAreas: SchoolArea[];
-  lostItemSummary: LostItemSummaryRow[];
-  selectedMode: lostItemMode;
-};
-
-const Map = (props: Props) => {
+const Map = (props: MapProps) => {
   const {
     setIsRegisterConfirmModalOpen,
     setSelectedCoordinates,

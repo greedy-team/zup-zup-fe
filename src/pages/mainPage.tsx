@@ -7,10 +7,9 @@ import {
   getLostItemDetail,
   getLostItemSummary,
   getSchoolAreas,
-} from '../apis/main/categoriesApi';
+} from '../apis/main/lostApi';
 import type { SchoolArea } from '../types/map/map';
-import type { lostItemMode } from '../types/main/main';
-import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/main/mainApi';
+import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/lost/lostApi';
 
 const MainPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -28,7 +27,7 @@ const MainPage = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
 
-  const [selectedMode, setSelectedMode] = useState<lostItemMode>('append');
+  const [selectedMode, setSelectedMode] = useState<'register' | 'append'>('append');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
 

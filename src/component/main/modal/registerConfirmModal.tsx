@@ -1,10 +1,6 @@
-type Props = {
-  isOpen: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
-};
+import type { ModalProps } from '../../../types/main';
 
-const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: Props) => {
+const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: ModalProps) => {
   if (!isOpen) return null;
   return (
     <div

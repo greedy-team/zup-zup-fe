@@ -1,15 +1,8 @@
 import LostListItem from './lostListItem';
-import type { LostItemListItem } from '../../../../types/main/mainApi';
 import Pagenation from './pagenation';
+import type { LostListProps } from '../../../../types/main';
 
-type Props = {
-  items: LostItemListItem[];
-  totalCount: number;
-  page: number;
-  setPage: (page: number) => void;
-};
-
-export default function LostList({ items, totalCount, page, setPage }: Props) {
+export default function LostList({ items, totalCount, page, setPage }: LostListProps) {
   const empty = totalCount === 0;
 
   if (empty) {

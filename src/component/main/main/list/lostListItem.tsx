@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { LostItemListItem } from '../../../../types/main/mainApi';
+import type { ListItemProps, StatusBadgeProps } from '../../../../types/main';
 
 function formatKST(iso: string) {
   try {
@@ -13,7 +13,7 @@ function formatKST(iso: string) {
   }
 }
 
-function StatusBadge({ status }: { status: LostItemListItem['status'] }) {
+function StatusBadge({ status }: StatusBadgeProps) {
   const isFound = status === 'found';
   const cls = isFound
     ? 'bg-teal-50 text-teal-700 border-teal-200'
@@ -25,12 +25,7 @@ function StatusBadge({ status }: { status: LostItemListItem['status'] }) {
   );
 }
 
-type Props = {
-  item: LostItemListItem;
-  className?: string;
-};
-
-export default function LostListItem({ item, className = '' }: Props) {
+export default function LostListItem({ item, className = '' }: ListItemProps) {
   const [imgError, setImgError] = useState(false);
 
   return (
