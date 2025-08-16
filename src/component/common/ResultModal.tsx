@@ -1,7 +1,7 @@
 import InfoIcon from '../common/Icons/InfoIcon';
 import CheckIcon from '../common/Icons/CheckIcon';
 import WrongIcon from '../common/Icons/WrongIcon';
-import type { ResultModalProps } from '../../types/find/index';
+import type { ResultModalProps } from '../../types/find';
 
 const ICONS = {
   success: { component: <CheckIcon />, bg: 'bg-green-500' },
@@ -25,7 +25,7 @@ const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultMo
         <p className="mt-2 text-gray-600">{message}</p>
         <button
           onClick={onConfirm}
-          className="mt-8 w-full rounded-lg bg-teal-600 py-3 text-base font-bold text-white transition hover:bg-teal-700"
+          className="mt-8 w-full rounded-lg bg-teal-500 py-3 text-base font-bold text-white transition hover:bg-teal-600"
         >
           {buttonText}
         </button>

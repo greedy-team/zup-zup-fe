@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import LostList from './lostList';
 import Map from './map';
-import FindLostItemModal from '../../find/FindModal';
+import RegisterModal from '../../register/RegisterModal';
 import type { Category } from '../../../types/main/category';
 import type { LostItem } from './lostListItem';
 
@@ -30,7 +30,10 @@ const Main = ({
 }: Props) => {
   const canSubmit = selectedLat != null && selectedLng != null;
 
-  // --- 분실물 찾기 모달 상태 관리 ---
+  // 분실물 등록 모달 상태 관리
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
+  // 분실물 찾기 모달 상태 관리
   const [isFindModalOpen, setIsFindModalOpen] = useState(false);
   const [selectedItemForFind, setSelectedItemForFind] = useState<LostItem | null>(null);
 
@@ -66,9 +69,9 @@ const Main = ({
           />
           <button
             disabled={!canSubmit}
-            className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-700 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+            className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             onClick={() => {
-              setIsRegisterConfirmModalOpen(true);
+              setIsRegisterModalOpen(true);
             }}
           >
             분실물 추가
@@ -80,6 +83,9 @@ const Main = ({
           <FindLostItemModal item={selectedItemForFind} onClose={handleCloseFindModal} />
         )}
       </div>
+
+      {/* isRegisterModalOpen 상태에 따라 RegisterModal을 조건부 렌더링 */}
+      {isRegisterModalOpen && <RegisterModal onClose={() => setIsRegisterModalOpen(false)} />}
     </main>
   );
 };

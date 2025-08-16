@@ -1,6 +1,6 @@
 const InfoIcon = () => (
   <svg
-    className="w-8 h-8 text-white"
+    className="h-8 w-8 text-white"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
