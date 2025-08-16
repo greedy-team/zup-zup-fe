@@ -27,7 +27,10 @@ const Step2_DetailForm = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'locationDetail' || 'storageLocation' ? value.replace(/^\s+/, '') : value,
+    }));
   };
 
   // 카테고리 특징 선택 핸들러
