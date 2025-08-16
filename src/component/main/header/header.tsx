@@ -7,6 +7,7 @@ const Header = ({
   categories,
   selectedCategoryId,
   setSelectedCategoryId,
+  selectedMode,
 }: CategoryRadioComponentProps) => {
   return (
     <header className="shrink-0 border-b">
@@ -20,7 +21,11 @@ const Header = ({
         categories={categories}
         selectedCategoryId={selectedCategoryId}
         setSelectedCategoryId={setSelectedCategoryId}
+        selectedMode={selectedMode}
       />
+      {selectedMode === 'register' && (
+        <div className="absolute top-0 right-0 left-0 z-40 h-30 bg-gray-500/30" />
+      )}
     </header>
   );
 };

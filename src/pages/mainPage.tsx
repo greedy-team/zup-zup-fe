@@ -68,10 +68,6 @@ const MainPage = () => {
     setPage(1);
   }, [selectedCategoryId, selectedAreaId]);
 
-  useEffect(() => {
-    setSelectedAreaId(0);
-  }, [selectedMode]);
-
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -79,6 +75,7 @@ const MainPage = () => {
           categories={categories}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
+          selectedMode={selectedMode}
         />
         <Main
           pagination={{ page, setPage, totalCount: totalCount }}

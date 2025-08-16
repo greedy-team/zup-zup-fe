@@ -1,11 +1,12 @@
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../lost/lostApi';
-import type { PaginationState, MapSelectionState, ModeState } from './main';
+import type { PaginationState, MapSelectionState, ModeState, lostItemMode } from './main';
 import type { SchoolArea } from '../map/map';
 
 export type CategoryRadioComponentProps = {
   categories: Category[];
   selectedCategoryId: number;
   setSelectedCategoryId: (c: number) => void;
+  selectedMode: lostItemMode;
 };
 
 export type ModalComponentProps = {
@@ -37,6 +38,7 @@ export type LostListComponentProps = {
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
+  selectedMode: lostItemMode;
 };
 
 export type MainComponentProps = {
@@ -62,7 +64,7 @@ export type MapComponentProps = {
   selectedAreaId: number;
   schoolAreas: SchoolArea[];
   lostItemSummary: LostItemSummaryRow[];
-  selectedMode: 'register' | 'append';
+  selectedMode: lostItemMode;
 };
 
 export type StatusBadgeComponentProps = {

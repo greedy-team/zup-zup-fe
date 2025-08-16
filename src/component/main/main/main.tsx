@@ -5,14 +5,19 @@ import type { MainComponentProps } from '../../../types/main/components';
 const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
   return (
     <main className="min-h-0 flex-1">
-      <div className="grid h-full min-h-0 grid-cols-[360px_1fr]">
-        <aside className="h-full border-r">
+      <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
+        <aside className="relative h-full border-r">
           <LostList
+            selectedMode={mode.selectedMode}
             items={lists.items}
             totalCount={pagination.totalCount}
             page={pagination.page}
             setPage={pagination.setPage}
           />
+
+          {mode.selectedMode === 'register' && (
+            <div className="absolute inset-0 z-10 bg-gray-500/30" />
+          )}
         </aside>
         <section className="relative h-full min-h-0">
           <Map

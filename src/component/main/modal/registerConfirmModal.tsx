@@ -8,7 +8,7 @@ const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: ModalComponentPro
       onClick={onCancel}
     >
       <div
-        className="max-h-[80vh] w-[90vw] max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
+        className="max-h-[80vh] w-[90vw] max-w-2xl overflow-y-auto rounded-2xl bg-white/70 p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl font-bold">분실물을 해당 위치에 등록하시겠습니까?</h2>

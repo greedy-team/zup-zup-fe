@@ -2,7 +2,13 @@ import LostListItem from './lostListItem';
 import Pagenation from './pagenation';
 import type { LostListComponentProps } from '../../../../types/main/components';
 
-export default function LostList({ items, totalCount, page, setPage }: LostListComponentProps) {
+export default function LostList({
+  selectedMode,
+  items,
+  totalCount,
+  page,
+  setPage,
+}: LostListComponentProps) {
   const empty = totalCount === 0;
 
   if (empty) {

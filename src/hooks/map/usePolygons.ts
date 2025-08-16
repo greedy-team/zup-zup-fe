@@ -17,6 +17,9 @@ export function usePolygons({
   const openRef = useRef(onOpenRegisterConfirm);
   const selectRef = useRef(onSelectArea);
 
+  // 등록 모드용 핀 관리
+  const registerPinRef = useRef<kakao.maps.Marker | null>(null);
+
   useEffect(() => {
     modeRef.current = selectedMode;
   }, [selectedMode]);
@@ -26,6 +29,42 @@ export function usePolygons({
   useEffect(() => {
     selectRef.current = onSelectArea;
   }, [onSelectArea]);
+
+  // 등록 모드일 때 핀 생성
+  const createRegisterPin = useCallback(
+    (latlng: kakao.maps.LatLng) => {
+      if (!map) return;
+
+      // 기존 핀 제거
+      if (registerPinRef.current) {
+        registerPinRef.current.setMap(null);
+      }
+
+      // 새 핀 생성
+      const pin = new kakao.maps.Marker({
+        position: latlng,
+        map: map,
+      });
+
+      registerPinRef.current = pin;
+    },
+    [map],
+  );
+
+  // 등록 모드 해제 시 핀 제거
+  const removeRegisterPin = useCallback(() => {
+    if (registerPinRef.current) {
+      registerPinRef.current.setMap(null);
+      registerPinRef.current = null;
+    }
+  }, []);
+
+  // 모드 변경 시 핀 제거
+  useEffect(() => {
+    if (selectedMode !== 'register') {
+      removeRegisterPin();
+    }
+  }, [selectedMode, removeRegisterPin]);
 
   useEffect(() => {
     if (!map || !schoolAreas.length) return;
@@ -50,6 +89,8 @@ export function usePolygons({
         selectRef.current?.(area.id);
 
         if (modeRef.current === 'register') {
+          // 등록 모드: 핀 생성 후 모달 열기
+          createRegisterPin(e.latLng);
           polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
           polygon.setOptions(SELECTED_STYLE);
           selectedPolygonRef.current = polygon;
@@ -94,6 +135,7 @@ export function usePolygons({
       polysRef.current = [];
       polyByIdRef.current.clear();
       selectedPolygonRef.current = null;
+      removeRegisterPin();
     };
   }, [map, schoolAreas]);
 
@@ -119,5 +161,5 @@ export function usePolygons({
     selectedPolygonRef.current = null;
   }, []);
 
-  return { polysRef, selectedPolygonRef, reset };
+  return { polysRef, selectedPolygonRef, reset, createRegisterPin };
 }
