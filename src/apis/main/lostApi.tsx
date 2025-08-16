@@ -1,15 +1,9 @@
-import type { Category, LostItemListItem } from '../../types/main/mainApi';
 import type { SchoolArea } from '../../types/map/map';
-
-type LostItemDetailResponse = {
-  items: LostItemListItem[];
-  total: number;
-};
-
-type LostItemSummaryRow = {
-  schoolAreaId: number;
-  count: number;
-};
+import type {
+  Category,
+  LostItemDetailResponse,
+  LostItemSummaryRow,
+} from '../../types/lost/lostApi';
 
 export const getCategories = async (): Promise<Category[]> => {
   const res = await fetch('/api/categories');
