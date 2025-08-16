@@ -159,44 +159,48 @@ const Step2_DetailForm = ({
 
       <FormSection title="사진 업로드">
         <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6">
-          <p className="mb-4 text-sm text-gray-500">
-            분실물 사진을 업로드 해주세요 (최소 1장, 최대 3장)
-          </p>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleImageUpload}
-            className="hidden"
-            data-testid="file-input"
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="rounded-lg bg-teal-500 px-6 py-2 font-bold text-white hover:cursor-pointer hover:bg-teal-600"
-          >
-            업로드
-          </button>
+          {formData.images.length < 3 && (
+            <div className="flex flex-col items-center">
+              <p className="mb-4 text-sm text-gray-500">
+                분실물 사진을 업로드 해주세요 (최소 1장, 최대 3장)
+              </p>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                className="hidden"
+                data-testid="file-input"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="rounded-lg bg-teal-500 px-6 py-2 font-bold text-white hover:cursor-pointer hover:bg-teal-600"
+              >
+                업로드
+              </button>
+            </div>
+          )}
+          {formData.images.length > 0 && (
+            <div className="mt-4 grid grid-cols-3 gap-4">
+              {formData.images.map((file, index) => (
+                <div key={index} className="relative aspect-square">
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`preview ${index}`}
+                    className="h-full w-full rounded-md object-cover"
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white hover:cursor-pointer"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        {formData.images.length > 0 && (
-          <div className="mt-4 grid grid-cols-3 gap-4">
-            {formData.images.map((file, index) => (
-              <div key={index} className="relative aspect-square">
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={`preview ${index}`}
-                  className="h-full w-full rounded-md object-cover"
-                />
-                <button
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white hover:cursor-pointer"
-                >
-                  X
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
       </FormSection>
     </div>
   );
