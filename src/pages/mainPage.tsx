@@ -46,7 +46,7 @@ const MainPage = () => {
   const [selectedArea, setSelectedArea] = useState<string>('');
   return (
     <>
-      <div className="h-screen flex flex-col">
+      <div className="flex h-screen flex-col">
         <Header
           categories={CATEGORIES}
           selectedCategory={selectedCategory}

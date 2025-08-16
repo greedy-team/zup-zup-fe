@@ -5,22 +5,16 @@ import { fetchQuiz } from '../../api/find/quizAPI';
 import { PLEDGE_TEXT } from '../../constants/find';
 
 export const useFindProcess = (item: LostItem, onClose: () => void) => {
-  // 현재 단계 상태 관리
   const [currentStep, setCurrentStep] = useState(1);
 
-  // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false);
 
-  // 퀴즈 데이터 상태 관리
   const [quiz, setQuiz] = useState<QuizData | null>(null);
 
-  // 선택된 정답 ID 상태 관리
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
 
-  // 서약 작성용 ref
   const agreementRef = useRef<HTMLInputElement>(null);
 
-  // 결과 모달 상태 관리
   const [resultModal, setResultModal] = useState({
     isOpen: false,
     status: 'success' as ResultModalStatus,
@@ -33,6 +27,10 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
   const isValuable = item.categoryName !== '기타';
 
   useEffect(() => {
+    setCurrentStep((prev) => Math.min(prev, isValuable ? 4 : 3));
+  }, [isValuable]);
+
+  useEffect(() => {
     if (currentStep === 2 && isValuable) {
       setIsLoading(true);
       fetchQuiz(item.lostItemId)
@@ -41,12 +39,10 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
     }
   }, [currentStep, isValuable, item.lostItemId]);
 
-  // 1단계 처리
   const handleStep1 = () => {
-    setCurrentStep(isValuable ? 2 : 3);
+    setCurrentStep(2);
   };
 
-  // 2단계: 퀴즈 제출 처리
   const handleStep2 = () => {
     if (!selectedChoiceId) alert('정답을 선택해주세요.');
 
@@ -67,12 +63,10 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
     });
   };
 
-  // 3단계: 상세 정보 조회
   const handleStep3 = () => {
-    setCurrentStep(4);
+    setCurrentStep(isValuable ? 4 : 3);
   };
 
-  // 4단계: 서약 입력 처리
   const handleStep4 = () => {
     const userInput = agreementRef.current?.value.trim() || '';
     if (userInput !== PLEDGE_TEXT) {
@@ -97,9 +91,17 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
     if (currentStep === 1) {
       handleStep1();
     } else if (currentStep === 2) {
-      handleStep2();
+      if (isValuable) {
+        handleStep2();
+      } else {
+        handleStep3();
+      }
     } else if (currentStep === 3) {
-      handleStep3();
+      if (isValuable) {
+        handleStep3();
+      } else {
+        handleStep4();
+      }
     } else if (currentStep === 4) {
       handleStep4();
     } else {
@@ -108,7 +110,6 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
   };
 
   return {
-    // States
     currentStep,
     isLoading,
     quiz,
@@ -117,7 +118,6 @@ export const useFindProcess = (item: LostItem, onClose: () => void) => {
     agreementRef,
     isValuable,
 
-    // Handlers
     handleNextStep,
     setSelectedChoiceId,
   };

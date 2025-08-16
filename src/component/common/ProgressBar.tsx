@@ -3,7 +3,10 @@ const ProgressBar: React.FC<{ steps: string[]; currentStep: number }> = ({
   currentStep,
 }) => {
   const totalSteps = steps.length;
-  const progressRatio = totalSteps > 1 ? (currentStep - 1) / (totalSteps - 1) : 0;
+
+  const safeCurrent = Math.max(1, Math.min(currentStep, Math.max(1, totalSteps)));
+
+  const progressRatio = totalSteps > 1 ? (safeCurrent - 1) / (totalSteps - 1) : 0;
 
   return (
     <div className="relative my-7">
@@ -15,8 +18,8 @@ const ProgressBar: React.FC<{ steps: string[]; currentStep: number }> = ({
       <div className="relative z-10 flex justify-between">
         {steps.map((stepName, index) => {
           const stepNumber = index + 1;
-          const isActive = stepNumber === currentStep;
-          const isCompleted = stepNumber < currentStep;
+          const isActive = stepNumber === safeCurrent;
+          const isCompleted = stepNumber < safeCurrent;
           return (
             <div key={stepName} className="flex flex-col items-center">
               <div

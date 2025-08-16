@@ -1,7 +1,7 @@
+import { useMemo } from 'react';
 import type { LostItem } from '../main/main/lostListItem';
 import { useFindProcess } from '../../hooks/find/useFindProcess';
 import { FIND_PROCESS_STEPS } from '../../constants/find';
-
 import ResultModal from '../common/ResultModal';
 import ProgressBar from '../common/ProgressBar';
 import Step1_ItemInfo from './steps/Step1_ItemInfo';
@@ -15,6 +15,8 @@ type Props = {
   item: LostItem;
   onClose: () => void;
 };
+
+type StepKey = 'ITEM' | 'QUIZ' | 'DETAIL' | 'AGREE';
 
 const FindModal = ({ item, onClose }: Props) => {
   const {
@@ -31,15 +33,44 @@ const FindModal = ({ item, onClose }: Props) => {
 
   const steps = isValuable ? FIND_PROCESS_STEPS.VALUABLE : FIND_PROCESS_STEPS.NON_VALUABLE;
 
+  const flow: StepKey[] = useMemo(
+    () => (isValuable ? ['ITEM', 'QUIZ', 'DETAIL', 'AGREE'] : ['ITEM', 'DETAIL', 'AGREE']),
+    [isValuable],
+  );
+
+  const safeIndex = Math.max(0, Math.min(currentStep - 1, flow.length - 1));
+  const stepKey = flow[safeIndex];
+
+  const renderStep = () => {
+    switch (stepKey) {
+      case 'ITEM':
+        return <Step1_ItemInfo item={item} />;
+      case 'QUIZ':
+        return (
+          <Step2_Quiz
+            quiz={quiz}
+            selectedChoiceId={selectedChoiceId}
+            onSelect={setSelectedChoiceId}
+          />
+        );
+      case 'DETAIL':
+        return <Step3_DetailInfo item={item} />;
+      case 'AGREE':
+        return <Step4_Agreement agreementRef={agreementRef} onEnter={handleNextStep} />;
+      default:
+        return null;
+    }
+  };
+
   const getButtonText = () => {
-    switch (currentStep) {
-      case 1:
+    switch (stepKey) {
+      case 'ITEM':
         return '다음';
-      case 2:
+      case 'QUIZ':
         return '정답 확인';
-      case 3:
+      case 'DETAIL':
         return '서약 작성하기';
-      case 4:
+      case 'AGREE':
         return '보관 장소 조회하기';
       default:
         return '';
@@ -47,9 +78,7 @@ const FindModal = ({ item, onClose }: Props) => {
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as Element).id === 'modal-overlay') {
-      onClose();
-    }
+    if ((e.target as Element).id === 'modal-overlay') onClose();
   };
 
   return (
@@ -78,20 +107,7 @@ const FindModal = ({ item, onClose }: Props) => {
               <SpinnerIcon />
             </div>
           ) : (
-            <>
-              {currentStep === 1 && <Step1_ItemInfo item={item} />}
-              {currentStep === 2 && (
-                <Step2_Quiz
-                  quiz={quiz}
-                  selectedChoiceId={selectedChoiceId}
-                  onSelect={setSelectedChoiceId}
-                />
-              )}
-              {currentStep === 3 && <Step3_DetailInfo item={item} />}
-              {currentStep === 4 && (
-                <Step4_Agreement agreementRef={agreementRef} onEnter={handleNextStep} />
-              )}
-            </>
+            renderStep()
           )}
         </div>
 
