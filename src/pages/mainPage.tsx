@@ -1,77 +1,101 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../component/main/header/header';
 import Main from '../component/main/main/main';
-import type { LostItem } from '../component/main/main/lostListItem';
 import RegisterConfirmModal from '../component/main/modal/registerConfirmModal';
-import type { Category } from '../types/main/category';
-
-const CATEGORIES: Category[] = [
-  '전체',
-  '지갑',
-  '가방',
-  '휴대폰',
-  '카드',
-  '악세서리',
-  '신분증/기숙사 카드',
-  '기타',
-];
-
-const MOCK: LostItem[] = [
-  {
-    status: 'registered',
-    lostItemId: 123,
-    categoryId: 'wallet',
-    categoryName: '지갑',
-    foundLocation: '광개토관 3층',
-    foundDate: '2025-08-08T09:00:00Z',
-    imageUrl: 'https://cdn.example.com/images/lost-items/123.jpg',
-  },
-  {
-    status: 'found',
-    lostItemId: 124,
-    categoryId: 'bag',
-    categoryName: '가방',
-    foundLocation: '학술정보원 3층',
-    foundDate: '2025-08-07T09:00:00Z',
-    imageUrl: 'https://cdn.example.com/images/lost-items/124.jpg',
-  },
-];
+import {
+  getCategories,
+  getLostItemDetail,
+  getLostItemSummary,
+  getSchoolAreas,
+} from '../apis/main/mainApi';
+import type { SchoolArea } from '../types/map/map';
+import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/lost/lostApi';
 
 const MainPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<Category>('전체');
-  const items: LostItem[] = MOCK;
-  const [selectedLat, setSelectedLat] = useState<number | null>(null);
-  const [selectedLng, setSelectedLng] = useState<number | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [items, setItems] = useState<LostItemListItem[]>([]);
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [selectedAreaId, setSelectedAreaId] = useState<number>(0);
+
+  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
+
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+
+  const [selectedMode, setSelectedMode] = useState<'register' | 'append'>('append');
+  const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
-  const [selectedArea, setSelectedArea] = useState<string>('');
+
+  const toggleMode = () => {
+    setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await getCategories();
+      setCategories(categories);
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchSchoolAreas = async () => {
+      const data = await getSchoolAreas();
+      const schoolAreasData = data.schoolAreas;
+      setSchoolAreas(schoolAreasData);
+    };
+    fetchSchoolAreas();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { items, total } = await getLostItemDetail(page, 5, selectedCategoryId, selectedAreaId);
+      setItems(items);
+      setTotalCount(total);
+    })();
+  }, [page, selectedCategoryId, selectedAreaId]);
+
+  useEffect(() => {
+    const fetchLostItemSummary = async () => {
+      const data = await getLostItemSummary(selectedAreaId);
+      setLostItemSummary(data);
+    };
+    fetchLostItemSummary();
+  }, [selectedAreaId]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategoryId, selectedAreaId]);
+
   return (
     <>
       <div className="flex h-screen flex-col">
         <Header
-          categories={CATEGORIES}
-          selectedCategory={selectedCategory}
-          onChangeCategory={setSelectedCategory}
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
+          selectedMode={selectedMode}
         />
         <Main
-          selectedCategory={selectedCategory}
-          items={items}
-          selectedLat={selectedLat}
-          setSelectedLat={setSelectedLat}
-          selectedLng={selectedLng}
-          setSelectedLng={setSelectedLng}
-          setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
-          setSelectedArea={setSelectedArea}
-          selectedArea={selectedArea}
+          pagination={{ page, setPage, totalCount: totalCount }}
+          mapSelection={{
+            selectedAreaId,
+            setSelectedAreaId,
+          }}
+          mode={{ selectedMode, toggleMode }}
+          lists={{ items, categories }}
+          areas={{ schoolAreas, lostItemSummary }}
+          ui={{ setIsRegisterConfirmModalOpen }}
         />
       </div>
+
       <RegisterConfirmModal
         isOpen={isRegisterConfirmModalOpen}
         onConfirm={() => {
           setIsRegisterConfirmModalOpen(false);
         }}
-        onCancel={() => {
-          setIsRegisterConfirmModalOpen(false);
-        }}
+        onCancel={() => setIsRegisterConfirmModalOpen(false)}
       />
     </>
   );
