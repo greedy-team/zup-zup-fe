@@ -23,12 +23,13 @@ const FindModal = ({ item, onClose }: Props) => {
     currentStep,
     isLoading,
     quiz,
-    selectedChoiceId,
+    selectedAnswers,
     resultModal,
     agreementRef,
     isValuable,
+    detail,
     handleNextStep,
-    setSelectedChoiceId,
+    setSelectedAnswers,
   } = useFindProcess(item, onClose);
 
   const steps = isValuable ? FIND_PROCESS_STEPS.VALUABLE : FIND_PROCESS_STEPS.NON_VALUABLE;
@@ -49,12 +50,14 @@ const FindModal = ({ item, onClose }: Props) => {
         return (
           <Step2_Quiz
             quiz={quiz}
-            selectedChoiceId={selectedChoiceId}
-            onSelect={setSelectedChoiceId}
+            selectedAnswers={selectedAnswers}
+            onSelect={(featureId, optionId) =>
+              setSelectedAnswers((prev) => ({ ...prev, [featureId]: optionId }))
+            }
           />
         );
       case 'DETAIL':
-        return <Step3_DetailInfo item={item} />;
+        return <Step3_DetailInfo detail={detail} />;
       case 'AGREE':
         return <Step4_Agreement agreementRef={agreementRef} onEnter={handleNextStep} />;
       default:
