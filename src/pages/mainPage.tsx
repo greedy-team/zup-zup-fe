@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Header from '../component/main/header/header';
 import Main from '../component/main/main/main';
 import RegisterConfirmModal from '../component/main/modal/registerConfirmModal';
@@ -6,6 +6,7 @@ import {
   getCategories,
   getLostItemDetail,
   getLostItemSummary,
+  getLostItemSummaryByCategory,
   getSchoolAreas,
 } from '../apis/main/mainApi';
 import type { SchoolArea } from '../types/map/map';
@@ -26,6 +27,49 @@ const MainPage = () => {
   const [selectedMode, setSelectedMode] = useState<'register' | 'append'>('append');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
+
+  // 카테고리별 요약 데이터 계산
+  const getCategorySummary = useCallback(
+    async (categoryId: number) => {
+      if (categoryId === 0) {
+        // 전체 카테고리인 경우 기존 summary 사용
+        return lostItemSummary;
+      }
+
+      if (schoolAreas.length === 0) {
+        return [];
+      }
+
+      try {
+        // 각 학교 구역별로 해당 카테고리의 개수를 계산
+        const categorySummaryPromises = schoolAreas.map(async (area) => {
+          const { total } = await getLostItemDetail(1, 1000, categoryId, area.id);
+          return {
+            schoolAreaId: area.id,
+            count: total,
+          };
+        });
+
+        const categorySummary = await Promise.all(categorySummaryPromises);
+        return categorySummary;
+      } catch (error) {
+        console.error('Failed to fetch category summary:', error);
+        return [];
+      }
+    },
+    [schoolAreas, lostItemSummary],
+  );
+
+  const [categorySummary, setCategorySummary] = useState<LostItemSummaryRow[]>([]);
+
+  // 카테고리 변경 시 카테고리별 요약 데이터 업데이트
+  useEffect(() => {
+    const updateCategorySummary = async () => {
+      const summary = await getCategorySummary(selectedCategoryId);
+      setCategorySummary(summary);
+    };
+    updateCategorySummary();
+  }, [selectedCategoryId, getCategorySummary]);
 
   const toggleMode = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
@@ -58,8 +102,13 @@ const MainPage = () => {
 
   useEffect(() => {
     const fetchLostItemSummary = async () => {
-      const data = await getLostItemSummary(selectedAreaId);
-      setLostItemSummary(data);
+      try {
+        const data = await getLostItemSummary(selectedAreaId);
+        setLostItemSummary(data);
+      } catch (error) {
+        console.error('Failed to fetch lost item summary:', error);
+        setLostItemSummary([]);
+      }
     };
     fetchLostItemSummary();
   }, [selectedAreaId]);
@@ -85,7 +134,7 @@ const MainPage = () => {
           }}
           mode={{ selectedMode, toggleMode }}
           lists={{ items, categories }}
-          areas={{ schoolAreas, lostItemSummary }}
+          areas={{ schoolAreas, lostItemSummary: categorySummary }}
           ui={{ setIsRegisterConfirmModalOpen }}
         />
       </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import RegisterModal from '../../register/RegisterModal';
 import Map from './map';
 import LostList from './list/lostList';
 import type { MainComponentProps } from '../../../types/main/components';
@@ -8,16 +9,17 @@ import FindModal from '../../find/FindModal';
 const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
   const [isFindModalOpen, setIsFindModalOpen] = useState(false);
   const [selectedItemForFind, setSelectedItemForFind] = useState<LostItemListItem | null>(null);
-  const handleOpenFindModal = (item: LostItemListItem) => {
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const handleOpenFindModal = (item: LostItemListItem) => {    
     setSelectedItemForFind(item);
     setIsFindModalOpen(true);
   };
 
-  // 모달 닫기 핸들러
   const handleCloseFindModal = () => {
     setIsFindModalOpen(false);
     setSelectedItemForFind(null);
   };
+  
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
@@ -37,6 +39,7 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
         </aside>
         <section className="relative h-full min-h-0">
           <Map
+
             setIsRegisterConfirmModalOpen={ui.setIsRegisterConfirmModalOpen}
             schoolAreas={areas.schoolAreas}
             setSelectedAreaId={mapSelection.setSelectedAreaId}
@@ -53,6 +56,13 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
         </section>
         {isFindModalOpen && selectedItemForFind && (
           <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+        )}
+
+        {isRegisterModalOpen && (
+          <RegisterModal
+            onClose={() => setIsRegisterModalOpen(false)}
+            schoolAreaId={mapSelection.selectedAreaId}
+          />
         )}
       </div>
     </main>

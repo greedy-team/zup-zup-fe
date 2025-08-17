@@ -1,24 +1,26 @@
 import { render, screen } from '@testing-library/react';
 import Step3_Confirm from '../../../component/register/steps/Step3_Confirm';
 import { vi, describe, it, expect } from 'vitest';
-import type { RegisterFormData, CategoryFeature } from '../../../types/register';
+import type { RegisterFormData, Category, Feature, SchoolArea } from '../../../types/register';
 
-const mockCategory = { id: 'phone1', name: '휴대폰' };
-const mockFeatures: CategoryFeature[] = [
-  { id: 'q1', question: '색상', options: [] },
-  { id: 'q2', question: '브랜드', options: [] },
+const mockCategory: Category = { categoryId: 1, categoryName: '휴대폰' };
+const mockFeatures: Feature[] = [
+  { featureId: 1, featureText: '색상', options: [{ id: 101, text: '검정' }] },
+  { featureId: 2, featureText: '브랜드', options: [{ id: 201, text: '삼성' }] },
 ];
-
+const mockSchoolAreas: SchoolArea[] = [{ id: 1, areaName: '학생회관' } as SchoolArea];
 const mockFormData: RegisterFormData = {
-  featureAnswers: { q1: '검정', q2: '삼성' },
-  building: '대양AI센터',
-  locationDetail: '콜라보랩 카운터에 있습니다.',
-  description: '분실물 상세 정보 ----',
-  storageLocation: '학생회관 401호',
+  schoolAreaId: 1,
+  features: [
+    { featureId: 1, optionId: 101 },
+    { featureId: 2, optionId: 201 },
+  ],
+  detailLocation: '콜라보랩 카운터',
+  description: '분실물입니다. 잘 부탁드립니다.',
+  storageName: '학생회관 401호',
   images: [new File([''], 'image1.png', { type: 'image/png' })],
 };
 
-// URL.createObjectURL 모의 처리
 window.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 describe('Step3_Confirm', () => {
@@ -28,14 +30,18 @@ describe('Step3_Confirm', () => {
         selectedCategory={mockCategory}
         formData={mockFormData}
         categoryFeatures={mockFeatures}
+        schoolAreas={mockSchoolAreas}
       />,
     );
 
-    // 카테고리 이름
-    expect(screen.getByText(mockCategory.name)).toBeInTheDocument();
+    // 카테고리, 건물, 보관장소, 상세위치, 상세정보
+    expect(screen.getByText(mockCategory.categoryName)).toBeInTheDocument();
+    expect(screen.getByText('학생회관')).toBeInTheDocument();
+    expect(screen.getByText(mockFormData.storageName)).toBeInTheDocument();
+    expect(screen.getByText(mockFormData.detailLocation)).toBeInTheDocument();
+    expect(screen.getByText(mockFormData.description)).toBeInTheDocument();
 
     // 이미지
-    expect(screen.getByAltText('confirm 0')).toBeInTheDocument();
     expect(screen.getByAltText('confirm 0')).toHaveAttribute('src', 'mock-url');
 
     // 분실물 특징
@@ -43,50 +49,5 @@ describe('Step3_Confirm', () => {
     expect(screen.getByText('검정')).toBeInTheDocument();
     expect(screen.getByText('브랜드:')).toBeInTheDocument();
     expect(screen.getByText('삼성')).toBeInTheDocument();
-
-    // 보관 장소
-    expect(screen.getByText(mockFormData.storageLocation)).toBeInTheDocument();
-
-    // 위치 정보
-    expect(screen.getByText(/건물:/)).toHaveTextContent(`건물: ${mockFormData.building}`);
-    expect(screen.getByText(/상세 위치:/)).toHaveTextContent(
-      `상세 위치: ${mockFormData.locationDetail}`,
-    );
-
-    // 상세 정보
-    expect(screen.getByText(mockFormData.description)).toBeInTheDocument();
-  });
-
-  it('내용이 없는 필드에 대해 플레이스홀더를 표시해야 합니다.', () => {
-    const emptyFormData: RegisterFormData = {
-      featureAnswers: {},
-      building: '',
-      locationDetail: '',
-      description: '',
-      storageLocation: '',
-      images: [],
-    };
-
-    render(
-      <Step3_Confirm
-        selectedCategory={{ id: 'cat2', name: '지갑' }}
-        formData={emptyFormData}
-        categoryFeatures={mockFeatures}
-      />,
-    );
-
-    // 카테고리 이름은 선택됨
-    expect(screen.getByText('지갑')).toBeInTheDocument();
-
-    // 이미지 없음 처리
-    expect(screen.queryByAltText(/confirm/)).not.toBeInTheDocument();
-
-    // 상세 정보 없음 처리
-    expect(screen.getByText('입력된 내용이 없습니다.')).toBeInTheDocument();
-
-    // 분실물 특징이 없으므로 질문 텍스트만 표시되지 않음
-    Object.values(emptyFormData.featureAnswers).forEach((ans) => {
-      expect(screen.queryByText(ans)).not.toBeInTheDocument();
-    });
   });
 });

@@ -1,5 +1,9 @@
 import { useRegisterProcess } from '../../hooks/register/useRegisterProcess';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
+import { useEffect, useState } from 'react';
+import { fetchSchoolAreas } from '../../api/register';
+import type { SchoolArea } from '../../types/register';
+import type { ResultProps } from '../../types/register';
 
 import ProgressBar from '../common/ProgressBar';
 import ResultModal from '../common/ResultModal';
@@ -9,34 +13,48 @@ import Step3_Confirm from './steps/Step3_Confirm';
 import CloseIcon from '../common/Icons/CloseIcon';
 import SpinnerIcon from '../common/Icons/SpinnerIcon';
 
-type Props = {
-  onClose: () => void;
-};
-
-const RegisterModal = ({ onClose }: Props) => {
-  // 등록 프로세스의 모든 로직을 담고 있는 커스텀 훅
+const RegisterModal = ({ onClose, schoolAreaId }: ResultProps) => {
   const {
     currentStep,
     isLoading,
+    categories,
     selectedCategory,
     categoryFeatures,
     formData,
+    resultModalContent,
     isStep2Valid,
-    resultModal,
     goToNextStep,
     goToPrevStep,
     setSelectedCategory,
     setFormData,
     handleRegister,
-  } = useRegisterProcess(onClose);
+    handleFeatureChange,
+  } = useRegisterProcess(onClose, schoolAreaId);
 
   const steps = REGISTER_PROCESS_STEPS.STEPS;
+  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
+
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as Element).id === 'modal-overlay') {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    fetchSchoolAreas().then(setSchoolAreas).catch(console.error);
+  }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      {resultModal.isOpen && <ResultModal {...resultModal} />}
+    <div
+      id="modal-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={handleOutsideClick}
+    >
+      {/* 결과 모달이 열려있으면 그 위에 렌더링 */}
+      {resultModalContent && <ResultModal {...resultModalContent} />}
 
       <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-8 shadow-xl">
+        {/* 모달 닫기 버튼 */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:cursor-pointer hover:text-gray-600"
@@ -47,9 +65,11 @@ const RegisterModal = ({ onClose }: Props) => {
         <h1 className="text-center text-2xl font-bold text-gray-800">분실물 등록</h1>
         <ProgressBar steps={steps} currentStep={currentStep} />
 
+        {/* 단계별 내용 렌더링 */}
         <div className="flex-grow overflow-y-auto pr-2">
           {currentStep === 1 && (
             <Step1_CategorySelect
+              categories={categories}
               selectedCategory={selectedCategory}
               onSelect={setSelectedCategory}
             />
@@ -60,6 +80,8 @@ const RegisterModal = ({ onClose }: Props) => {
               formData={formData}
               setFormData={setFormData}
               categoryFeatures={categoryFeatures}
+              schoolAreas={schoolAreas}
+              handleFeatureChange={handleFeatureChange}
             />
           )}
           {currentStep === 3 && (
@@ -67,13 +89,14 @@ const RegisterModal = ({ onClose }: Props) => {
               selectedCategory={selectedCategory}
               formData={formData}
               categoryFeatures={categoryFeatures}
+              schoolAreas={schoolAreas}
             />
           )}
         </div>
 
         <div className="mt-auto flex items-center justify-between border-t pt-6">
+          {/* 이전 버튼 */}
           <div>
-            {/* 1단계에서는 '이전' 버튼 숨김 */}
             {currentStep > 1 && (
               <button
                 onClick={goToPrevStep}
@@ -83,8 +106,9 @@ const RegisterModal = ({ onClose }: Props) => {
               </button>
             )}
           </div>
+
+          {/* 다음 버튼 또는 등록하기 버튼 */}
           <div>
-            {/* 마지막 단계가 아닐 경우 '다음' 버튼 표시 */}
             {currentStep < steps.length ? (
               <button
                 onClick={goToNextStep}
@@ -96,7 +120,6 @@ const RegisterModal = ({ onClose }: Props) => {
                 다음
               </button>
             ) : (
-              // 마지막 단계일 경우 '등록하기' 버튼 표시
               <button
                 onClick={handleRegister}
                 disabled={isLoading}

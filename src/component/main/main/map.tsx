@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
@@ -12,6 +13,7 @@ const Map = (props: MapComponentProps) => {
     schoolAreas,
     lostItemSummary,
     selectedMode,
+    selectedCategoryId,
   } = props;
 
   const mapRef = useRef<HTMLDivElement>(null);
@@ -20,10 +22,11 @@ const Map = (props: MapComponentProps) => {
 
   useEffect(() => {
     if (!loaded || !mapRef.current) return;
+
     const kakao = window.kakao;
     const m = new kakao.maps.Map(mapRef.current, {
       center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
-      level: 2,
+      level: 3,
     });
     m.setCursor('default');
     setMap(m);
@@ -44,7 +47,9 @@ const Map = (props: MapComponentProps) => {
     schoolAreas,
     summary: lostItemSummary,
     enabled: selectedMode !== 'register',
+    selectedCategoryId: selectedCategoryId,
   });
+
 
   useEffect(() => {
     if (!map) return;
@@ -63,12 +68,15 @@ const Map = (props: MapComponentProps) => {
         return;
       }
       setSelectedAreaId(0);
+
     };
     kakao.maps.event.addListener(map, 'click', onMapClick);
+
     return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
   }, [map, selectedMode, setSelectedAreaId, setIsRegisterConfirmModalOpen, createRegisterPin]);
 
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
+
 
   return (
     <div>
