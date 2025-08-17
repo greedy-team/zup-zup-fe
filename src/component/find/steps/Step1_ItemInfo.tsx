@@ -1,6 +1,6 @@
-import type { LostItem } from '../../main/main/lostListItem';
+import type { LostItemListItem } from '../../../types/lost/lostApi';
 
-const Step1_ItemInfo = ({ item }: { item: LostItem }) => {
+const Step1_ItemInfo = ({ item }: { item: LostItemListItem }) => {
   return (
     <div className="space-y-4">
       <div>

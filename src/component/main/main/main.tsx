@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import Map from './map';
 import LostList from './list/lostList';
 import type { MainComponentProps } from '../../../types/main/components';
+import type { LostItemListItem } from '../../../types/lost/lostApi';
+import FindModal from '../../find/FindModal';
 
 const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
+  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
+  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItemListItem | null>(null);
+  const handleOpenFindModal = (item: LostItemListItem) => {
+    setSelectedItemForFind(item);
+    setIsFindModalOpen(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleCloseFindModal = () => {
+    setIsFindModalOpen(false);
+    setSelectedItemForFind(null);
+  };
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
@@ -13,6 +28,7 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
             totalCount={pagination.totalCount}
             page={pagination.page}
             setPage={pagination.setPage}
+            onFindButtonClick={handleOpenFindModal}
           />
 
           {mode.selectedMode === 'register' && (
@@ -35,6 +51,9 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
             {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
+        {isFindModalOpen && selectedItemForFind && (
+          <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+        )}
       </div>
     </main>
   );
