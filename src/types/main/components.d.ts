@@ -13,6 +13,9 @@ export type ModalComponentProps = {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  setIsRegisterConfirmModalOpen: (b: boolean) => void;
+  setIsRegisterModalOpen: (b: boolean) => void;
+  isRegisterModalOpen: boolean;
 };
 
 export type ButtonComponentProps = {
@@ -25,6 +28,7 @@ export type ButtonComponentProps = {
 export type ListItemComponentProps = {
   item: LostItemListItem;
   className?: string;
+  onFindClick?: (item: LostItemListItem) => void;
 };
 
 export type PaginationComponentProps = {
@@ -55,7 +59,11 @@ export type MainComponentProps = {
   };
   ui: {
     setIsRegisterConfirmModalOpen: (b: boolean) => void;
+    setIsRegisterModalOpen: (b: boolean) => void;
+    setIsFindModalOpen: (b: boolean) => void;
   };
+  isRegisterModalOpen: boolean;
+  isFindModalOpen: boolean;
 };
 
 export type MapComponentProps = {

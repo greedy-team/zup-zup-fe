@@ -8,6 +8,7 @@ export default function LostList({
   totalCount,
   page,
   setPage,
+  onSelectItemForFind,
 }: LostListComponentProps) {
   const empty = totalCount === 0;
 
@@ -29,7 +30,11 @@ export default function LostList({
       <div className="max-h-[61vh] min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 [scrollbar-gutter:stable]">
         <ul className="m-0 list-none space-y-3 p-0 pb-6">
           {items.map((item) => (
-            <LostListItem key={item.lostItemId} item={item} />
+            <LostListItem
+              key={item.lostItemId}
+              item={item}
+              onFindClick={onSelectItemForFind}
+            />
           ))}
         </ul>
       </div>

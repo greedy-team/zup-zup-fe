@@ -1,25 +1,30 @@
 import { useState } from 'react';
 import RegisterModal from '../../register/RegisterModal';
-import type { LostItem } from './lostListItem';
 import FindModal from '../../find/FindModal';
 import Map from './map';
 import LostList from './list/lostList';
 import type { MainComponentProps } from '../../../types/main/components';
+import type { LostItemListItem } from '../../../types/lost/lostApi';
 
-const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
-    
-      const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
-  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItem | null>(null);
+const Main = ({
+  pagination,
+  mapSelection,
+  mode,
+  lists,
+  areas,
+  ui,
+  isRegisterModalOpen,
+  isFindModalOpen,
+}: MainComponentProps) => {
+  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItemListItem | null>(null);
 
-
-  const handleOpenFindModal = (item: LostItem) => {
+  const handleOpenFindModal = (item: LostItemListItem) => {
     setSelectedItemForFind(item);
-    setIsFindModalOpen(true);
+    ui.setIsFindModalOpen(true);
   };
 
   const handleCloseFindModal = () => {
-    setIsFindModalOpen(false);
+    ui.setIsFindModalOpen(false);
     setSelectedItemForFind(null);
   };
 
@@ -41,7 +46,6 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
         </aside>
         <section className="relative h-full min-h-0">
           <Map
-
             setIsRegisterConfirmModalOpen={ui.setIsRegisterConfirmModalOpen}
             schoolAreas={areas.schoolAreas}
             setSelectedAreaId={mapSelection.setSelectedAreaId}
@@ -63,7 +67,7 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
 
         {isRegisterModalOpen && (
           <RegisterModal
-            onClose={() => setIsRegisterModalOpen(false)}
+            onClose={() => ui.setIsRegisterModalOpen(false)}
             schoolAreaId={mapSelection.selectedAreaId}
           />
         )}

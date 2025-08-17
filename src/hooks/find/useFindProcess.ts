@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import type { LostItem } from '../../component/main/main/lostListItem';
 import type { QuizData, ResultModalStatus } from '../../types/find';
 import { fetchQuiz } from '../../api/find/quizAPI';
 import { PLEDGE_TEXT } from '../../constants/find';
+import type { LostItemListItem } from '../../types/lost/lostApi';
 
-export const useFindProcess = (item: LostItem, onClose: () => void) => {
+export const useFindProcess = (item: LostItemListItem, onClose: () => void) => {
   // 현재 단계 상태 관리
   const [currentStep, setCurrentStep] = useState(1);
 
