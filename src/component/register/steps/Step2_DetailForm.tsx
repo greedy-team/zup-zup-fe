@@ -18,7 +18,8 @@ const Step2_DetailForm = ({
   formData,
   setFormData,
   categoryFeatures,
-  selectedArea,
+  schoolAreas,
+  handleFeatureChange,
 }: Step2Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,18 +30,8 @@ const Step2_DetailForm = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'locationDetail' || 'storageLocation' ? value.replace(/^\s+/, '') : value,
-    }));
-  };
-
-  // 카테고리 특징 선택 핸들러
-  const handleFeatureChange = (questionId: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      featureAnswers: {
-        ...prev.featureAnswers,
-        [questionId]: value,
-      },
+      [name]:
+        name === 'detailLocation' || name === 'storageName' ? value.replace(/^\s+/, '') : value,
     }));
   };
 
@@ -74,28 +65,35 @@ const Step2_DetailForm = ({
     );
   }
 
+  const selectedAreaName = schoolAreas.find((area) => area.id === formData.schoolAreaId)?.areaName;
+
   return (
     <div>
       <FormSection title="카테고리 특징">
         <div className="space-y-4">
           {categoryFeatures.map((feature) => (
-            <div key={feature.id}>
-              <label htmlFor={feature.id} className="mb-1 block text-sm font-medium text-gray-700">
-                {feature.question}
+            <div key={feature.featureId}>
+              <label
+                htmlFor={String(feature.featureId)}
+                className="mb-1 block text-sm font-medium text-gray-700"
+              >
+                {feature.featureText}
               </label>
               <select
-                id={feature.id}
-                name={feature.id}
-                value={formData.featureAnswers[feature.id] || ''}
-                onChange={(e) => handleFeatureChange(feature.id, e.target.value)}
+                id={String(feature.featureId)}
+                name={String(feature.featureId)}
+                value={
+                  formData.features.find((f) => f.featureId === feature.featureId)?.optionId || ''
+                }
+                onChange={(e) => handleFeatureChange(feature.featureId, Number(e.target.value))}
                 className="w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-teal-500 focus:ring-teal-500"
               >
                 <option value="" disabled>
                   선택해주세요
                 </option>
                 {feature.options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
+                  <option key={opt.id} value={opt.id}>
+                    {opt.text}
                   </option>
                 ))}
               </select>
@@ -109,22 +107,21 @@ const Step2_DetailForm = ({
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">선택된 건물</label>
             <div className="w-full rounded-md border-gray-200 bg-gray-200 p-2 text-gray-600 shadow-inner">
-              {/* 여기서는 선택된 건물이 나와야 하지만 지금은 X */}
-              {selectedArea || '지도에서 건물을 먼저 선택해주세요. (ex: 학술정보원)'}
+              {selectedAreaName || '지도에서 건물을 먼저 선택해주세요.'}
             </div>
           </div>
           <div>
             <label
-              htmlFor="locationDetail"
+              htmlFor="detailLocation"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
               상세 위치 (예: 401호, 정문 앞 소파)
             </label>
             <input
-              id="locationDetail"
+              id="detailLocation"
               type="text"
-              name="locationDetail"
-              value={formData.locationDetail}
+              name="detailLocation"
+              value={formData.detailLocation}
               onChange={handleChange}
               className="w-full rounded-md border-gray-300 p-2 shadow-sm"
             />
@@ -147,10 +144,10 @@ const Step2_DetailForm = ({
 
       <FormSection title="보관 장소 (예: 학생회관 401호)">
         <input
-          id="storageLocation"
+          id="storageName"
           type="text"
-          name="storageLocation"
-          value={formData.storageLocation}
+          name="storageName"
+          value={formData.storageName}
           onChange={handleChange}
           placeholder="분실물을 보관하고 있는 장소를 입력해주세요"
           className="w-full rounded-md border-gray-300 p-2 shadow-sm"

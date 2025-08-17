@@ -1,8 +1,28 @@
+import { useState } from 'react';
+import RegisterModal from '../../register/RegisterModal';
+import type { LostItem } from './lostListItem';
+import FindModal from '../../find/FindModal';
 import Map from './map';
 import LostList from './list/lostList';
 import type { MainComponentProps } from '../../../types/main/components';
 
 const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponentProps) => {
+    
+      const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
+  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItem | null>(null);
+
+
+  const handleOpenFindModal = (item: LostItem) => {
+    setSelectedItemForFind(item);
+    setIsFindModalOpen(true);
+  };
+
+  const handleCloseFindModal = () => {
+    setIsFindModalOpen(false);
+    setSelectedItemForFind(null);
+  };
+
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
@@ -21,6 +41,7 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
         </aside>
         <section className="relative h-full min-h-0">
           <Map
+
             setIsRegisterConfirmModalOpen={ui.setIsRegisterConfirmModalOpen}
             schoolAreas={areas.schoolAreas}
             setSelectedAreaId={mapSelection.setSelectedAreaId}
@@ -35,6 +56,17 @@ const Main = ({ pagination, mapSelection, mode, lists, areas, ui }: MainComponen
             {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
+
+        {isFindModalOpen && selectedItemForFind && (
+          <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
+        )}
+
+        {isRegisterModalOpen && (
+          <RegisterModal
+            onClose={() => setIsRegisterModalOpen(false)}
+            schoolAreaId={mapSelection.selectedAreaId}
+          />
+        )}
       </div>
     </main>
   );
