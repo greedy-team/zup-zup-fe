@@ -28,7 +28,7 @@ export type ButtonComponentProps = {
 export type ListItemComponentProps = {
   item: LostItemListItem;
   className?: string;
-  onFindClick?: (item: LostItemListItem) => void;
+  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type PaginationComponentProps = {
@@ -43,6 +43,7 @@ export type LostListComponentProps = {
   page: number;
   setPage: (page: number) => void;
   selectedMode: lostItemMode;
+  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type MainComponentProps = {

@@ -27,7 +27,7 @@ const Main = ({
     ui.setIsFindModalOpen(false);
     setSelectedItemForFind(null);
   };
-
+  
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
@@ -38,6 +38,7 @@ const Main = ({
             totalCount={pagination.totalCount}
             page={pagination.page}
             setPage={pagination.setPage}
+            onFindButtonClick={handleOpenFindModal}
           />
 
           {mode.selectedMode === 'register' && (
@@ -60,7 +61,6 @@ const Main = ({
             {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
-
         {isFindModalOpen && selectedItemForFind && (
           <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
         )}

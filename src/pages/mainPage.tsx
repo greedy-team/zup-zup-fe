@@ -6,7 +6,6 @@ import {
   getCategories,
   getLostItemDetail,
   getLostItemSummary,
-  getLostItemSummaryByCategory,
   getSchoolAreas,
 } from '../apis/main/mainApi';
 import type { SchoolArea } from '../types/map/map';
@@ -72,7 +71,7 @@ const MainPage = () => {
       setCategorySummary(summary);
     };
     updateCategorySummary();
-  }, [selectedCategoryId, getCategorySummary]);
+  }, [selectedCategoryId, getCategorySummary, isFindModalOpen, isRegisterModalOpen]);
 
   const toggleMode = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
@@ -101,7 +100,7 @@ const MainPage = () => {
       setItems(items);
       setTotalCount(total);
     })();
-  }, [page, selectedCategoryId, selectedAreaId]);
+  }, [page, selectedCategoryId, selectedAreaId, isFindModalOpen, isRegisterModalOpen]);
 
   useEffect(() => {
     const fetchLostItemSummary = async () => {
