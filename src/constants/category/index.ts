@@ -8,4 +8,5 @@ export const categoryIcons: Record<number, string> = {
   5: 'https://i.pinimg.com/736x/da/a2/2e/daa22e9b8b3f3a4de1834916272f69ad.jpg',
   6: 'https://i.pinimg.com/736x/d7/f8/bf/d7f8bff8071a7b22168978f0aed006b9.jpg',
   7: 'https://i.pinimg.com/736x/38/60/08/386008ce4656323cedf6fc65975c1151.jpg',
+  99: 'https://i.pinimg.com/736x/d8/c4/a2/d8c4a2980f47a6beb452fb3412287465.jpg', // 임시로 추가한 기타 아이콘
 };

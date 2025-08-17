@@ -1,3 +1,4 @@
+import { categoryIcons } from '../../../constants/category';
 import type { Step1Props } from '../../../types/register';
 
 const Step1_CategorySelect = ({ categories, selectedCategory, onSelect }: Step1Props) => (
@@ -15,7 +16,7 @@ const Step1_CategorySelect = ({ categories, selectedCategory, onSelect }: Step1P
           }`}
         >
           <div className="mb-2 h-10 w-10 rounded bg-gray-200">
-            {/* 아이콘이 있다면 여기에 표시 */}
+            <img src={categoryIcons[category.categoryId]} alt={category.categoryName} />
           </div>
           <span className="text-sm font-medium text-gray-800">{category.categoryName}</span>
         </button>
