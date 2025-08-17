@@ -9,7 +9,7 @@ export function useNumberedMarkers({
   enabled,
 }: UseNumberedMarkersHookOptions) {
   useEffect(() => {
-    if (!map || !enabled) return;
+    if (!map || !enabled || !summary || !Array.isArray(summary)) return;
 
     const summaryMap = new Map(summary.map((item) => [item.schoolAreaId, item.count]));
     const markers = schoolAreas.map((area) => {

@@ -12,6 +12,7 @@ const Map = (props: MapComponentProps) => {
     schoolAreas,
     lostItemSummary,
     selectedMode,
+    selectedCategoryId,
   } = props;
 
   const mapRef = useRef<HTMLDivElement>(null);
@@ -44,6 +45,7 @@ const Map = (props: MapComponentProps) => {
     schoolAreas,
     summary: lostItemSummary,
     enabled: selectedMode !== 'register',
+    selectedCategoryId: selectedCategoryId,
   });
 
   useEffect(() => {

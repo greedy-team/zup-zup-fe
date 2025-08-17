@@ -5,12 +5,21 @@ export function getLostItemById(id: number): LostItem | undefined {
   return lostItems.find((li) => li.lostItemId === id);
 }
 
-export function getSummary(categoryId?: number): { schoolAreaId: number; count: number }[] {
+export function getSummary(
+  categoryId?: number,
+  areaId?: number,
+): { schoolAreaId: number; count: number }[] {
   const filtered = lostItems.filter(
     (li) => li.status === 'registered' && (!categoryId || li.categoryId === categoryId),
   );
+
+  let result = filtered;
+  if (areaId) {
+    result = result.filter((li) => li.schoolAreaId === areaId);
+  }
+
   const map = new Map<number, number>();
-  for (const li of filtered) map.set(li.schoolAreaId, (map.get(li.schoolAreaId) ?? 0) + 1);
+  for (const li of result) map.set(li.schoolAreaId, (map.get(li.schoolAreaId) ?? 0) + 1);
   return Array.from(map, ([schoolAreaId, count]) => ({ schoolAreaId, count }));
 }
 
