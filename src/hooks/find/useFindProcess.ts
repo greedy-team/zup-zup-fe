@@ -3,7 +3,6 @@ import type { LostItemListItem } from '../../types/lost/lostApi';
 import type { QuizItem, QuizSubmitBody, QuizResult, ResultModalStatus } from '../../types/find';
 import { getQuiz, submitQuiz, postPledge, getPublicDetail } from '../../apis/find/findApi';
 import { PLEDGE_TEXT } from '../../constants/find';
-import type { LostItemListItem } from '../../types/lost/lostApi';
 
 export const useFindProcess = (item: LostItemListItem, onClose: () => void) => {
   const [currentStep, setCurrentStep] = useState(1);
