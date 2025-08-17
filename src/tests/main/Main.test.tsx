@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import Main from '../../component/main/main/main';
-import type { LostItem } from '../../component/main/main/lostListItem';
+import type { LostItem } from '../../component/main/main/list/lostListItem';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 

@@ -1,15 +1,8 @@
 import { useState } from 'react';
-
-export type LostItem = {
-  status: 'registered' | 'found';
-  lostItemId: number;
-  categoryId: string;
-  categoryName: string;
-  foundLocation: string;
-  foundDate: string; // ISO
-  imageUrl?: string;
-  detail?: string;
-};
+import type {
+  ListItemComponentProps,
+  StatusBadgeComponentProps,
+} from '../../../../types/main/components';
 
 function formatKST(iso: string) {
   try {
@@ -23,30 +16,24 @@ function formatKST(iso: string) {
   }
 }
 
-function StatusBadge({ status }: { status: LostItem['status'] }) {
+function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
-  const cls = isFound
+  const badgeClass = isFound
     ? 'bg-teal-50 text-teal-700 border-teal-200'
     : 'bg-gray-50 text-gray-700 border-gray-200';
   return (
-    <span className={`rounded-full border px-2 py-0.5 text-[11px] ${cls}`}>
+    <span className={`rounded-full border px-2 py-0.5 text-[11px] ${badgeClass}`}>
       {isFound ? '습득물' : '분실물'}
     </span>
   );
 }
 
-type Props = {
-  item: LostItem;
-  className?: string;
-  onFindClick: (item: LostItem) => void;
-};
-
-export default function ListItem({ item, className = '', onFindClick }: Props) {
+export default function LostListItem({ item, className = '' }: ListItemComponentProps) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <li className={`rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
-      <div className="flex gap-3">
+    <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
+      <div className="flex gap-2">
         {item.imageUrl && !imgError ? (
           <img
             src={item.imageUrl}
@@ -60,7 +47,7 @@ export default function ListItem({ item, className = '', onFindClick }: Props) {
         )}
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <span className="truncate text-sm font-medium" title={item.categoryName}>
               {item.categoryName}
             </span>
@@ -68,17 +55,15 @@ export default function ListItem({ item, className = '', onFindClick }: Props) {
           </div>
 
           <div className="mt-1 truncate text-xs text-gray-500" title={item.foundLocation}>
-            {item.foundLocation} · {formatKST(item.foundDate)}
+            {item.foundLocation}
+          </div>
+          <div className="mt-1 truncate text-xs text-gray-500" title={item.foundDate}>
+            {formatKST(item.foundDate)}
           </div>
 
-          <div className="mt-2 flex gap-2">
-            <button
-              onClick={() => onFindClick(item)}
-              className="rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50"
-            >
-              분실물 찾기
-            </button>
-          </div>
+          <button className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50">
+            분실물 찾기
+          </button>
         </div>
       </div>
     </li>

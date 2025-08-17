@@ -1,108 +1,99 @@
 import { useEffect, useRef, useState } from 'react';
-import { useKakaoLoader } from '../../../hooks/main/useKakaoLoader';
-import { fetchSchoolAreas } from '../../../api/register';
-import type { SchoolArea } from '../../../types/register';
 
-type Props = {
-  setSelectedLat: (lat: number | null) => void;
-  setSelectedLng: (lng: number | null) => void;
-  setSelectedAreaId: (id: number | null) => void;
-  selectedAreaId: number | null;
-};
+import { useLoader } from '../../../hooks/map/useLoader';
+import { usePolygons } from '../../../hooks/map/usePolygons';
+import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
+import type { MapComponentProps } from '../../../types/main/components';
 
-const KakaoMap = ({ setSelectedLat, setSelectedLng, setSelectedAreaId, selectedAreaId }: Props) => {
+const Map = (props: MapComponentProps) => {
+  const {
+    setIsRegisterConfirmModalOpen,
+    setSelectedAreaId,
+    selectedAreaId,
+    schoolAreas,
+    lostItemSummary,
+    selectedMode,
+    selectedCategoryId,
+  } = props;
+
   const mapRef = useRef<HTMLDivElement>(null);
-  const markerRef = useRef<any>(null);
-  const clickedOverlayRef = useRef(false);
-  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
-
-  const loaded = useKakaoLoader();
+  const loaded = useLoader();
+  const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
   useEffect(() => {
-    fetchSchoolAreas().then(setSchoolAreas).catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (!loaded || !mapRef.current || schoolAreas.length === 0) return;
+    if (!loaded || !mapRef.current) return;
 
     const kakao = window.kakao;
-    const map = new kakao.maps.Map(mapRef.current, {
+    const m = new kakao.maps.Map(mapRef.current, {
       center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
       level: 3,
     });
+    m.setCursor('default');
+    setMap(m);
+    return () => setMap(null);
+  }, [loaded]);
 
-    const place = (latlng: any) => {
-      const lat = latlng.getLat();
-      const lng = latlng.getLng();
-      if (!markerRef.current) {
-        markerRef.current = new kakao.maps.Marker({ position: latlng });
-        markerRef.current.setMap(map);
-      } else {
-        markerRef.current.setPosition(latlng);
-      }
-      setSelectedLat(lat);
-      setSelectedLng(lng);
-    };
+  const { reset, createRegisterPin } = usePolygons({
+    map,
+    schoolAreas,
+    selectedAreaId,
+    selectedMode,
+    onOpenRegisterConfirm: () => setIsRegisterConfirmModalOpen(true),
+    onSelectArea: setSelectedAreaId,
+  });
 
-    const polygons: any[] = [];
+  useNumberedMarkers({
+    map,
+    schoolAreas,
+    summary: lostItemSummary,
+    enabled: selectedMode !== 'register',
+    selectedCategoryId: selectedCategoryId,
+  });
 
-    schoolAreas.forEach((area) => {
-      const path = area.areaPolygon.coordinates.map(
-        (coord) => new kakao.maps.LatLng(coord.lat, coord.lng),
-      );
 
-      const polygon = new kakao.maps.Polygon({
-        path,
-        strokeWeight: 3,
-        strokeColor: '#39DE2A',
-        strokeOpacity: 0.8,
-        strokeStyle: 'solid',
-        fillColor: '#A2FF99',
-        fillOpacity: 0.7,
-      });
-      polygons.push(polygon);
-      polygon.setMap(map);
+  useEffect(() => {
+    if (!map) return;
+    reset();
+  }, [selectedMode, map, reset]);
 
-      const mouseoverOption = { fillColor: '#EFFFED', fillOpacity: 0.8 };
-      const mouseoutOption = { fillColor: '#A2FF99', fillOpacity: 0.7 };
-
-      kakao.maps.event.addListener(polygon, 'mouseover', () => polygon.setOptions(mouseoverOption));
-      kakao.maps.event.addListener(polygon, 'mouseout', () => polygon.setOptions(mouseoutOption));
-      kakao.maps.event.addListener(polygon, 'click', (e: any) => {
-        clickedOverlayRef.current = true;
-        setSelectedAreaId(area.id);
-        place(e.latLng);
-      });
-    });
-
-    const onMapClick = (e: any) => {
-      if (clickedOverlayRef.current) {
-        clickedOverlayRef.current = false;
+  useEffect(() => {
+    if (!map) return;
+    const kakao = window.kakao;
+    const onMapClick = (e: kakao.maps.event.MouseEvent) => {
+      if (selectedMode === 'register') {
+        // 등록 모드: 지도 클릭 시 핀 생성 및 모달 열기
+        setSelectedAreaId(0); // 구역 선택 해제
+        createRegisterPin(e.latLng); // 핀 생성
+        setIsRegisterConfirmModalOpen(true);
         return;
       }
-      place(e.latLng);
-      setSelectedAreaId(null);
-    };
+      setSelectedAreaId(0);
 
+    };
     kakao.maps.event.addListener(map, 'click', onMapClick);
 
-    return () => {
-      // unmount 시 이벤트 리스너 제거
-      kakao.maps.event.removeListener(map, 'click', onMapClick);
-      polygons.forEach((p) => p.setMap(null));
-    };
-  }, [loaded, schoolAreas, setSelectedLat, setSelectedLng, setSelectedAreaId]);
+    return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
+  }, [map, selectedMode, setSelectedAreaId, setIsRegisterConfirmModalOpen, createRegisterPin]);
 
-  const selectedAreaName = schoolAreas.find((area) => area.id === selectedAreaId)?.areaName;
+  const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
+
 
   return (
     <div>
       <div ref={mapRef} className="absolute inset-0" />
+      {selectedMode === 'register' && (
+        <div className="absolute top-20 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-400/70 px-6 py-3 shadow-lg">
+          <p className="text-center text-lg font-medium text-black">
+            분실물을 발견한 위치를 선택해주세요
+          </p>
+        </div>
+      )}
+
       <div className="absolute bottom-3 left-3 z-10 rounded-md bg-white/90 px-3 py-2 text-sm shadow">
-        선택: {selectedAreaName || '전체'}
+        선택: {selectedArea?.areaName || '전체'}
       </div>
     </div>
   );
 };
 
-export default KakaoMap;
+export default Map;
