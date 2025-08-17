@@ -1,11 +1,23 @@
 import type { ModalComponentProps } from '../../../types/main/components';
 
-const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: ModalComponentProps) => {
+const RegisterConfirmModal = ({
+  isOpen,
+  onConfirm,
+  onCancel,
+  setIsRegisterConfirmModalOpen,
+  isRegisterModalOpen,
+}: ModalComponentProps) => {
   if (!isOpen) return null;
+
+  const handleCancel = () => {
+    setIsRegisterConfirmModalOpen(false);
+    onCancel();
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      onClick={onCancel}
+      onClick={handleCancel}
     >
       <div
         className="max-h-[80vh] w-[90vw] max-w-2xl overflow-y-auto rounded-2xl bg-white/70 p-6 shadow-2xl"
@@ -21,7 +33,7 @@ const RegisterConfirmModal = ({ isOpen, onConfirm, onCancel }: ModalComponentPro
           </button>
           <button
             className="rounded-lg bg-gray-300 px-4 py-2 text-gray-600 hover:bg-gray-400"
-            onClick={onCancel}
+            onClick={handleCancel}
           >
             취소
           </button>
