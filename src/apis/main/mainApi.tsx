@@ -25,6 +25,19 @@ export const getLostItemSummary = async (areaId?: number): Promise<LostItemSumma
   return data;
 };
 
+export const getLostItemSummaryByCategory = async (
+  categoryId: number,
+  areaId?: number,
+): Promise<LostItemSummaryRow[]> => {
+  const qs = new URLSearchParams({
+    categoryId: String(categoryId),
+  });
+  if (areaId) qs.set('areaId', String(areaId));
+  const res = await fetch(`/api/lost-items/summary-by-category?${qs.toString()}`);
+  const data: LostItemSummaryRow[] = await res.json();
+  return data;
+};
+
 export const getLostItemDetail = async (
   page: number,
   limit: number,

@@ -15,6 +15,7 @@ export type UseNumberedMarkersHookOptions = {
   schoolAreas: SchoolArea[];
   summary: LostItemSummaryRow[];
   enabled: boolean;
+  selectedCategoryId: number;
 };
 
 export type UseLoaderHookReturnValue = boolean;
