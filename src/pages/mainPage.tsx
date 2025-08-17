@@ -28,6 +28,9 @@ const MainPage = () => {
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
 
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
+
   // 카테고리별 요약 데이터 계산
   const getCategorySummary = useCallback(
     async (categoryId: number) => {
@@ -135,16 +138,22 @@ const MainPage = () => {
           mode={{ selectedMode, toggleMode }}
           lists={{ items, categories }}
           areas={{ schoolAreas, lostItemSummary: categorySummary }}
-          ui={{ setIsRegisterConfirmModalOpen }}
+          ui={{ setIsRegisterConfirmModalOpen, setIsRegisterModalOpen, setIsFindModalOpen }}
+          isRegisterModalOpen={isRegisterModalOpen}
+          isFindModalOpen={isFindModalOpen}
         />
       </div>
 
       <RegisterConfirmModal
+        setIsRegisterConfirmModalOpen={setIsRegisterConfirmModalOpen}
         isOpen={isRegisterConfirmModalOpen}
         onConfirm={() => {
           setIsRegisterConfirmModalOpen(false);
+          setIsRegisterModalOpen(true);
         }}
         onCancel={() => setIsRegisterConfirmModalOpen(false)}
+        isRegisterModalOpen={isRegisterModalOpen}
+        setIsRegisterModalOpen={setIsRegisterModalOpen}
       />
     </>
   );

@@ -1,4 +1,3 @@
-import type { LostItem } from '../main/main/lostListItem';
 import { useFindProcess } from '../../hooks/find/useFindProcess';
 import { FIND_PROCESS_STEPS } from '../../constants/find';
 
@@ -10,9 +9,10 @@ import Step4_Agreement from './steps/Step4_Agreement';
 import CloseIcon from '../common/Icons/CloseIcon';
 import SpinnerIcon from '../common/Icons/SpinnerIcon';
 import Step3_DetailInfo from './steps/Step3_DetailInfo';
+import type { LostItemListItem } from '../../types/lost/lostApi';
 
 type Props = {
-  item: LostItem;
+  item: LostItemListItem;
   onClose: () => void;
 };
 

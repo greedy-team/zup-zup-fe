@@ -28,7 +28,7 @@ function StatusBadge({ status }: StatusBadgeComponentProps) {
   );
 }
 
-export default function LostListItem({ item, className = '' }: ListItemComponentProps) {
+export default function LostListItem({ item, className = '', onFindClick }: ListItemComponentProps) {
   const [imgError, setImgError] = useState(false);
 
   return (
@@ -61,7 +61,10 @@ export default function LostListItem({ item, className = '' }: ListItemComponent
             {formatKST(item.foundDate)}
           </div>
 
-          <button className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50">
+          <button
+            className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50"
+            onClick={() => onFindClick?.(item)}
+          >
             분실물 찾기
           </button>
         </div>
