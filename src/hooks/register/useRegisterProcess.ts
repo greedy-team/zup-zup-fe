@@ -18,7 +18,11 @@ const INITIAL_FORM_DATA: Omit<RegisterFormData, 'schoolAreaId'> = {
   images: [],
 };
 
-export const useRegisterProcess = (onClose: () => void, schoolAreaId: number | null) => {
+export const useRegisterProcess = (
+  onClose: () => void,
+  schoolAreaId: number | null,
+  onModeChange?: () => void,
+) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -92,6 +96,8 @@ export const useRegisterProcess = (onClose: () => void, schoolAreaId: number | n
         onConfirm: () => {
           setResultModalContent(null);
           onClose();
+          // 등록 완료 후 조회 모드로 변경
+          onModeChange?.();
         },
       });
     } catch (error) {

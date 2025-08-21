@@ -13,7 +13,11 @@ import Step3_Confirm from './steps/Step3_Confirm';
 import CloseIcon from '../common/Icons/CloseIcon';
 import SpinnerIcon from '../common/Icons/SpinnerIcon';
 
-const RegisterModal = ({ onClose, schoolAreaId }: ResultProps) => {
+const RegisterModal = ({
+  onClose,
+  schoolAreaId,
+  onModeChange,
+}: ResultProps & { onModeChange?: () => void }) => {
   const {
     currentStep,
     isLoading,
@@ -29,7 +33,7 @@ const RegisterModal = ({ onClose, schoolAreaId }: ResultProps) => {
     setFormData,
     handleRegister,
     handleFeatureChange,
-  } = useRegisterProcess(onClose, schoolAreaId);
+  } = useRegisterProcess(onClose, schoolAreaId, onModeChange);
 
   const steps = REGISTER_PROCESS_STEPS.STEPS;
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);

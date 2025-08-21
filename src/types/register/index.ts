@@ -42,6 +42,7 @@ export type RegisterFormData = {
 export type ResultProps = {
   onClose: () => void;
   schoolAreaId: number | null;
+  onModeChange?: () => void;
 };
 
 export type ResultModalContent = {
