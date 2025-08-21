@@ -33,8 +33,8 @@ export default function App() {
             <Route path="pledge" element={<FindPledge />} />
           </Route>
 
-          {/* 등록: (/register/*) */}
-          <Route path="register" element={<RegisterLayout />}>
+          {/* 등록: (/register/:schoolAreaId/*) */}
+          <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
             <Route index element={<Navigate to="category" replace />} />
             <Route path="category" element={<RegisterCategory />} />
             <Route path="details" element={<RegisterDetails />} />
