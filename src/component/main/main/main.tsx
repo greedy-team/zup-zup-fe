@@ -27,7 +27,7 @@ const Main = ({
     ui.setIsFindModalOpen(false);
     setSelectedItemForFind(null);
   };
-  
+
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
@@ -69,6 +69,7 @@ const Main = ({
           <RegisterModal
             onClose={() => ui.setIsRegisterModalOpen(false)}
             schoolAreaId={mapSelection.selectedAreaId}
+            onModeChange={mode.toggleMode}
           />
         )}
       </div>
