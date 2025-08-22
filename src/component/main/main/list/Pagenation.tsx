@@ -1,6 +1,18 @@
-import type { PaginationComponentProps } from '../../../../types/main/components';
+import { useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { TotalCountContext } from '../../../../contexts/AppContexts';
 
-const Pagenation = ({ page, totalCount, setPage }: PaginationComponentProps) => {
+const Pagenation = () => {
+  const { totalCount } = useContext(TotalCountContext)!;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+
+  // 페이지 이동 설정 핸들러
+  const setPage = (p: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set('page', String(p));
+    setSearchParams(next, { replace: true });
+  };
   return (
     <div className="fixed bottom-0 flex justify-center gap-2 rounded-full bg-white/90 px-4 py-2 backdrop-blur">
       <button

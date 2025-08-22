@@ -1,20 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
-import type { MapComponentProps } from '../../../types/main/components';
+import {
+  RegisterConfirmModalContext,
+  SchoolAreasContext,
+  LostItemSummaryContext,
+  SelectedModeContext,
+} from '../../../contexts/AppContexts';
 
-const Map = (props: MapComponentProps) => {
-  const {
-    setIsRegisterConfirmModalOpen,
-    setSelectedAreaId,
-    selectedAreaId,
-    schoolAreas,
-    lostItemSummary,
-    selectedMode,
-    selectedCategoryId,
-  } = props;
+const Map = () => {
+  const { setIsRegisterConfirmModalOpen } = useContext(RegisterConfirmModalContext)!;
+  const { schoolAreas } = useContext(SchoolAreasContext)!;
+  const { lostItemSummary } = useContext(LostItemSummaryContext)!;
+  const { selectedMode } = useContext(SelectedModeContext)!;
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
+  const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const loaded = useLoader();
@@ -33,13 +38,21 @@ const Map = (props: MapComponentProps) => {
     return () => setMap(null);
   }, [loaded]);
 
+  // 구역 선택 시 페이지 1로 이동시키는 핸들러
+  const updateAreaIdInUrl = (areaId: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set('schoolAreaId', String(areaId));
+    next.set('page', '1');
+    setSearchParams(next, { replace: true });
+  };
+
   const { reset, createRegisterPin } = usePolygons({
     map,
     schoolAreas,
     selectedAreaId,
     selectedMode,
     onOpenRegisterConfirm: () => setIsRegisterConfirmModalOpen(true),
-    onSelectArea: setSelectedAreaId,
+    onSelectArea: updateAreaIdInUrl,
   });
 
   useNumberedMarkers({
@@ -50,11 +63,9 @@ const Map = (props: MapComponentProps) => {
     selectedCategoryId: selectedCategoryId,
   });
 
-
   useEffect(() => {
-    if (!map) return;
     reset();
-  }, [selectedMode, map, reset]);
+  }, [selectedMode, reset]);
 
   useEffect(() => {
     if (!map) return;
@@ -62,21 +73,19 @@ const Map = (props: MapComponentProps) => {
     const onMapClick = (e: kakao.maps.event.MouseEvent) => {
       if (selectedMode === 'register') {
         // 등록 모드: 지도 클릭 시 핀 생성 및 모달 열기
-        setSelectedAreaId(0); // 구역 선택 해제
+        updateAreaIdInUrl(0); // 구역 선택 해제
         createRegisterPin(e.latLng); // 핀 생성
         setIsRegisterConfirmModalOpen(true);
         return;
       }
-      setSelectedAreaId(0);
-
+      updateAreaIdInUrl(0);
     };
     kakao.maps.event.addListener(map, 'click', onMapClick);
 
     return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
-  }, [map, selectedMode, setSelectedAreaId, setIsRegisterConfirmModalOpen, createRegisterPin]);
+  }, [map, selectedMode, setIsRegisterConfirmModalOpen, createRegisterPin, selectedAreaId]);
 
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
-
 
   return (
     <div>
