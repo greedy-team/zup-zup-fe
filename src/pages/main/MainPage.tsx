@@ -67,19 +67,19 @@ const MainPage = () => {
     })();
   }, [page, selectedCategoryId, selectedAreaId]);
 
-  // 선택된 구역의 분실물 요약 데이터 가져오기 → context 상태를 채움
+  // 선택된 구역/카테고리의 분실물 요약 데이터 가져오기 → context 상태를 채움 (단일 호출)
   useEffect(() => {
     const fetchLostItemSummary = async () => {
       try {
-        const data = await getLostItemSummary(selectedAreaId);
+        const data = await getLostItemSummary(selectedAreaId, selectedCategoryId || undefined);
         setLostItemSummary(data);
       } catch (error) {
-        console.error('Failed to fetch lost item summary:', error);
+        console.error('분실물 요약 데이터 가져오기 실패:', error);
         setLostItemSummary([]);
       }
     };
     fetchLostItemSummary();
-  }, [selectedAreaId]);
+  }, [selectedAreaId, selectedCategoryId, setLostItemSummary]);
 
   return (
     <>

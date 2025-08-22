@@ -48,7 +48,7 @@ const Map = () => {
     setSearchParams(next, { replace: true });
   };
 
-  // 구역 관리
+  // 구역 가져오기
   const { reset, createRegisterPin } = usePolygons({
     map,
     schoolAreas,
@@ -58,7 +58,7 @@ const Map = () => {
     onSelectArea: updateAreaIdInUrl,
   });
 
-  // 번호 마커 관리
+  // 번호 마커 가져오기
   useNumberedMarkers({
     map,
     schoolAreas,

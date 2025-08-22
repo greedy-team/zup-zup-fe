@@ -17,9 +17,13 @@ export const getSchoolAreas = async (): Promise<{ schoolAreas: SchoolArea[] }> =
   return { schoolAreas };
 };
 
-export const getLostItemSummary = async (areaId?: number): Promise<LostItemSummaryRow[]> => {
+export const getLostItemSummary = async (
+  areaId?: number,
+  categoryId?: number,
+): Promise<LostItemSummaryRow[]> => {
   const qs = new URLSearchParams();
   if (areaId) qs.set('areaId', String(areaId));
+  if (categoryId) qs.set('categoryId', String(categoryId));
   const res = await fetch(`/api/lost-items/summary?${qs.toString()}`);
   const data: LostItemSummaryRow[] = await res.json();
   return data;
@@ -35,6 +39,7 @@ export const getLostItemSummaryByCategory = async (
   if (areaId) qs.set('areaId', String(areaId));
   const res = await fetch(`/api/lost-items/summary-by-category?${qs.toString()}`);
   const data: LostItemSummaryRow[] = await res.json();
+  console.log('data', data);
   return data;
 };
 
