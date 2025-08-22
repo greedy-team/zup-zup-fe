@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BASE_STYLE, HOVER_STYLE, SELECTED_STYLE } from '../../constants/map/polygonStyle';
 import type { UsePolygonsHookOptions } from '../../types/hooks/map';
 
@@ -16,6 +16,7 @@ export function usePolygons({
   const modeRef = useRef(selectedMode);
   const openRef = useRef(onOpenRegisterConfirm);
   const selectRef = useRef(onSelectArea);
+  const [selectedPolygonAreaId, setSelectedPolygonAreaId] = useState(selectedAreaId);
 
   // 등록 모드용 핀 관리
   const registerPinRef = useRef<kakao.maps.Marker | null>(null);
@@ -86,6 +87,15 @@ export function usePolygons({
       const onClick = (e: kakao.maps.event.MouseEvent) => {
         kakao.maps.event.preventMap?.();
 
+        // 선택된 구역 클릭 시 선택 해제
+        if (selectedPolygonAreaId === area.id) {
+          setSelectedPolygonAreaId(0);
+          selectRef.current?.(0);
+          return;
+        }
+
+        // 선택된 구역 클릭 시 선택 구역 변경
+        setSelectedPolygonAreaId(area.id);
         selectRef.current?.(area.id);
 
         if (modeRef.current === 'register') {
@@ -147,19 +157,19 @@ export function usePolygons({
       selectedPolygonRef.current = null;
       removeRegisterPin();
     };
-  }, [map, schoolAreas]);
+  }, [map, schoolAreas, selectedPolygonAreaId]);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
 
-    if (!selectedAreaId) {
+    if (!selectedPolygonAreaId) {
       selectedPolygonRef.current = null;
       return;
     }
-    const poly = polyByIdRef.current.get(selectedAreaId) || null;
+    const poly = polyByIdRef.current.get(selectedPolygonAreaId) || null;
     if (poly) poly.setOptions(SELECTED_STYLE);
     selectedPolygonRef.current = poly;
-  }, [selectedAreaId]);
+  }, [selectedPolygonAreaId]);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
