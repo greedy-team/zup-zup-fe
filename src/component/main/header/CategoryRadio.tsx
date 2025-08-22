@@ -1,12 +1,25 @@
-import type { CategoryRadioComponentProps } from '../../../types/main/components';
+import { useContext, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
 
-const CategoryRadio = ({
-  categories,
-  selectedCategoryId,
-  setSelectedCategoryId,
-  selectedMode,
-}: CategoryRadioComponentProps) => {
+const CategoryRadio = () => {
+  const { categories } = useContext(CategoriesContext)!;
+  const { selectedMode } = useContext(SelectedModeContext)!;
+  const [searchParams, setSearchParams] = useSearchParams();
   const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories];
+
+  const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
+
+  // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
+  const handleSelectCategory = useCallback(
+    (id: number) => {
+      const next = new URLSearchParams(searchParams);
+      next.set('categoryId', String(id));
+      next.set('page', '1');
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams],
+  );
 
   return (
     <>
@@ -24,7 +37,7 @@ const CategoryRadio = ({
                   name="category"
                   value={id}
                   checked={id === selectedCategoryId}
-                  onChange={() => setSelectedCategoryId(id)}
+                  onChange={() => handleSelectCategory(id)}
                   className="peer hidden"
                 />
                 <label
