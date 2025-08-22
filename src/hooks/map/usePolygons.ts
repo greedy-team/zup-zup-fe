@@ -127,6 +127,16 @@ export function usePolygons({
     polysRef.current = polys;
     polyByIdRef.current = byId;
 
+    // 초기 로드/새로고침 시 현재 selectedAreaId에 맞춰 선택 상태 적용
+    if (selectedAreaId) {
+      const poly = byId.get(selectedAreaId) || null;
+      if (poly) {
+        polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
+        poly.setOptions(SELECTED_STYLE);
+        selectedPolygonRef.current = poly;
+      }
+    }
+
     return () => {
       handlers.forEach(({ target, type, handler }) =>
         kakao.maps.event.removeListener(target, type, handler),

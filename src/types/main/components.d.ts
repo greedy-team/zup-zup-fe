@@ -26,7 +26,6 @@ export type ButtonComponentProps = {
 export type ListItemComponentProps = {
   item: LostItemListItem;
   className?: string;
-  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type PaginationComponentProps = {
@@ -40,7 +39,6 @@ export type LostListComponentProps = {
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
-  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type MainComponentProps = {
