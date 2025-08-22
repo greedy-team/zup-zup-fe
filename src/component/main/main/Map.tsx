@@ -150,7 +150,7 @@ const Map = () => {
       path: [outerWorldCW, campusHoleCCW], // [외곽, 구멍]
       strokeWeight: 0,
       fillColor: '#000000',
-      fillOpacity: 0.45, // 회색 투명도
+      fillOpacity: 0.25, // 회색 투명도
       zIndex: 999,
     });
 
@@ -192,20 +192,17 @@ const Map = () => {
   useEffect(() => {
     if (!map) return;
     const kakao = window.kakao;
+
+    if (selectedMode !== 'register') return;
     const onMapClick = (e: kakao.maps.event.MouseEvent) => {
-      if (selectedMode === 'register') {
-        // 등록 모드: 지도 클릭 시 핀 생성 및 모달 열기
-        updateAreaIdInUrl(0); // 구역 선택 해제
-        createRegisterPin(e.latLng); // 핀 생성
-        setIsRegisterConfirmModalOpen(true);
-        return;
-      }
-      updateAreaIdInUrl(0);
+      // 등록 모드: 지도 클릭 시 핀 생성 및 모달 열기
+      createRegisterPin(e.latLng); // 핀 생성
+      setIsRegisterConfirmModalOpen(true);
     };
     kakao.maps.event.addListener(map, 'click', onMapClick);
 
     return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
-  }, [map, selectedMode, setIsRegisterConfirmModalOpen, createRegisterPin, selectedAreaId]);
+  }, [map, selectedMode, setIsRegisterConfirmModalOpen, createRegisterPin]);
 
   // 선택된 구역 정보 가져오기
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
