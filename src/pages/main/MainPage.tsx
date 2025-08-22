@@ -157,7 +157,6 @@ const MainPage = () => {
           setIsRegisterModalOpen(true);
         }}
         onCancel={() => setIsRegisterConfirmModalOpen(false)}
-        isRegisterModalOpen={isRegisterModalOpen}
         setIsRegisterModalOpen={setIsRegisterModalOpen}
       />
     </>

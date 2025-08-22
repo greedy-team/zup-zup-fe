@@ -5,7 +5,6 @@ const RegisterConfirmModal = ({
   onConfirm,
   onCancel,
   setIsRegisterConfirmModalOpen,
-  isRegisterModalOpen,
 }: ModalComponentProps) => {
   if (!isOpen) return null;
 

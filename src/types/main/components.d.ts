@@ -15,7 +15,6 @@ export type ModalComponentProps = {
   onCancel: () => void;
   setIsRegisterConfirmModalOpen: (b: boolean) => void;
   setIsRegisterModalOpen: (b: boolean) => void;
-  isRegisterModalOpen: boolean;
 };
 
 export type ButtonComponentProps = {
