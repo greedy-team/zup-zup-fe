@@ -123,6 +123,39 @@ const Map = () => {
     };
   }, [map]);
 
+  // 세종대 밖은 반투명 그레이로 마스킹(도넛 폴리곤)
+  useEffect(() => {
+    if (!map) return;
+    const kakao = window.kakao;
+
+    // 바깥 큰 사각형(시계방향; 전 세계를 대충 덮는 박스)
+    const outerWorldCW = [
+      new kakao.maps.LatLng(85, -179.999),
+      new kakao.maps.LatLng(85, 179.999),
+      new kakao.maps.LatLng(-85, 179.999),
+      new kakao.maps.LatLng(-85, -179.999),
+    ];
+
+    // 남길 영역(세종대 근처) - "구멍" 경로(반시계방향 권장)
+    // SW → NW → NE → SE 순으로 넣어 CCW가 되게 작성
+    const campusHoleCCW = [
+      new kakao.maps.LatLng(37.545, 127.07), // SW
+      new kakao.maps.LatLng(37.5575, 127.07), // NW
+      new kakao.maps.LatLng(37.5575, 127.078), // NE
+      new kakao.maps.LatLng(37.545, 127.078), // SE
+    ];
+
+    const mask = new kakao.maps.Polygon({
+      map,
+      path: [outerWorldCW, campusHoleCCW], // [외곽, 구멍]
+      strokeWeight: 0,
+      fillColor: '#000000',
+      fillOpacity: 0.45, // 회색 투명도
+      zIndex: 999,
+    });
+
+    return () => mask.setMap(null);
+  }, [map]);
   // 구역 선택 시 페이지 1로 이동시키는 핸들러
   const updateAreaIdInUrl = (areaId: number) => {
     const next = new URLSearchParams(searchParams);
