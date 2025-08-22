@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../../component/main/header/Header';
 import Main from '../../component/main/main/Main';
 import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModal';
@@ -12,6 +13,8 @@ import type { SchoolArea } from '../../types/map/map';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../../types/lost/lostApi';
 
 const MainPage = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<LostItemListItem[]>([]);
 
@@ -26,9 +29,6 @@ const MainPage = () => {
   const [selectedMode, setSelectedMode] = useState<'register' | 'append'>('append');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
-
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isFindModalOpen, setIsFindModalOpen] = useState(false);
 
   // 카테고리별 요약 데이터 계산
   const getCategorySummary = useCallback(
@@ -71,7 +71,24 @@ const MainPage = () => {
       setCategorySummary(summary);
     };
     updateCategorySummary();
-  }, [selectedCategoryId, getCategorySummary, isFindModalOpen, isRegisterModalOpen]);
+  }, [selectedCategoryId, getCategorySummary]);
+
+  // lostItemId가 존재하면 찾기 프로세스로 라우팅
+  useEffect(() => {
+    const lostItemId = searchParams.get('lostItemId');
+    if (lostItemId) {
+      navigate(`/find/${lostItemId}`);
+    }
+  }, [searchParams, navigate]);
+
+  // 상태 → 메인 쿼리스트링 동기화
+  useEffect(() => {
+    const next = new URLSearchParams();
+    next.set('categoryId', String(selectedCategoryId));
+    next.set('schoolAreaId', String(selectedAreaId));
+    next.set('page', String(page));
+    setSearchParams(next, { replace: true });
+  }, [selectedCategoryId, selectedAreaId, page, setSearchParams]);
 
   // 모드 토글 핸들러: 등록/찾기 모드 전환
   const toggleMode = () => {
@@ -104,7 +121,7 @@ const MainPage = () => {
       setItems(items);
       setTotalCount(total);
     })();
-  }, [page, selectedCategoryId, selectedAreaId, isFindModalOpen, isRegisterModalOpen]);
+  }, [page, selectedCategoryId, selectedAreaId]);
 
   // 선택된 구역의 분실물 요약 데이터 가져오기
   useEffect(() => {
@@ -119,11 +136,6 @@ const MainPage = () => {
     };
     fetchLostItemSummary();
   }, [selectedAreaId]);
-
-  // 카테고리나 구역 변경 시 페이지를 1페이지로 리셋
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategoryId, selectedAreaId]);
 
   return (
     <>
@@ -141,11 +153,10 @@ const MainPage = () => {
             setSelectedAreaId,
           }}
           mode={{ selectedMode, toggleMode }}
+          selectedCategoryId={selectedCategoryId}
           lists={{ items, categories }}
           areas={{ schoolAreas, lostItemSummary: categorySummary }}
-          ui={{ setIsRegisterConfirmModalOpen, setIsRegisterModalOpen, setIsFindModalOpen }}
-          isRegisterModalOpen={isRegisterModalOpen}
-          isFindModalOpen={isFindModalOpen}
+          ui={{ setIsRegisterConfirmModalOpen }}
         />
       </div>
 
@@ -154,10 +165,10 @@ const MainPage = () => {
         isOpen={isRegisterConfirmModalOpen}
         onConfirm={() => {
           setIsRegisterConfirmModalOpen(false);
-          setIsRegisterModalOpen(true);
+          // 등록은 페이지 방식으로 전환
+          navigate(`/register/${selectedAreaId}`);
         }}
         onCancel={() => setIsRegisterConfirmModalOpen(false)}
-        setIsRegisterModalOpen={setIsRegisterModalOpen}
       />
     </>
   );

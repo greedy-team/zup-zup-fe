@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import RegisterModal from '../../register/RegisterModal';
-import FindModal from '../../find/FindModal';
+import { useNavigate } from 'react-router-dom';
 import Map from './Map';
 import LostList from './list/LostList';
 import type { MainComponentProps } from '../../../types/main/components';
@@ -10,22 +8,15 @@ const Main = ({
   pagination,
   mapSelection,
   mode,
+  selectedCategoryId,
   lists,
   areas,
   ui,
-  isRegisterModalOpen,
-  isFindModalOpen,
 }: MainComponentProps) => {
-  const [selectedItemForFind, setSelectedItemForFind] = useState<LostItemListItem | null>(null);
+  const navigate = useNavigate();
 
   const handleOpenFindModal = (item: LostItemListItem) => {
-    setSelectedItemForFind(item);
-    ui.setIsFindModalOpen(true);
-  };
-
-  const handleCloseFindModal = () => {
-    ui.setIsFindModalOpen(false);
-    setSelectedItemForFind(null);
+    navigate(`/find/${item.lostItemId}`);
   };
 
   return (
@@ -52,6 +43,7 @@ const Main = ({
             selectedAreaId={mapSelection.selectedAreaId}
             lostItemSummary={areas.lostItemSummary}
             selectedMode={mode.selectedMode}
+            selectedCategoryId={selectedCategoryId}
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
@@ -60,17 +52,6 @@ const Main = ({
             {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
-        {isFindModalOpen && selectedItemForFind && (
-          <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
-        )}
-
-        {isRegisterModalOpen && (
-          <RegisterModal
-            onClose={() => ui.setIsRegisterModalOpen(false)}
-            schoolAreaId={mapSelection.selectedAreaId}
-            onModeChange={mode.toggleMode}
-          />
-        )}
       </div>
     </main>
   );
