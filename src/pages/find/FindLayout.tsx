@@ -1,3 +1,7 @@
 export default function FindLayout() {
-  return;
+  return (
+    <div>
+      <h1>FindLayout</h1>
+    </div>
+  );
 }

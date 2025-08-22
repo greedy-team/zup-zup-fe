@@ -42,7 +42,6 @@ export type LostListComponentProps = {
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
-  selectedMode: lostItemMode;
   onFindButtonClick: (item: LostItemListItem) => void;
 };
 

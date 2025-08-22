@@ -1,3 +1,7 @@
 export default function RegisterLayout() {
-  return;
+  return (
+    <div>
+      <h1>RegisterLayout</h1>
+    </div>
+  );
 }
