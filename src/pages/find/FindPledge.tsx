@@ -1,3 +1,3 @@
-export function FindPledge() {
+export default function FindPledge() {
   return;
 }

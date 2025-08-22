@@ -1,7 +1,7 @@
 import type { CategoryRadioComponentProps } from '../../../types/main/components';
 import Authentication from './Authentication';
-import CategoryRadio from './categoryRadio';
-import Logo from './logo';
+import CategoryRadio from './CategoryRadio';
+import Logo from './Logo';
 
 const Header = ({
   categories,

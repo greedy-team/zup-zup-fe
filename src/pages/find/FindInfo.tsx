@@ -1,3 +1,3 @@
-export function FindInfo() {
+export default function FindInfo() {
   return;
 }

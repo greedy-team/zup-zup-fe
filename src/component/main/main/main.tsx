@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import RegisterModal from '../../register/RegisterModal';
 import FindModal from '../../find/FindModal';
-import Map from './map';
-import LostList from './list/lostList';
+import Map from './Map';
+import LostList from './list/LostList';
 import type { MainComponentProps } from '../../../types/main/components';
 import type { LostItemListItem } from '../../../types/lost/lostApi';
 

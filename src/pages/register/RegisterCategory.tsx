@@ -1,3 +1,3 @@
-export function RegisterCategory() {
+export default function RegisterCategory() {
   return;
 }
