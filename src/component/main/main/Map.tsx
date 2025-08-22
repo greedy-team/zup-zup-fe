@@ -31,12 +31,15 @@ const Map = () => {
     if (!loaded || !mapRef.current) return;
 
     const kakao = window.kakao;
-    const m = new kakao.maps.Map(mapRef.current, {
+    const map = new kakao.maps.Map(mapRef.current, {
       center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
       level: 3,
+      minLevel: 1,
+      maxLevel: 3,
     });
-    m.setCursor('default');
-    setMap(m);
+
+    map.setCursor('default');
+    setMap(map);
     return () => setMap(null);
   }, [loaded]);
 
