@@ -71,7 +71,7 @@ const MainPage = () => {
   useEffect(() => {
     const fetchLostItemSummary = async () => {
       try {
-        const data = await getLostItemSummary(selectedAreaId, selectedCategoryId || undefined);
+        const data = await getLostItemSummary(selectedAreaId, selectedCategoryId);
         setLostItemSummary(data);
       } catch (error) {
         console.error('분실물 요약 데이터 가져오기 실패:', error);

@@ -39,7 +39,6 @@ export const getLostItemSummaryByCategory = async (
   if (areaId) qs.set('areaId', String(areaId));
   const res = await fetch(`/api/lost-items/summary-by-category?${qs.toString()}`);
   const data: LostItemSummaryRow[] = await res.json();
-  console.log('data', data);
   return data;
 };
 
