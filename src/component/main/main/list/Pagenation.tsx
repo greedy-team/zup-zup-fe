@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { TotalCountContext } from '../../../../contexts/AppContexts';
 
 const Pagenation = () => {
-  const { totalCount } = useContext(TotalCountContext)!;
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { totalCount } = useContext(TotalCountContext)!;
+
   const page = Number(searchParams.get('page')) || 1;
 
   // 페이지 이동 설정 핸들러

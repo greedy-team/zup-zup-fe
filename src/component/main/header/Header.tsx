@@ -6,6 +6,7 @@ import Logo from './Logo';
 
 const Header = () => {
   const { selectedMode } = useContext(SelectedModeContext)!;
+
   return (
     <header className="shrink-0 border-b">
       <div className="flex h-30 items-center justify-between bg-teal-50 px-4 text-black">

@@ -5,6 +5,7 @@ import type {
 } from '../../../../types/main/components';
 import { useNavigate } from 'react-router-dom';
 
+// 분실물 등록 시간 포맷팅
 function formatKST(iso: string) {
   try {
     return new Date(iso).toLocaleDateString('ko-KR', {
@@ -17,6 +18,7 @@ function formatKST(iso: string) {
   }
 }
 
+// 분실물 상태 배지
 function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
   const badgeClass = isFound
@@ -29,8 +31,10 @@ function StatusBadge({ status }: StatusBadgeComponentProps) {
   );
 }
 
-export default function LostListItem({ item, className = '' }: ListItemComponentProps) {
+export default function LostListItem({ item, className }: ListItemComponentProps) {
+  // 이미지 로딩 에러 처리
   const [imgError, setImgError] = useState(false);
+
   const navigate = useNavigate();
 
   return (

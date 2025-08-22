@@ -6,9 +6,8 @@ import { ItemsContext, TotalCountContext } from '../../../../contexts/AppContext
 export default function LostList() {
   const { items } = useContext(ItemsContext)!;
   const { totalCount } = useContext(TotalCountContext)!;
-  const empty = totalCount === 0;
 
-  if (empty) {
+  if (totalCount === 0) {
     return (
       <div className="px-4 py-6">
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-sm text-teal-700">

@@ -12,17 +12,19 @@ import {
 } from '../../../contexts/AppContexts';
 
 const Map = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { setIsRegisterConfirmModalOpen } = useContext(RegisterConfirmModalContext)!;
   const { schoolAreas } = useContext(SchoolAreasContext)!;
   const { lostItemSummary } = useContext(LostItemSummaryContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
   const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const loaded = useLoader();
+
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const Map = () => {
     setSearchParams(next, { replace: true });
   };
 
+  // 구역 관리
   const { reset, createRegisterPin } = usePolygons({
     map,
     schoolAreas,
@@ -55,6 +58,7 @@ const Map = () => {
     onSelectArea: updateAreaIdInUrl,
   });
 
+  // 번호 마커 관리
   useNumberedMarkers({
     map,
     schoolAreas,
@@ -63,10 +67,12 @@ const Map = () => {
     selectedCategoryId: selectedCategoryId,
   });
 
+  // 모드 변경 시 마커 초기화
   useEffect(() => {
     reset();
   }, [selectedMode, reset]);
 
+  // 지도 클릭 시 핀 생성 및 모달 열기
   useEffect(() => {
     if (!map) return;
     const kakao = window.kakao;
@@ -85,6 +91,7 @@ const Map = () => {
     return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
   }, [map, selectedMode, setIsRegisterConfirmModalOpen, createRegisterPin, selectedAreaId]);
 
+  // 선택된 구역 정보 가져오기
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
 
   return (

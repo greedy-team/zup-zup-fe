@@ -3,12 +3,14 @@ import { useSearchParams } from 'react-router-dom';
 import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
 
 const CategoryRadio = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { categories } = useContext(CategoriesContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories];
 
   const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
+
+  const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories]; // msw에서 사용하는 전체 카테고리 추가
 
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = useCallback(

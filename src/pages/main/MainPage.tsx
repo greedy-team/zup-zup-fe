@@ -20,6 +20,7 @@ import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModa
 const MainPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   const { setCategories } = useContext(CategoriesContext)!;
   const { setItems } = useContext(ItemsContext)!;
   const { setSchoolAreas } = useContext(SchoolAreasContext)!;
