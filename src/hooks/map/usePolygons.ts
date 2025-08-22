@@ -31,6 +31,20 @@ export function usePolygons({
     selectRef.current = onSelectArea;
   }, [onSelectArea]);
 
+  const getPolygonCenter = (poly: kakao.maps.Polygon) => {
+    // getPath는 보통 LatLng[]를, 도넛/멀티패스면 LatLng[][]를 반환할 수 있어 대비
+    const raw: any = poly.getPath();
+    const rings: kakao.maps.LatLng[][] = Array.isArray(raw[0]) ? raw : [raw];
+
+    const bounds = new kakao.maps.LatLngBounds();
+    // 첫 번째 외곽 링만으로 중앙을 구해도 보통 충분
+    rings[0].forEach((ll: kakao.maps.LatLng) => bounds.extend(ll));
+
+    const sw = bounds.getSouthWest();
+    const ne = bounds.getNorthEast();
+    return new kakao.maps.LatLng((sw.getLat() + ne.getLat()) / 2, (sw.getLng() + ne.getLng()) / 2);
+  };
+
   // 등록 모드일 때 핀 생성
   const createRegisterPin = useCallback(
     (latlng: kakao.maps.LatLng) => {
@@ -105,12 +119,19 @@ export function usePolygons({
           polygon.setOptions(SELECTED_STYLE);
           selectedPolygonRef.current = polygon;
           openRef.current?.();
+
+          const center = getPolygonCenter(polygon);
+          map?.panTo(center);
+
           return;
         }
 
         polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
         polygon.setOptions(SELECTED_STYLE);
         selectedPolygonRef.current = polygon;
+
+        const center = getPolygonCenter(polygon);
+        map?.panTo(center);
       };
       const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;

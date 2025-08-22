@@ -33,9 +33,9 @@ const Map = () => {
     const kakao = window.kakao;
     const map = new kakao.maps.Map(mapRef.current, {
       center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
-      level: 3,
+      level: 2,
       minLevel: 1,
-      maxLevel: 3,
+      maxLevel: 2,
     });
 
     map.setCursor('default');
