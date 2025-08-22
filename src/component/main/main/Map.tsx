@@ -43,6 +43,86 @@ const Map = () => {
     return () => setMap(null);
   }, [loaded]);
 
+  // 세종대 경계 하드락(드래그 중 실시간 제한)
+  useEffect(() => {
+    if (!map) return;
+    const kakao = window.kakao;
+
+    // 세종대 근처 박스
+    const ALLOWED = new kakao.maps.LatLngBounds(
+      new kakao.maps.LatLng(37.547, 127.0655), // SW
+      new kakao.maps.LatLng(37.5545, 127.084), // NE
+    );
+
+    // 재진입 방지 플래그
+    let adjusting = false;
+
+    // 현재 뷰포트 절반 크기만큼 여유를 둔 안쪽 경계
+    const getInnerBounds = () => {
+      const b = map.getBounds();
+      const sw = b.getSouthWest();
+      const ne = b.getNorthEast();
+
+      const halfLatSpan = (ne.getLat() - sw.getLat()) / 2;
+      const halfLngSpan = (ne.getLng() - sw.getLng()) / 2;
+
+      const aSW = ALLOWED.getSouthWest();
+      const aNE = ALLOWED.getNorthEast();
+
+      // 안쪽 경계 = 허용 박스에서 현재 뷰 반경만큼 축소
+      const innerSW = new kakao.maps.LatLng(aSW.getLat() + halfLatSpan, aSW.getLng() + halfLngSpan);
+      const innerNE = new kakao.maps.LatLng(aNE.getLat() - halfLatSpan, aNE.getLng() - halfLngSpan);
+
+      // 만약 뷰포트가 허용 영역보다 크면(inner가 뒤집히면) setBounds로 맞춤
+      if (innerSW.getLat() >= innerNE.getLat() || innerSW.getLng() >= innerNE.getLng()) {
+        map.setBounds(ALLOWED);
+        return null;
+      }
+      return new kakao.maps.LatLngBounds(innerSW, innerNE);
+    };
+
+    const clampCenter = () => {
+      if (adjusting) return;
+      const inner = getInnerBounds();
+      if (!inner) return;
+
+      const c = map.getCenter();
+      if (inner.contain(c)) return;
+
+      adjusting = true;
+      const sw = inner.getSouthWest();
+      const ne = inner.getNorthEast();
+
+      const lat = Math.min(Math.max(c.getLat(), sw.getLat()), ne.getLat());
+      const lng = Math.min(Math.max(c.getLng(), sw.getLng()), ne.getLng());
+
+      // 즉시 중심 보정(드래그 중에도 벽처럼 느껴짐)
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      adjusting = false;
+    };
+
+    // 드래그 중/줌 중에도 지속 보정
+    const onCenterChanged = clampCenter;
+    const onZoomChanged = clampCenter;
+    const onDragStart = clampCenter;
+    const onDrag = clampCenter;
+
+    // 초기 뷰 보정
+    clampCenter();
+
+    kakao.maps.event.addListener(map, 'center_changed', onCenterChanged);
+    kakao.maps.event.addListener(map, 'zoom_changed', onZoomChanged);
+    kakao.maps.event.addListener(map, 'dragstart', onDragStart);
+    kakao.maps.event.addListener(map, 'drag', onDrag);
+
+    return () => {
+      kakao.maps.event.removeListener(map, 'center_changed', onCenterChanged);
+      kakao.maps.event.removeListener(map, 'zoom_changed', onZoomChanged);
+      kakao.maps.event.removeListener(map, 'dragstart', onDragStart);
+      kakao.maps.event.removeListener(map, 'drag', onDrag);
+    };
+  }, [map]);
+
   // 구역 선택 시 페이지 1로 이동시키는 핸들러
   const updateAreaIdInUrl = (areaId: number) => {
     const next = new URLSearchParams(searchParams);
