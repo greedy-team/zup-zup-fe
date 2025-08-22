@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import RegisterConfirmModal from '../../component/main/modal/registerConfirmModal';
+import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModal';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 

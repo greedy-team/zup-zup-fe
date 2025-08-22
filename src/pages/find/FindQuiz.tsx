@@ -1,3 +1,3 @@
-export function FindQuiz() {
+export default function FindQuiz() {
   return;
 }

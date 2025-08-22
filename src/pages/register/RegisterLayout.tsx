@@ -1,3 +1,3 @@
-export function RegisterLayout() {
+export default function RegisterLayout() {
   return;
 }

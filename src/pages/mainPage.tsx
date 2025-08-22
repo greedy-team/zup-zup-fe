@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import Header from '../component/main/header/header';
-import Main from '../component/main/main/main';
-import RegisterConfirmModal from '../component/main/modal/registerConfirmModal';
+import Header from '../component/main/header/Header';
+import Main from '../component/main/main/Main';
+import RegisterConfirmModal from '../component/main/modal/RegisterConfirmModal';
 import {
   getCategories,
   getLostItemDetail,

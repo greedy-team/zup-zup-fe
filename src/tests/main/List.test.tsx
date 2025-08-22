@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import LostList from '../../component/main/main/list/lostList';
-import type { LostItem } from '../../component/main/main/list/lostListItem';
+import LostList from '../../component/main/main/list/LostList';
+import type { LostItem } from '../../component/main/main/list/LostListItem';
 import { describe, test, expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
