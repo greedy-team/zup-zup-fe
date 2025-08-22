@@ -15,7 +15,6 @@ export type ModalComponentProps = {
   onCancel: () => void;
   setIsRegisterConfirmModalOpen: (b: boolean) => void;
   setIsRegisterModalOpen: (b: boolean) => void;
-  isRegisterModalOpen: boolean;
 };
 
 export type ButtonComponentProps = {
@@ -42,7 +41,6 @@ export type LostListComponentProps = {
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
-  selectedMode: lostItemMode;
   onFindButtonClick: (item: LostItemListItem) => void;
 };
 

@@ -1,3 +1,7 @@
 export default function RegisterCategory() {
-  return;
+  return (
+    <div>
+      <h1>RegisterCategory</h1>
+    </div>
+  );
 }

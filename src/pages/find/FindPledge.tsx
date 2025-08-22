@@ -1,3 +1,7 @@
 export default function FindPledge() {
-  return;
+  return (
+    <div>
+      <h1>FindPledge</h1>
+    </div>
+  );
 }

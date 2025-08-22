@@ -33,7 +33,6 @@ const Main = ({
       <div className="grid h-full min-h-0 grid-cols-[380px_1fr]">
         <aside className="relative h-full border-r">
           <LostList
-            selectedMode={mode.selectedMode}
             items={lists.items}
             totalCount={pagination.totalCount}
             page={pagination.page}

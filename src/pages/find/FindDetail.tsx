@@ -1,3 +1,7 @@
 export default function FindDetail() {
-  return;
+  return (
+    <div>
+      <h1>FindDetail</h1>
+    </div>
+  );
 }

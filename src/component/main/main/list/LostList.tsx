@@ -3,7 +3,6 @@ import Pagenation from './Pagenation';
 import type { LostListComponentProps } from '../../../../types/main/components';
 
 export default function LostList({
-  selectedMode,
   items,
   totalCount,
   page,
