@@ -13,6 +13,7 @@ const RegisterConfirmModal = () => {
   const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
 
   const handleCancel = () => {
+    navigate(`/main?schoolAreaId=${0}`);
     setIsRegisterConfirmModalOpen(false);
   };
 

@@ -174,13 +174,12 @@ const Map = () => {
     onSelectArea: updateAreaIdInUrl,
   });
 
-  // 번호 마커 가져오기
   useNumberedMarkers({
     map,
     schoolAreas,
     summary: lostItemSummary,
     enabled: selectedMode !== 'register',
-    selectedCategoryId: selectedCategoryId,
+    selectedCategoryId, // 타입에 없으면 빼도 됩니다
   });
 
   // 모드 변경 시 마커 초기화
