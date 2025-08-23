@@ -16,7 +16,11 @@ export function usePolygons({
   const modeRef = useRef(selectedMode);
   const openRef = useRef(onOpenRegisterConfirm);
   const selectRef = useRef(onSelectArea);
-  const [selectedPolygonAreaId, setSelectedPolygonAreaId] = useState(selectedAreaId);
+
+  const currentSelectedIdRef = useRef(selectedAreaId);
+  useEffect(() => {
+    currentSelectedIdRef.current = selectedAreaId;
+  }, [selectedAreaId]);
 
   // 등록 모드용 핀 관리
   const registerPinRef = useRef<kakao.maps.Marker | null>(null);
@@ -101,15 +105,17 @@ export function usePolygons({
       const onClick = (e: kakao.maps.event.MouseEvent) => {
         kakao.maps.event.preventMap?.();
 
-        // 선택된 구역 클릭 시 선택 해제
-        if (selectedPolygonAreaId === area.id) {
-          setSelectedPolygonAreaId(0);
+        if (currentSelectedIdRef.current === area.id) {
+          // 영역 취소 시 즉시 UI 반영
+          selectedPolygonRef.current?.setOptions(BASE_STYLE);
+          selectedPolygonRef.current = null;
+          currentSelectedIdRef.current = 0;
           selectRef.current?.(0);
           return;
         }
 
         // 선택된 구역 클릭 시 선택 구역 변경
-        setSelectedPolygonAreaId(area.id);
+        currentSelectedIdRef.current = area.id;
         selectRef.current?.(area.id);
 
         if (modeRef.current === 'register') {
@@ -178,19 +184,19 @@ export function usePolygons({
       selectedPolygonRef.current = null;
       removeRegisterPin();
     };
-  }, [map, schoolAreas, selectedPolygonAreaId]);
+  }, [map, schoolAreas]);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
 
-    if (!selectedPolygonAreaId) {
+    if (!currentSelectedIdRef.current) {
       selectedPolygonRef.current = null;
       return;
     }
-    const poly = polyByIdRef.current.get(selectedPolygonAreaId) || null;
+    const poly = polyByIdRef.current.get(currentSelectedIdRef.current) || null;
     if (poly) poly.setOptions(SELECTED_STYLE);
     selectedPolygonRef.current = poly;
-  }, [selectedPolygonAreaId]);
+  }, []);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
