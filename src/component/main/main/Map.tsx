@@ -41,8 +41,12 @@ const Map = () => {
   useOutsideMask(map);
   // 구역 선택 시 페이지 1로 이동시키는 핸들러
   const updateAreaIdInUrl = (areaId: number) => {
-    const next = new URLSearchParams(searchParams);
-    next.set('schoolAreaId', String(areaId));
+    const next = new URLSearchParams();
+    if (areaId === 0) {
+      next.delete('schoolAreaId');
+    } else {
+      next.set('schoolAreaId', String(areaId));
+    }
     next.set('page', '1');
     setSearchParams(next, { replace: true });
   };
