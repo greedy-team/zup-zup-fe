@@ -1,5 +1,10 @@
 import { http, HttpResponse } from 'msw';
-import { getSummary, getDetail, getEtcDetail } from '../selectors/lostItems.selectors';
+import {
+  getSummary,
+  getDetail,
+  getEtcDetail,
+  getPublicById,
+} from '../selectors/lostItems.selectors';
 import { toInt } from '../utils/toInt';
 import { createLostItemFromFormData } from '../selectors/register.selectors';
 
@@ -35,7 +40,8 @@ export const lostItemsHandlers = [
 
     return HttpResponse.json(data);
   }),
-  http.get('/api/lost-items/:id', ({ params }) => {
+
+  http.get('/api/lost-items/:id/detail', ({ params }) => {
     const id = toInt(params.id);
     if (!id) return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
 
@@ -50,6 +56,28 @@ export const lostItemsHandlers = [
 
     return HttpResponse.json(result, { status: 200 });
   }),
+
+  http.get('/api/lost-items/:id', ({ params }) => {
+    const id = toInt(params.id);
+    if (!id) {
+      return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
+    }
+
+    const result = getPublicById(id);
+
+    if ('error' in result) {
+      if (result.error === 'NOT_FOUND') {
+        return HttpResponse.json({ error: 'Not Found' }, { status: 404 });
+      }
+
+      if (result.error === 'FORBIDDEN') {
+        return HttpResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+    }
+
+    return HttpResponse.json(result, { status: 200 });
+  }),
+
   http.post('/api/lost-items', async ({ request }) => {
     const formData = await request.formData();
     const result = createLostItemFromFormData(formData);
