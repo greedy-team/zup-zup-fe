@@ -16,6 +16,7 @@ import {
   LostItemSummaryContext,
 } from '../../contexts/AppContexts';
 import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModal';
+import { isValidId } from '../../utils/isValidId';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -27,9 +28,12 @@ const MainPage = () => {
   const { setTotalCount } = useContext(TotalCountContext)!;
   const { setLostItemSummary } = useContext(LostItemSummaryContext)!;
 
-  const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
-  const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
-  const page = Number(searchParams.get('page')) || 1;
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+  const rawPage = searchParams.get('page');
+  const page = isValidId(rawPage) ? Number(rawPage) : 1;
 
   // lostItemId가 존재하면 찾기 프로세스로 라우팅
   useEffect(() => {
