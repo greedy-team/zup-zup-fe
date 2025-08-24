@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
+import { isValidId } from '../../../utils/isValidId';
 
 const CategoryRadio = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -8,14 +9,19 @@ const CategoryRadio = () => {
   const { categories } = useContext(CategoriesContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
 
-  const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
 
   const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories]; // msw에서 사용하는 전체 카테고리 추가
 
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
-    const next = new URLSearchParams(); // 화이트리스트 방식
-    if (id !== 0) next.set('categoryId', String(id));
+    const next = new URLSearchParams();
+    if (id === 0) {
+      next.delete('categoryId');
+    } else {
+      next.set('categoryId', String(id));
+    }
     next.set('page', '1');
     setSearchParams(next, { replace: true });
   };
