@@ -17,6 +17,7 @@ import {
 } from '../../contexts/AppContexts';
 import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModal';
 import { isValidId } from '../../utils/isValidId';
+import { PAGE_SIZE } from '../../constants/main/pagenation';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -65,7 +66,12 @@ const MainPage = () => {
   // 분실물 목록 데이터 가져오기 (페이지, 카테고리, 구역 변경 시) → context 상태를 채움
   useEffect(() => {
     (async () => {
-      const { items, total } = await getLostItemDetail(page, 5, selectedCategoryId, selectedAreaId);
+      const { items, total } = await getLostItemDetail(
+        page,
+        PAGE_SIZE,
+        selectedCategoryId,
+        selectedAreaId,
+      );
       setItems(items);
       setTotalCount(total);
     })();

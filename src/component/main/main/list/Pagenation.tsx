@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { TotalCountContext } from '../../../../contexts/AppContexts';
-
+import { getTotalPages, isValidPage } from '../../../../utils/Page/pagenationUtils';
 const Pagenation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { totalCount } = useContext(TotalCountContext)!;
 
-  const page = Number(searchParams.get('page')) || 1;
+  const rawPage = searchParams.get('page');
+  const page = isValidPage(rawPage, getTotalPages(totalCount)) ? Number(rawPage) : 1;
 
   // 페이지 이동 설정 핸들러
   const setPage = (p: number) => {
@@ -25,11 +26,11 @@ const Pagenation = () => {
         이전
       </button>
       <span className="flex items-center justify-center">
-        {page} / {Math.max(1, Math.ceil(totalCount / 5))}
+        {page} / {getTotalPages(totalCount)}
       </span>
       <button
         className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
-        disabled={page >= Math.max(1, Math.ceil(totalCount / 5))}
+        disabled={page >= getTotalPages(totalCount)}
         onClick={() => setPage(page + 1)}
       >
         다음
