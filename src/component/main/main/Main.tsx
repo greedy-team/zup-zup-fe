@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import RegisterModal from '../../register/RegisterModal';
+import { useNavigate } from 'react-router-dom';
 import FindModal from '../../find/FindModal';
 import Map from './Map';
 import LostList from './list/LostList';
@@ -13,10 +13,10 @@ const Main = ({
   lists,
   areas,
   ui,
-  isRegisterModalOpen,
   isFindModalOpen,
 }: MainComponentProps) => {
   const [selectedItemForFind, setSelectedItemForFind] = useState<LostItemListItem | null>(null);
+  const navigate = useNavigate();
 
   const handleOpenFindModal = (item: LostItemListItem) => {
     setSelectedItemForFind(item);
@@ -26,6 +26,14 @@ const Main = ({
   const handleCloseFindModal = () => {
     ui.setIsFindModalOpen(false);
     setSelectedItemForFind(null);
+  };
+
+  const handleRegisterButtonClick = () => {
+    if (mode.selectedMode === 'register') {
+      mode.toggleMode();
+    } else {
+      navigate(`/register/${mapSelection.selectedAreaId}`);
+    }
   };
 
   return (
@@ -55,21 +63,14 @@ const Main = ({
           />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-            onClick={mode.toggleMode}
+            onClick={handleRegisterButtonClick}
+            disabled={mode.selectedMode !== 'register' && !mapSelection.selectedAreaId}
           >
             {mode.selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
         </section>
         {isFindModalOpen && selectedItemForFind && (
           <FindModal item={selectedItemForFind} onClose={handleCloseFindModal} />
-        )}
-
-        {isRegisterModalOpen && (
-          <RegisterModal
-            onClose={() => ui.setIsRegisterModalOpen(false)}
-            schoolAreaId={mapSelection.selectedAreaId}
-            onModeChange={mode.toggleMode}
-          />
         )}
       </div>
     </main>
