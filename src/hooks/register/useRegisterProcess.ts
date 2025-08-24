@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCategories, fetchCategoryFeatures, postLostItem } from '../../api/register';
 import type {
   Category,
@@ -9,7 +10,6 @@ import type {
   ResultModalContent,
 } from '../../types/register';
 
-// 초기 폼 데이터 설정
 const INITIAL_FORM_DATA: Omit<RegisterFormData, 'schoolAreaId'> = {
   detailLocation: '',
   storageName: '',
@@ -18,28 +18,42 @@ const INITIAL_FORM_DATA: Omit<RegisterFormData, 'schoolAreaId'> = {
   images: [],
 };
 
-export const useRegisterProcess = (
-  onClose: () => void,
-  schoolAreaId: number | null,
-  onModeChange?: () => void,
-) => {
-  const [currentStep, setCurrentStep] = useState(1);
+/**
+ * 라우팅 기반 등록 프로세스 커스텀 훅
+ * - schoolAreaId는 인자 또는 URL 파라미터 중 유효한 값을 사용
+ */
+export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
+  const navigate = useNavigate();
+  const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
+
+  // 유효한 schoolAreaId 결정(인자 우선, 없으면 URL 파라미터 사용)
+  const effectiveSchoolAreaId = useMemo(() => {
+    if (typeof schoolAreaIdArg === 'number') return schoolAreaIdArg;
+    const n = Number(schoolAreaIdParam);
+    return Number.isFinite(n) ? n : null;
+  }, [schoolAreaIdArg, schoolAreaIdParam]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
   const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
-    schoolAreaId,
+    schoolAreaId: effectiveSchoolAreaId,
   });
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
+
+  // schoolAreaId 변경 시 formData 동기화
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, schoolAreaId: effectiveSchoolAreaId }));
+  }, [effectiveSchoolAreaId]);
 
   // 초기 렌더링 시, 카테고리 목록을 가져오기
   useEffect(() => {
     setIsLoading(true);
     fetchCategories()
       .then(setCategories)
-      .catch(console.error) // Add error handling
+      .catch(console.error)
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -56,9 +70,6 @@ export const useRegisterProcess = (
       setCategoryFeatures([]);
     }
   }, [selectedCategory]);
-
-  const goToNextStep = () => setCurrentStep((prev) => prev + 1);
-  const goToPrevStep = () => setCurrentStep((prev) => prev - 1);
 
   // 2단계로 넘어가기 위한 검증 변수
   const isStep2Valid =
@@ -95,9 +106,7 @@ export const useRegisterProcess = (
         buttonText: '홈으로',
         onConfirm: () => {
           setResultModalContent(null);
-          onClose();
-          // 등록 완료 후 조회 모드로 변경
-          onModeChange?.();
+          navigate('/');
         },
       });
     } catch (error) {
@@ -125,7 +134,6 @@ export const useRegisterProcess = (
   };
 
   return {
-    currentStep,
     isLoading,
     categories,
     selectedCategory,
@@ -133,8 +141,6 @@ export const useRegisterProcess = (
     formData,
     isStep2Valid,
     resultModalContent,
-    goToNextStep,
-    goToPrevStep,
     setSelectedCategory,
     setFormData,
     handleRegister,

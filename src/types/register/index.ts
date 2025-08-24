@@ -1,4 +1,4 @@
-import type React from 'react';
+import { useRegisterProcess } from '../../hooks/register/useRegisterProcess';
 
 export type Category = {
   categoryId: number;
@@ -39,40 +39,12 @@ export type RegisterFormData = {
   images: File[];
 };
 
-export type ResultProps = {
-  onClose: () => void;
-  schoolAreaId: number | null;
-  onModeChange?: () => void;
-};
-
 export type ResultModalContent = {
   status: 'success' | 'error' | 'info';
   title: string;
   message: string;
   buttonText: string;
   onConfirm: () => void;
-};
-
-export type Step1Props = {
-  categories: Category[];
-  selectedCategory: Category | null;
-  onSelect: (category: Category) => void;
-};
-
-export type Step2Props = {
-  isLoading: boolean;
-  formData: RegisterFormData;
-  setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
-  categoryFeatures: Feature[];
-  schoolAreas: SchoolArea[];
-  handleFeatureChange: (featureId: number, optionId: number) => void;
-};
-
-export type Step3Props = {
-  selectedCategory: Category | null;
-  formData: RegisterFormData;
-  categoryFeatures: Feature[];
-  schoolAreas: SchoolArea[];
 };
 
 export type LostItemRegisterRequest = {
@@ -82,4 +54,8 @@ export type LostItemRegisterRequest = {
   storageName: string;
   features: FeatureSelection[];
   description?: string;
+};
+
+export type RegisterContextType = ReturnType<typeof useRegisterProcess> & {
+  schoolAreas: SchoolArea[];
 };
