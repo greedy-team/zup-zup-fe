@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
 

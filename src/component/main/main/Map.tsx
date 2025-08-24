@@ -8,13 +8,13 @@ import { getKakaoMap } from '../../../hooks/map/getKakaoMap';
 import { useHardLock } from '../../../hooks/map/useHardLock';
 import { useOutsideMask } from '../../../hooks/map/useOutsideMask';
 import { useRegisterMapClick } from '../../../hooks/map/useRegisterMapClick';
+import { isValidId } from '../../../utils/isValidId';
 import {
   RegisterConfirmModalContext,
   SchoolAreasContext,
   LostItemSummaryContext,
   SelectedModeContext,
 } from '../../../contexts/AppContexts';
-// keep constants import minimal here; hooks encapsulate most logic
 
 const Map = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,8 +24,10 @@ const Map = () => {
   const { lostItemSummary } = useContext(LostItemSummaryContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
 
-  const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
-  const selectedCategoryId = Number(searchParams.get('categoryId')) || 0;
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const loaded = useLoader();
