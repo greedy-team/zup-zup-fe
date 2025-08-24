@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
 import { SelectedModeContext } from '../../../contexts/AppContexts';
@@ -7,9 +7,9 @@ const Main = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
 
   // 모드 토글 핸들러
-  const toggleMode = useCallback(() => {
+  const toggleMode = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
-  }, [selectedMode, setSelectedMode]);
+  };
 
   return (
     <main className="min-h-0 flex-1">
