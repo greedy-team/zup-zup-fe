@@ -79,3 +79,33 @@ export function getEtcDetail(
     description: targetLostItem.description ?? null,
   };
 }
+
+export function getPublicById(
+  lostItemId: number,
+):
+  | {
+      status: 'registered';
+      lostItemId: number;
+      categoryId: number;
+      categoryName: string;
+      foundLocation: string;
+      foundDate: string;
+      imageUrl: string;
+    }
+  | { error: 'NOT_FOUND' | 'FORBIDDEN' } {
+  const item = getLostItemById(lostItemId);
+  if (!item) return { error: 'NOT_FOUND' };
+  if (item.status !== 'registered') return { error: 'FORBIDDEN' };
+
+  const imageUrl =
+    item.categoryId === ETC_CATEGORY_ID ? item.imageUrl : categoryIcons[item.categoryId];
+  return {
+    status: 'registered',
+    lostItemId: item.lostItemId,
+    categoryId: item.categoryId,
+    categoryName: item.categoryName,
+    foundLocation: `${item.foundAreaName} ${item.detailLocation}`,
+    foundDate: item.foundDate,
+    imageUrl,
+  };
+}
