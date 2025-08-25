@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCategories, fetchCategoryFeatures, postLostItem } from '../../api/register';
+import { fetchSchoolAreas } from '../../api/register';
 import type {
+  SchoolArea,
   Category,
   Feature,
   RegisterFormData,
@@ -132,6 +134,24 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       return { ...prev, features: [...otherFeatures, newFeature] };
     });
   };
+
+  // schoolAreaId 유효성 검증
+  useEffect(() => {
+    if (validSchoolAreaId == null) return;
+
+    fetchSchoolAreas()
+      .then((areas: SchoolArea[]) => {
+        const exists = areas.some((area) => area.id === validSchoolAreaId);
+        if (!exists) {
+          console.warn(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.error('학교 지역 검증 실패', err);
+        navigate('/');
+      });
+  }, [validSchoolAreaId]);
 
   return {
     isLoading,
