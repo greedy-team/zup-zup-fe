@@ -1,17 +1,13 @@
+import { useContext } from 'react';
 import LostListItem from './LostListItem';
 import Pagenation from './Pagenation';
-import type { LostListComponentProps } from '../../../../types/main/components';
+import { ItemsContext, TotalCountContext } from '../../../../contexts/AppContexts';
 
-export default function LostList({
-  items,
-  totalCount,
-  page,
-  setPage,
-  onFindButtonClick,
-}: LostListComponentProps) {
-  const empty = totalCount === 0;
+export default function LostList() {
+  const { items } = useContext(ItemsContext)!;
+  const { totalCount } = useContext(TotalCountContext)!;
 
-  if (empty) {
+  if (totalCount === 0) {
     return (
       <div className="px-4 py-6">
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-sm text-teal-700">
@@ -29,13 +25,13 @@ export default function LostList({
       <div className="max-h-[61vh] min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 [scrollbar-gutter:stable]">
         <ul className="m-0 list-none space-y-3 p-0 pb-6">
           {items.map((item) => (
-            <LostListItem key={item.lostItemId} item={item} onFindButtonClick={onFindButtonClick} />
+            <LostListItem key={item.lostItemId} item={item} />
           ))}
         </ul>
       </div>
 
       <div className="flex items-center justify-center">
-        <Pagenation page={page} totalCount={totalCount} setPage={setPage} />
+        <Pagenation />
       </div>
     </div>
   );

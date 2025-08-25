@@ -1,45 +1,64 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { useLoader } from '../../../hooks/map/useLoader';
 import { usePolygons } from '../../../hooks/map/usePolygons';
 import { useNumberedMarkers } from '../../../hooks/map/useNumberedMarkers';
-import type { MapComponentProps } from '../../../types/main/components';
+import { getKakaoMap } from '../../../hooks/map/getKakaoMap';
+import { useHardLock } from '../../../hooks/map/useHardLock';
+import { useOutsideMask } from '../../../hooks/map/useOutsideMask';
+import { useRegisterMapClick } from '../../../hooks/map/useRegisterMapClick';
+import { isValidId } from '../../../utils/isValidId';
+import {
+  RegisterConfirmModalContext,
+  SchoolAreasContext,
+  LostItemSummaryContext,
+  SelectedModeContext,
+} from '../../../contexts/AppContexts';
 
-const Map = (props: MapComponentProps) => {
-  const {
-    setIsRegisterConfirmModalOpen,
-    setSelectedAreaId,
-    selectedAreaId,
-    schoolAreas,
-    lostItemSummary,
-    selectedMode,
-    selectedCategoryId,
-  } = props;
+const Map = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { setIsRegisterConfirmModalOpen } = useContext(RegisterConfirmModalContext)!;
+  const { schoolAreas } = useContext(SchoolAreasContext)!;
+  const { lostItemSummary } = useContext(LostItemSummaryContext)!;
+  const { selectedMode } = useContext(SelectedModeContext)!;
+
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const loaded = useLoader();
-  const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
-  useEffect(() => {
-    if (!loaded || !mapRef.current) return;
+  const map = getKakaoMap(mapRef, loaded);
 
-    const kakao = window.kakao;
-    const m = new kakao.maps.Map(mapRef.current, {
-      center: new kakao.maps.LatLng(37.550701948532236, 127.07428227734258),
-      level: 3,
-    });
-    m.setCursor('default');
-    setMap(m);
-    return () => setMap(null);
-  }, [loaded]);
+  // 세종대 경계 하드락(드래그 중 실시간 제한)
+  useHardLock(map);
 
+  // 세종대 밖은 반투명 그레이로 마스킹(도넛 폴리곤)
+  useOutsideMask(map);
+  // 구역 선택 시 페이지 1로 이동시키는 핸들러
+  const updateAreaIdInUrl = (areaId: number) => {
+    const next = new URLSearchParams();
+    if (areaId === 0) {
+      next.delete('schoolAreaId');
+    } else {
+      next.set('schoolAreaId', String(areaId));
+    }
+    next.set('page', '1');
+    setSearchParams(next, { replace: true });
+  };
+
+  // 구역 가져오기
   const { reset, createRegisterPin } = usePolygons({
     map,
     schoolAreas,
     selectedAreaId,
     selectedMode,
     onOpenRegisterConfirm: () => setIsRegisterConfirmModalOpen(true),
-    onSelectArea: setSelectedAreaId,
+    onSelectArea: updateAreaIdInUrl,
   });
 
   useNumberedMarkers({
@@ -47,36 +66,21 @@ const Map = (props: MapComponentProps) => {
     schoolAreas,
     summary: lostItemSummary,
     enabled: selectedMode !== 'register',
-    selectedCategoryId: selectedCategoryId,
+    selectedCategoryId,
   });
 
-
+  // 모드 변경 시 마커 초기화
   useEffect(() => {
-    if (!map) return;
     reset();
-  }, [selectedMode, map, reset]);
+  }, [selectedMode, reset]);
 
-  useEffect(() => {
-    if (!map) return;
-    const kakao = window.kakao;
-    const onMapClick = (e: kakao.maps.event.MouseEvent) => {
-      if (selectedMode === 'register') {
-        // 등록 모드: 지도 클릭 시 핀 생성 및 모달 열기
-        setSelectedAreaId(0); // 구역 선택 해제
-        createRegisterPin(e.latLng); // 핀 생성
-        setIsRegisterConfirmModalOpen(true);
-        return;
-      }
-      setSelectedAreaId(0);
+  // 지도 클릭 시 핀 생성 및 모달 열기
+  useRegisterMapClick(map, selectedMode === 'register', createRegisterPin, () =>
+    setIsRegisterConfirmModalOpen(true),
+  );
 
-    };
-    kakao.maps.event.addListener(map, 'click', onMapClick);
-
-    return () => kakao.maps.event.removeListener(map, 'click', onMapClick);
-  }, [map, selectedMode, setSelectedAreaId, setIsRegisterConfirmModalOpen, createRegisterPin]);
-
+  // 선택된 구역 정보 가져오기
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
-
 
   return (
     <div>
