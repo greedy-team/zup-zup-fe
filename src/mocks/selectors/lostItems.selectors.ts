@@ -80,9 +80,7 @@ export function getEtcDetail(
   };
 }
 
-export function getPublicById(
-  lostItemId: number,
-):
+export function getPublicInfoById(lostItemId: number):
   | {
       status: 'registered';
       lostItemId: number;

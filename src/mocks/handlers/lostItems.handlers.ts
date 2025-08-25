@@ -3,7 +3,7 @@ import {
   getSummary,
   getDetail,
   getEtcDetail,
-  getPublicById,
+  getPublicInfoById,
 } from '../selectors/lostItems.selectors';
 import { toInt } from '../utils/toInt';
 import { createLostItemFromFormData } from '../selectors/register.selectors';
@@ -63,7 +63,7 @@ export const lostItemsHandlers = [
       return HttpResponse.json({ error: 'invalid id' }, { status: 400 });
     }
 
-    const result = getPublicById(id);
+    const result = getPublicInfoById(id);
 
     if ('error' in result) {
       if (result.error === 'NOT_FOUND') {
