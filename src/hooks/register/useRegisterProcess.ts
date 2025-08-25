@@ -27,7 +27,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
 
   // 유효한 schoolAreaId 결정(인자 우선, 없으면 URL 파라미터 사용)
-  const effectiveSchoolAreaId = useMemo(() => {
+  const validSchoolAreaId = useMemo(() => {
     if (typeof schoolAreaIdArg === 'number') return schoolAreaIdArg;
     const n = Number(schoolAreaIdParam);
     return Number.isFinite(n) ? n : null;
@@ -39,14 +39,14 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
   const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
-    schoolAreaId: effectiveSchoolAreaId,
+    schoolAreaId: validSchoolAreaId,
   });
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
 
   // schoolAreaId 변경 시 formData 동기화
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, schoolAreaId: effectiveSchoolAreaId }));
-  }, [effectiveSchoolAreaId]);
+    setFormData((prev) => ({ ...prev, schoolAreaId: validSchoolAreaId }));
+  }, [validSchoolAreaId]);
 
   // 초기 렌더링 시, 카테고리 목록을 가져오기
   useEffect(() => {
