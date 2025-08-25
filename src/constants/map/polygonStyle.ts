@@ -22,3 +22,10 @@ export const SELECTED_STYLE = {
   fillColor: '#A2FF99',
   fillOpacity: 0.8,
 };
+
+export const MAP_MASK_STYLE = {
+  strokeWeight: 0,
+  fillColor: '#000000',
+  fillOpacity: 0.25,
+  zIndex: 999,
+};

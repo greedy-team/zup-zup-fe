@@ -17,8 +17,6 @@ export function useNumberedMarkers({
       return createNumberedMarker(map, area.marker, count);
     });
 
-    return () => {
-      markers.forEach((m) => m?.setMap?.(null));
-    };
+    return () => markers.forEach((m) => m?.setMap?.(null));
   }, [map, schoolAreas, summary, enabled]);
 }

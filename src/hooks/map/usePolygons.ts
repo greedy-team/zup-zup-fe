@@ -17,6 +17,11 @@ export function usePolygons({
   const openRef = useRef(onOpenRegisterConfirm);
   const selectRef = useRef(onSelectArea);
 
+  const currentSelectedIdRef = useRef(selectedAreaId);
+  useEffect(() => {
+    currentSelectedIdRef.current = selectedAreaId;
+  }, [selectedAreaId]);
+
   // 등록 모드용 핀 관리
   const registerPinRef = useRef<kakao.maps.Marker | null>(null);
 
@@ -29,6 +34,20 @@ export function usePolygons({
   useEffect(() => {
     selectRef.current = onSelectArea;
   }, [onSelectArea]);
+
+  const getPolygonCenter = (poly: kakao.maps.Polygon) => {
+    // getPath는 보통 LatLng[]를, 도넛/멀티패스면 LatLng[][]를 반환할 수 있어 대비
+    const raw: any = poly.getPath();
+    const rings: kakao.maps.LatLng[][] = Array.isArray(raw[0]) ? raw : [raw];
+
+    const bounds = new kakao.maps.LatLngBounds();
+    // 첫 번째 외곽 링만으로 중앙을 구해도 보통 충분
+    rings[0].forEach((ll: kakao.maps.LatLng) => bounds.extend(ll));
+
+    const sw = bounds.getSouthWest();
+    const ne = bounds.getNorthEast();
+    return new kakao.maps.LatLng((sw.getLat() + ne.getLat()) / 2, (sw.getLng() + ne.getLng()) / 2);
+  };
 
   // 등록 모드일 때 핀 생성
   const createRegisterPin = useCallback(
@@ -86,6 +105,17 @@ export function usePolygons({
       const onClick = (e: kakao.maps.event.MouseEvent) => {
         kakao.maps.event.preventMap?.();
 
+        if (currentSelectedIdRef.current === area.id) {
+          // 영역 취소 시 즉시 UI 반영
+          selectedPolygonRef.current?.setOptions(BASE_STYLE);
+          selectedPolygonRef.current = null;
+          currentSelectedIdRef.current = 0;
+          selectRef.current?.(0);
+          return;
+        }
+
+        // 선택된 구역 클릭 시 선택 구역 변경
+        currentSelectedIdRef.current = area.id;
         selectRef.current?.(area.id);
 
         if (modeRef.current === 'register') {
@@ -95,12 +125,19 @@ export function usePolygons({
           polygon.setOptions(SELECTED_STYLE);
           selectedPolygonRef.current = polygon;
           openRef.current?.();
+
+          const center = getPolygonCenter(polygon);
+          map?.panTo(center);
+
           return;
         }
 
         polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
         polygon.setOptions(SELECTED_STYLE);
         selectedPolygonRef.current = polygon;
+
+        const center = getPolygonCenter(polygon);
+        map?.panTo(center);
       };
       const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;
@@ -127,6 +164,16 @@ export function usePolygons({
     polysRef.current = polys;
     polyByIdRef.current = byId;
 
+    // 초기 로드/새로고침 시 현재 selectedAreaId에 맞춰 선택 상태 적용
+    if (selectedAreaId) {
+      const poly = byId.get(selectedAreaId) || null;
+      if (poly) {
+        polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
+        poly.setOptions(SELECTED_STYLE);
+        selectedPolygonRef.current = poly;
+      }
+    }
+
     return () => {
       handlers.forEach(({ target, type, handler }) =>
         kakao.maps.event.removeListener(target, type, handler),
@@ -142,14 +189,14 @@ export function usePolygons({
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
 
-    if (!selectedAreaId) {
+    if (!currentSelectedIdRef.current) {
       selectedPolygonRef.current = null;
       return;
     }
-    const poly = polyByIdRef.current.get(selectedAreaId) || null;
+    const poly = polyByIdRef.current.get(currentSelectedIdRef.current) || null;
     if (poly) poly.setOptions(SELECTED_STYLE);
     selectedPolygonRef.current = poly;
-  }, [selectedAreaId]);
+  }, []);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));

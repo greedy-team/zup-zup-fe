@@ -14,7 +14,6 @@ export type ModalComponentProps = {
   onConfirm: () => void;
   onCancel: () => void;
   setIsRegisterConfirmModalOpen: (b: boolean) => void;
-  setIsRegisterModalOpen: (b: boolean) => void;
 };
 
 export type ButtonComponentProps = {
@@ -27,7 +26,6 @@ export type ButtonComponentProps = {
 export type ListItemComponentProps = {
   item: LostItemListItem;
   className?: string;
-  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type PaginationComponentProps = {
@@ -41,13 +39,13 @@ export type LostListComponentProps = {
   totalCount: number;
   page: number;
   setPage: (page: number) => void;
-  onFindButtonClick: (item: LostItemListItem) => void;
 };
 
 export type MainComponentProps = {
   pagination: PaginationState;
   mapSelection: MapSelectionState;
   mode: ModeState;
+  selectedCategoryId: number;
   lists: {
     items: LostItemListItem[];
     categories: Category[];
@@ -58,11 +56,7 @@ export type MainComponentProps = {
   };
   ui: {
     setIsRegisterConfirmModalOpen: (b: boolean) => void;
-    setIsRegisterModalOpen: (b: boolean) => void;
-    setIsFindModalOpen: (b: boolean) => void;
   };
-  isRegisterModalOpen: boolean;
-  isFindModalOpen: boolean;
 };
 
 export type MapComponentProps = {
@@ -72,6 +66,7 @@ export type MapComponentProps = {
   schoolAreas: SchoolArea[];
   lostItemSummary: LostItemSummaryRow[];
   selectedMode: lostItemMode;
+  selectedCategoryId: number;
 };
 
 export type StatusBadgeComponentProps = {

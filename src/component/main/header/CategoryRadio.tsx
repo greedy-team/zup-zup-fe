@@ -1,19 +1,37 @@
-import type { CategoryRadioComponentProps } from '../../../types/main/components';
+import { useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
+import { isValidId } from '../../../utils/isValidId';
 
-const CategoryRadio = ({
-  categories,
-  selectedCategoryId,
-  setSelectedCategoryId,
-  selectedMode,
-}: CategoryRadioComponentProps) => {
-  const tmpCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories];
+const CategoryRadio = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { categories } = useContext(CategoriesContext)!;
+  const { selectedMode } = useContext(SelectedModeContext)!;
+
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+
+  const allCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories]; // msw에서 사용하는 전체 카테고리 추가
+
+  // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
+  const handleSelectCategory = (id: number) => {
+    const next = new URLSearchParams();
+    if (id === 0) {
+      next.delete('categoryId');
+    } else {
+      next.set('categoryId', String(id));
+    }
+    next.set('page', '1');
+    setSearchParams(next, { replace: true });
+  };
 
   return (
     <>
       <fieldset className="relative overflow-x-auto border-0 bg-white px-4 py-3">
         <legend className="sr-only">카테고리 선택</legend>
         <div className="flex min-w-max gap-2">
-          {tmpCategoryList.map((category) => {
+          {allCategoryList.map((category) => {
             const id = category.categoryId;
             const name = category.categoryName;
             return (
@@ -24,7 +42,7 @@ const CategoryRadio = ({
                   name="category"
                   value={id}
                   checked={id === selectedCategoryId}
-                  onChange={() => setSelectedCategoryId(id)}
+                  onChange={() => handleSelectCategory(id)}
                   className="peer hidden"
                 />
                 <label

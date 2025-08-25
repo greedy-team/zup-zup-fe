@@ -3,7 +3,9 @@ import type {
   ListItemComponentProps,
   StatusBadgeComponentProps,
 } from '../../../../types/main/components';
+import { useNavigate } from 'react-router-dom';
 
+// 분실물 등록 시간 포맷팅
 function formatKST(iso: string) {
   try {
     return new Date(iso).toLocaleDateString('ko-KR', {
@@ -16,6 +18,7 @@ function formatKST(iso: string) {
   }
 }
 
+// 분실물 상태 배지
 function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
   const badgeClass = isFound
@@ -28,12 +31,11 @@ function StatusBadge({ status }: StatusBadgeComponentProps) {
   );
 }
 
-export default function LostListItem({
-  item,
-  className = '',
-  onFindButtonClick,
-}: ListItemComponentProps) {
+export default function LostListItem({ item, className }: ListItemComponentProps) {
+  // 이미지 로딩 에러 처리
   const [imgError, setImgError] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
@@ -67,7 +69,7 @@ export default function LostListItem({
 
           <button
             className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50"
-            onClick={() => onFindButtonClick(item)}
+            onClick={() => navigate(`/find/${item.lostItemId}`)}
           >
             분실물 찾기
           </button>

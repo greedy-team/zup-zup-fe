@@ -1,7 +1,14 @@
 declare global {
-  namespace kakao.maps.event {
-    interface MouseEvent {
-      latLng: kakao.maps.LatLng;
+  namespace kakao.maps {
+    interface MapOptions {
+      minLevel?: number;
+      maxLevel?: number;
+    }
+
+    namespace event {
+      interface MouseEvent {
+        latLng: kakao.maps.LatLng;
+      }
     }
   }
 
