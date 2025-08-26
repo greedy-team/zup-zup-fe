@@ -27,7 +27,7 @@ const RegisterCategory = () => {
               onChange={() => setSelectedCategory(category)}
               className="hidden"
             />
-            <div className="mb-2 h-10 w-10 rounded bg-gray-200">
+            <div className="mb-2 h-10 w-10 rounded">
               <img src={categoryIcons[category.categoryId]} alt={category.categoryName} />
             </div>
             <span className="text-sm font-medium text-gray-800">{category.categoryName}</span>
