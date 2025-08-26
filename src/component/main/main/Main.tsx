@@ -1,14 +1,21 @@
+import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
 import { SelectedModeContext } from '../../../contexts/AppContexts';
+import { SelectedAreaIdContext } from '../../../contexts/AppContexts';
 
 const Main = () => {
+  const navigate = useNavigate();
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
+  const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
 
-  // 모드 토글 핸들러
-  const toggleMode = () => {
-    setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
+  const handleRegisterButtonClick = () => {
+    if (selectedMode === 'register') {
+      setSelectedMode('append');
+    } else {
+      navigate(`/register/${selectedAreaId}`);
+    }
   };
 
   return (
@@ -23,7 +30,8 @@ const Main = () => {
           <Map />
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-            onClick={toggleMode}
+            onClick={handleRegisterButtonClick}
+            disabled={selectedMode !== 'register' && !selectedAreaId}
           >
             {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>
