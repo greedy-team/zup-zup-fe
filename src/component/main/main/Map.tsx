@@ -14,6 +14,7 @@ import {
   SchoolAreasContext,
   LostItemSummaryContext,
   SelectedModeContext,
+  SelectedAreaIdContext,
 } from '../../../contexts/AppContexts';
 
 const Map = () => {
@@ -23,6 +24,7 @@ const Map = () => {
   const { schoolAreas } = useContext(SchoolAreasContext)!;
   const { lostItemSummary } = useContext(LostItemSummaryContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
+  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
 
   const rawAreaId = searchParams.get('schoolAreaId');
   const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
@@ -39,6 +41,7 @@ const Map = () => {
 
   // 세종대 밖은 반투명 그레이로 마스킹(도넛 폴리곤)
   useOutsideMask(map);
+
   // 구역 선택 시 페이지 1로 이동시키는 핸들러
   const updateAreaIdInUrl = (areaId: number) => {
     const next = new URLSearchParams();
@@ -46,6 +49,7 @@ const Map = () => {
       next.delete('schoolAreaId');
     } else {
       next.set('schoolAreaId', String(areaId));
+      setSelectedAreaId(areaId);
     }
     next.set('page', '1');
     setSearchParams(next, { replace: true });
