@@ -8,8 +8,8 @@ const RegisterCategory = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold text-gray-700">카테고리를 선택해주세요</h2>
-      <div role="radiogroup" className="mb-4 grid grid-cols-3 gap-4 sm:grid-cols-6">
+      <h2 className="mb-4 text-lg font-bold text-gray-700 md:text-xl">카테고리를 선택해주세요</h2>
+      <div role="radiogroup" className="mb-4 grid grid-cols-3 gap-4 md:grid-cols-4">
         {categories.map((category) => (
           <label
             key={category.categoryId}
@@ -27,10 +27,12 @@ const RegisterCategory = () => {
               onChange={() => setSelectedCategory(category)}
               className="hidden"
             />
-            <div className="mb-2 h-10 w-10 rounded">
+            <div className="mb-2 h-10 w-10 rounded sm:h-15 sm:w-15">
               <img src={categoryIcons[category.categoryId]} alt={category.categoryName} />
             </div>
-            <span className="text-sm font-medium text-gray-800">{category.categoryName}</span>
+            <span className="text-base font-medium text-gray-800 md:text-lg">
+              {category.categoryName}
+            </span>
           </label>
         ))}
       </div>
