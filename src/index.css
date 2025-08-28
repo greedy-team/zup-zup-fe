@@ -10,3 +10,11 @@ h2,
 h3 {
   font-family: 'Ownglyph_corncorn-Rg', sans-serif;
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

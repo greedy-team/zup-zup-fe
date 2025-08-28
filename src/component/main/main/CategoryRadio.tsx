@@ -33,34 +33,36 @@ const CategoryRadio = () => {
 
   return (
     <>
-      <fieldset className="relative z-10 overflow-x-auto border-0 bg-transparent px-4 py-3 md:border-b md:bg-white">
-        <legend className="sr-only">카테고리 선택</legend>
-        <div className="flex min-w-max gap-2">
-          {allCategoryList.map((category) => {
-            const id = category.categoryId;
-            const name = category.categoryName;
-            return (
-              <div key={id}>
-                <input
-                  type="radio"
-                  id={name}
-                  name="category"
-                  value={id}
-                  checked={id === selectedCategoryId}
-                  onChange={() => handleSelectCategory(id)}
-                  className="peer hidden"
-                />
-                <label
-                  htmlFor={name}
-                  className="cursor-pointer rounded-full border border-black/20 bg-white px-4.5 py-2 text-sm peer-checked:border-black/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
-                >
-                  {name}
-                </label>
-              </div>
-            );
-          })}
-        </div>
-      </fieldset>
+      <div className="scrollbar-hide relative z-10 w-full touch-pan-x overflow-x-auto px-4 py-3 [-webkit-overflow-scrolling:touch] md:border-b md:bg-white">
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="sr-only">카테고리 선택</legend>
+          <div className="inline-flex min-w-max gap-2 whitespace-nowrap">
+            {allCategoryList.map((category) => {
+              const id = category.categoryId;
+              const name = category.categoryName;
+              return (
+                <div key={id}>
+                  <input
+                    type="radio"
+                    id={name}
+                    name="category"
+                    value={id}
+                    checked={id === selectedCategoryId}
+                    onChange={() => handleSelectCategory(id)}
+                    className="peer hidden"
+                  />
+                  <label
+                    htmlFor={name}
+                    className="cursor-pointer rounded-full border border-black/20 bg-white px-4.5 py-2 text-sm peer-checked:border-black/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
+                  >
+                    {name}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </fieldset>
+      </div>
     </>
   );
 };
