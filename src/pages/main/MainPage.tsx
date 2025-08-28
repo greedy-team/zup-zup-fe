@@ -1,6 +1,5 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Header from '../../component/main/header/Header';
 import Main from '../../component/main/main/Main';
 import {
   getCategories,
@@ -94,7 +93,6 @@ const MainPage = () => {
   return (
     <>
       <div className="flex h-screen flex-col">
-        <Header />
         <Main />
       </div>
 

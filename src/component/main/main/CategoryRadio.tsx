@@ -28,7 +28,7 @@ const CategoryRadio = () => {
 
   return (
     <>
-      <fieldset className="relative overflow-x-auto border-0 bg-white px-4 py-3">
+      <fieldset className="relative z-10 overflow-x-auto border-0 border-b bg-white px-4 py-3">
         <legend className="sr-only">카테고리 선택</legend>
         <div className="flex min-w-max gap-2">
           {allCategoryList.map((category) => {

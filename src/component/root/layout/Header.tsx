@@ -3,7 +3,7 @@ import Logo from './Logo';
 
 const Header = () => {
   return (
-    <header className="shrink-0 bg-teal-50">
+    <header className="shrink-0 border-b bg-teal-50">
       {/* 반응형으로 높이 설정(sm, lg) */}
       <div className="relative flex h-20 items-center sm:h-24 lg:h-28">
         {/* 로고를 좌측에 고정하고 중앙에 오도록 */}

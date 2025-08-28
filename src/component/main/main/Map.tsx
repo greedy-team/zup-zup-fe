@@ -16,6 +16,7 @@ import {
   SelectedModeContext,
   SelectedAreaIdContext,
 } from '../../../contexts/AppContexts';
+import CategoryRadio from './CategoryRadio';
 
 const Map = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -90,6 +91,8 @@ const Map = () => {
 
   return (
     <div>
+      <CategoryRadio />
+
       {selectedMode === 'append' && selectedArea && (
         <div className="absolute top-10 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
           {selectedArea?.areaName}
