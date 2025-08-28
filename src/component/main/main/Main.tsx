@@ -1,21 +1,21 @@
-import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
 import { SelectedModeContext } from '../../../contexts/AppContexts';
-import { SelectedAreaIdContext } from '../../../contexts/AppContexts';
+import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
-  const navigate = useNavigate();
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
-  const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
+
+  const navigate = useNavigate();
 
   const handleRegisterButtonClick = () => {
-    if (selectedMode === 'register') {
-      setSelectedMode('append');
-    } else {
-      navigate(`/register/${selectedAreaId}`);
-    }
+    setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
+    const url = new URLSearchParams();
+    url.set('schoolAreaId', '0');
+    url.set('page', '1');
+    url.set('categoryId', '0');
+    navigate(`/main?${url.toString()}`);
   };
 
   return (
@@ -31,7 +31,6 @@ const Main = () => {
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             onClick={handleRegisterButtonClick}
-            disabled={selectedMode !== 'register' && !selectedAreaId}
           >
             {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
           </button>

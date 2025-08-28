@@ -90,9 +90,14 @@ const Map = () => {
 
   return (
     <div>
-      {selectedArea && (
+      {selectedMode === 'append' && selectedArea && (
         <div className="absolute top-10 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
           {selectedArea?.areaName}
+        </div>
+      )}
+      {selectedMode === 'register' && hoverArea && (
+        <div className="absolute top-40 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
+          {hoverArea?.areaName}
         </div>
       )}
       <div ref={mapRef} className="absolute inset-0" />
@@ -105,7 +110,7 @@ const Map = () => {
       )}
 
       {hoverArea && (
-        <div className="absolute bottom-3 left-3 z-10 rounded-md bg-white/90 px-3 py-2 text-sm shadow">
+        <div className="absolute bottom-3 left-3 z-10 rounded-md bg-white/90 px-6 py-2 text-base shadow">
           {hoverArea?.areaName}
         </div>
       )}
