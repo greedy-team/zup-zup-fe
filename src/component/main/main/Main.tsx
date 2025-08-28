@@ -1,12 +1,13 @@
 import { useContext, useState } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
-import { SelectedModeContext } from '../../../contexts/AppContexts';
+import { SelectedModeContext, TotalCountContext } from '../../../contexts/AppContexts';
 import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);
+  const { totalCount } = useContext(TotalCountContext)!;
 
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ const Main = () => {
           >
             <div className="flex items-center justify-between border-b px-4 py-3">
               <h3 className="text-sm font-semibold">분실물 목록</h3>
+              <p>총 {totalCount}건</p>
               <button
                 className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setIsMobileListOpen(false)}
