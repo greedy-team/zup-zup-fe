@@ -38,22 +38,24 @@ const Main = () => {
             목록
           </button>
 
-          {isMobileListOpen && (
-            <div className="absolute inset-0 z-20 flex flex-col bg-white md:hidden">
-              <div className="flex items-center justify-between border-b px-4 py-3">
-                <h3 className="text-sm font-semibold">분실물 목록</h3>
-                <button
-                  className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
-                  onClick={() => setIsMobileListOpen(false)}
-                >
-                  닫기
-                </button>
-              </div>
-              <div className="min-h-0 flex-1 overflow-y-auto">
-                <LostList />
-              </div>
+          <div
+            className={`absolute inset-0 z-20 flex transform flex-col bg-white transition-transform duration-300 ease-out md:hidden ${
+              isMobileListOpen ? 'translate-y-0' : 'pointer-events-none translate-y-full'
+            }`}
+          >
+            <div className="flex items-center justify-between border-b px-4 py-3">
+              <h3 className="text-sm font-semibold">분실물 목록</h3>
+              <button
+                className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                onClick={() => setIsMobileListOpen(false)}
+              >
+                닫기
+              </button>
             </div>
-          )}
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <LostList />
+            </div>
+          </div>
 
           <button
             className="absolute right-5 bottom-5 z-10 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
