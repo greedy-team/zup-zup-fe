@@ -19,8 +19,10 @@ export default function LostList() {
 
   return (
     <div className="overflow-y-auto px-4 py-4">
-      <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
-      <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
+      <div className="relative hidden md:block">
+        <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
+        <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
+      </div>
 
       <div className="max-h-[61vh] min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 [scrollbar-gutter:stable]">
         <ul className="m-0 list-none space-y-3 p-0 pb-6">
