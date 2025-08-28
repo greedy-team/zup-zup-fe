@@ -1,8 +1,6 @@
 import { useContext } from 'react';
 import { SelectedModeContext } from '../../../contexts/AppContexts';
-import Authentication from './Authentication';
 import CategoryRadio from './CategoryRadio';
-import Logo from './Logo';
 
 const Header = () => {
   const { selectedMode } = useContext(SelectedModeContext)!;

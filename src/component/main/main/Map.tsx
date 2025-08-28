@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useLoader } from '../../../hooks/map/useLoader';
@@ -25,7 +25,7 @@ const Map = () => {
   const { lostItemSummary } = useContext(LostItemSummaryContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
-
+  const [hoverAreaId, setHoverAreaId] = useState(0); // 마우스 올리면 구역 아이디 업데이트
   const rawAreaId = searchParams.get('schoolAreaId');
   const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
   const rawCategoryId = searchParams.get('categoryId');
@@ -63,6 +63,7 @@ const Map = () => {
     selectedMode,
     onOpenRegisterConfirm: () => setIsRegisterConfirmModalOpen(true),
     onSelectArea: updateAreaIdInUrl,
+    setHoverAreaId,
   });
 
   useNumberedMarkers({
@@ -85,9 +86,15 @@ const Map = () => {
 
   // 선택된 구역 정보 가져오기
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
+  const hoverArea = schoolAreas.find((area) => area.id === hoverAreaId);
 
   return (
     <div>
+      {selectedArea && (
+        <div className="absolute top-10 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
+          {selectedArea?.areaName}
+        </div>
+      )}
       <div ref={mapRef} className="absolute inset-0" />
       {selectedMode === 'register' && (
         <div className="absolute top-20 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-400/70 px-6 py-3 shadow-lg">
@@ -97,9 +104,11 @@ const Map = () => {
         </div>
       )}
 
-      <div className="absolute bottom-3 left-3 z-10 rounded-md bg-white/90 px-3 py-2 text-sm shadow">
-        선택: {selectedArea?.areaName || '전체'}
-      </div>
+      {hoverArea && (
+        <div className="absolute bottom-3 left-3 z-10 rounded-md bg-white/90 px-3 py-2 text-sm shadow">
+          {hoverArea?.areaName}
+        </div>
+      )}
     </div>
   );
 };

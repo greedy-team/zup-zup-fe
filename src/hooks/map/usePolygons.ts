@@ -9,6 +9,7 @@ export function usePolygons({
   selectedMode,
   onOpenRegisterConfirm,
   onSelectArea,
+  setHoverAreaId,
 }: UsePolygonsHookOptions) {
   const polysRef = useRef<kakao.maps.Polygon[]>([]);
   const polyByIdRef = useRef<Map<number, kakao.maps.Polygon>>(new Map());
@@ -142,10 +143,12 @@ export function usePolygons({
       const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(HOVER_STYLE);
+        setHoverAreaId?.(area.id);
       };
       const onOut = () => {
         if (selectedPolygonRef.current === polygon) return;
         polygon.setOptions(BASE_STYLE);
+        setHoverAreaId?.(0);
       };
 
       kakao.maps.event.addListener(polygon, 'click', onClick);
