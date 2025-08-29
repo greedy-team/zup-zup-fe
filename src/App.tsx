@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContexts';
+import { AuthFlagProvider } from './contexts/AuthFlag';
 // 헤더 부분 (카테고리 제외)
 import RootLayout from './layouts/RootLayout';
 // 메인 (카테고리 필터(찾기랑 등록에는 필요 없음 ) + 목록 + 지도)  헤당 쿼리의 스트링 값은 필수가 아님 카테고리가 전체인 경우 전체 구역인 경우 → /?categoryId=&schoolAreaId=&page=
 import MainPage from './pages/main/MainPage';
+import LoginPage from './pages/login/LoginPage';
 // 찾기(Find) -> /find/:lostItemId/*
 import FindLayout from './pages/find/FindLayout'; // 진행 바(진행바 생성을 여기서 해야함 귀중품 비 귀중품 판단해서)와 같은 찾기 단계의 공통 요소, 규칙 검사 단계를 건너띈 경우를 판단
 import FindInfo from './pages/find/FindInfo'; // 정보 확인(물건 정보)
@@ -19,33 +21,37 @@ import RegisterReview from './pages/register/RegisterReview'; // 3) 최종 확�
 export default function App() {
   return (
     <BrowserRouter>
-      <AppProvider>
-        <Routes>
-          {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
-          <Route element={<RootLayout />}>
-            {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
-            <Route index element={<MainPage />} />
+      <AuthFlagProvider>
+        <AppProvider>
+          <Routes>
+            {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
+            <Route element={<RootLayout />}>
+              {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
+              <Route index element={<MainPage />} />
 
-            {/* 찾기: (/find/:lostItemId/*) */}
-            <Route path="find/:lostItemId" element={<FindLayout />}>
-              <Route index element={<Navigate to="info" replace />} />
-              <Route path="info" element={<FindInfo />} />
-              <Route path="quiz" element={<FindQuiz />} />
-              <Route path="detail" element={<FindDetail />} />
-              <Route path="pledge" element={<FindPledge />} />
-            </Route>
+              <Route path="login" element={<LoginPage />} />
 
-            {/* 등록: (/register/:schoolAreaId/*) */}
-            <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
-              <Route index element={<Navigate to="category" replace />} />
-              <Route path="category" element={<RegisterCategory />} />
-              <Route path="details" element={<RegisterDetails />} />
-              <Route path="review" element={<RegisterReview />} />
+              {/* 찾기: (/find/:lostItemId/*) */}
+              <Route path="find/:lostItemId" element={<FindLayout />}>
+                <Route index element={<Navigate to="info" replace />} />
+                <Route path="info" element={<FindInfo />} />
+                <Route path="quiz" element={<FindQuiz />} />
+                <Route path="detail" element={<FindDetail />} />
+                <Route path="pledge" element={<FindPledge />} />
+              </Route>
+
+              {/* 등록: (/register/:schoolAreaId/*) */}
+              <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
+                <Route index element={<Navigate to="category" replace />} />
+                <Route path="category" element={<RegisterCategory />} />
+                <Route path="details" element={<RegisterDetails />} />
+                <Route path="review" element={<RegisterReview />} />
+              </Route>
+              <Route path="*" element={<MainPage />} />
             </Route>
-            <Route path="*" element={<MainPage />} />
-          </Route>
-        </Routes>
-      </AppProvider>
+          </Routes>
+        </AppProvider>
+      </AuthFlagProvider>
     </BrowserRouter>
   );
 }
