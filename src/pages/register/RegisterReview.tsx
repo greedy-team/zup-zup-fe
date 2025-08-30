@@ -33,14 +33,16 @@ const RegisterReview = () => {
   return (
     <div>
       <h2 className="mb-4 text-lg font-semibold text-gray-700">입력 정보를 확인해주세요</h2>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* 왼쪽 */}
-        <div className="space-y-3 lg:col-span-1">
+        <div className="space-y-3 md:col-span-1">
           <InfoBox title="카테고리">
-            <p className="text-lg font-bold">{selectedCategory?.categoryName || '선택되지 않음'}</p>
+            <p className="text-base font-bold">
+              {selectedCategory?.categoryName || '선택되지 않음'}
+            </p>
           </InfoBox>
           <InfoBox title="등록된 사진" className="min-h-[200px]">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {formData.images.map((file, index) => (
                 <img
                   key={index}
@@ -54,34 +56,34 @@ const RegisterReview = () => {
         </div>
 
         {/* 중앙 */}
-        <div className="space-y-3 lg:col-span-1">
+        <div className="space-y-3 md:col-span-1">
           <InfoBox title="분실물 특징" className="min-h-[150px]">
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 text-base">
               {formData.features.map(({ featureId, optionId }) => (
                 <li key={featureId}>
                   <span className="text-gray-500">{questionMap.get(featureId) || '질문'}: </span>
-                  <span className="font-semibold">{optionsMap.get(optionId) || '답변'}</span>
+                  <span className="font-bold text-black">{optionsMap.get(optionId) || '답변'}</span>
                 </li>
               ))}
             </ul>
           </InfoBox>
           <InfoBox title="보관 장소">
-            <p className="text-sm font-semibold">{formData.storageName}</p>
+            <p className="text-base font-bold text-black">{formData.storageName}</p>
           </InfoBox>
         </div>
 
         {/* 오른쪽 */}
         <div className="space-y-3 lg:col-span-1">
           <InfoBox title="위치 정보">
-            <p className="mb-2 text-sm text-gray-500">
-              건물: <span className="font-semibold text-black">{selectedAreaName || '선택 X'}</span>
+            <p className="mb-2 text-base text-gray-500">
+              건물: <span className="font-bold text-black">{selectedAreaName || '선택 X'}</span>
             </p>
-            <p className="text-sm text-gray-500">
-              상세 위치: <span className="font-semibold text-black">{formData.detailLocation}</span>
+            <p className="text-base text-gray-500">
+              상세 위치: <span className="font-bold text-black">{formData.detailLocation}</span>
             </p>
           </InfoBox>
           <InfoBox title="상세 정보">
-            <p className="text-sm font-semibold whitespace-pre-wrap">
+            <p className="text-base font-bold whitespace-pre-wrap text-black">
               {formData.description || '입력된 내용이 없습니다.'}
             </p>
           </InfoBox>
