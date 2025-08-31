@@ -12,12 +12,13 @@ import type {
   ResultModalContent,
 } from '../../types/register';
 
-const INITIAL_FORM_DATA: Omit<RegisterFormData, 'schoolAreaId'> = {
-  detailLocation: '',
-  storageName: '',
-  features: [],
+const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
+  foundAreaDetail: '',
+  depositArea: '',
+  featureOptions: [],
   description: '',
   images: [],
+  imageOrder: [],
 };
 
 /**
@@ -41,7 +42,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
   const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
-    schoolAreaId: validSchoolAreaId,
+    foundAreaId: validSchoolAreaId,
   });
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
 
@@ -64,7 +65,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     if (selectedCategory) {
       setIsLoading(true);
       setFormData((prev) => ({ ...prev, features: [] })); // 선택된 카테고리 변경 시 특징 초기화
-      fetchCategoryFeatures(selectedCategory.categoryId)
+      fetchCategoryFeatures(selectedCategory.id)
         .then(setCategoryFeatures)
         .catch(console.error)
         .finally(() => setIsLoading(false));
@@ -75,15 +76,16 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
   // 2단계로 넘어가기 위한 검증 변수
   const isStep2Valid =
-    formData.features.length === categoryFeatures.length &&
-    !!formData.detailLocation.trim() &&
-    !!formData.storageName.trim() &&
+    formData.featureOptions.length === categoryFeatures.length &&
+    !!formData.foundAreaDetail.trim() &&
+    !!formData.depositArea.trim() &&
     formData.images.length > 0 &&
-    !!formData.schoolAreaId;
+    formData.imageOrder.length === formData.images.length &&
+    !!formData.foundAreaId;
 
   // 최종 등록 함수
   const handleRegister = async () => {
-    if (!selectedCategory || !formData.schoolAreaId) {
+    if (!selectedCategory || !formData.foundAreaId) {
       console.error('카테고리 또는 학교 구역이 선택되지 않았습니다.');
       return;
     }
@@ -91,11 +93,12 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     setIsLoading(true);
 
     const requestData: LostItemRegisterRequest = {
-      categoryId: selectedCategory.categoryId,
-      schoolAreaId: formData.schoolAreaId,
-      features: formData.features,
-      detailLocation: formData.detailLocation,
-      storageName: formData.storageName,
+      categoryId: selectedCategory.id,
+      foundAreaId: formData.foundAreaId,
+      foundAreaDetail: formData.foundAreaDetail,
+      depositArea: formData.depositArea,
+      featureOptions: formData.featureOptions,
+      imageOrder: formData.imageOrder,
       description: formData.description || undefined,
     };
 
@@ -129,9 +132,9 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   // 카테고리 특징 변경 핸들러
   const handleFeatureChange = (featureId: number, optionId: number) => {
     setFormData((prev) => {
-      const otherFeatures = prev.features.filter((f) => f.featureId !== featureId);
+      const otherFeatures = prev.featureOptions.filter((f) => f.featureId !== featureId);
       const newFeature: FeatureSelection = { featureId, optionId };
-      return { ...prev, features: [...otherFeatures, newFeature] };
+      return { ...prev, featureOptions: [...otherFeatures, newFeature] };
     });
   };
 

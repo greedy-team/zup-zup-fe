@@ -1,19 +1,21 @@
 import { useRegisterProcess } from '../../hooks/register/useRegisterProcess';
 
 export type Category = {
-  categoryId: number;
-  categoryName: string;
+  id: number;
+  name: string;
+  iconUrl: string;
 };
 
 export type Feature = {
-  featureId: number;
-  featureText: string;
+  id: number;
+  name: string;
+  quizQuestion: string;
   options: FeatureOption[];
 };
 
 export type FeatureOption = {
   id: number;
-  text: string;
+  optionValue: string;
 };
 
 export type FeatureSelection = {
@@ -31,12 +33,13 @@ export type SchoolArea = {
 };
 
 export type RegisterFormData = {
-  schoolAreaId: number | null;
-  detailLocation: string;
-  storageName: string;
-  features: FeatureSelection[];
+  foundAreaId: number | null;
+  foundAreaDetail: string;
+  depositArea: string;
+  featureOptions: FeatureSelection[];
   description?: string;
   images: File[];
+  imageOrder: number[];
 };
 
 export type ResultModalContent = {
@@ -49,10 +52,11 @@ export type ResultModalContent = {
 
 export type LostItemRegisterRequest = {
   categoryId: number;
-  schoolAreaId: number;
-  detailLocation: string;
-  storageName: string;
-  features: FeatureSelection[];
+  foundAreaId: number;
+  foundAreaDetail: string;
+  depositArea: string;
+  featureOptions: FeatureSelection[];
+  imageOrder: number[];
   description?: string;
 };
 

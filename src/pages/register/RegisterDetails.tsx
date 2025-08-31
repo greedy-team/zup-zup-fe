@@ -28,7 +28,9 @@ const RegisterDetails = () => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === 'detailLocation' || name === 'storageName' ? value.replace(/^\s+/, '') : value,
+        name === 'foundAreaDetail' || name === 'depositArea'
+          ? value.replace(/^\s+/, '') // 앞 공백 제거
+          : value,
     }));
   };
 
@@ -41,14 +43,26 @@ const RegisterDetails = () => {
       alert('사진은 최대 3장까지 업로드할 수 있습니다.');
       return;
     }
-    setFormData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
+
+    const newImages = [...formData.images, ...files];
+    const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
+
+    setFormData((prev) => ({
+      ...prev,
+      images: newImages,
+      imageOrder: newOrder,
+    }));
   };
 
   // 이미지 삭제 핸들러
   const handleRemoveImage = (indexToRemove: number) => {
+    const newImages = formData.images.filter((_, index) => index !== indexToRemove);
+    const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
+
     setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, index) => index !== indexToRemove),
+      images: newImages,
+      imageOrder: newOrder,
     }));
   };
 
@@ -61,27 +75,24 @@ const RegisterDetails = () => {
     );
   }
 
-  const selectedAreaName = schoolAreas.find((a) => a.id === formData.schoolAreaId)?.areaName;
+  const selectedAreaName = schoolAreas.find((a) => a.id === formData.foundAreaId)?.areaName;
 
   return (
     <div className="space-y-4">
       <FormSection title="카테고리 특징">
         <div className="space-y-4">
           {categoryFeatures.map((feature) => (
-            <div key={feature.featureId}>
-              <label
-                htmlFor={String(feature.featureId)}
-                className="mb-1 block font-medium text-gray-700"
-              >
-                {feature.featureText}
+            <div key={feature.id}>
+              <label htmlFor={String(feature.id)} className="mb-1 block font-medium text-gray-700">
+                {feature.quizQuestion} {/* ✅ API의 quizQuestion 사용 */}
               </label>
               <select
-                id={String(feature.featureId)}
-                name={String(feature.featureId)}
+                id={String(feature.id)}
+                name={String(feature.id)}
                 value={
-                  formData.features.find((f) => f.featureId === feature.featureId)?.optionId || ''
+                  formData.featureOptions.find((f) => f.featureId === feature.id)?.optionId || ''
                 }
-                onChange={(e) => handleFeatureChange(feature.featureId, Number(e.target.value))}
+                onChange={(e) => handleFeatureChange(feature.id, Number(e.target.value))}
                 className="w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-teal-500 focus:ring-teal-500"
               >
                 <option value="" disabled>
@@ -89,7 +100,7 @@ const RegisterDetails = () => {
                 </option>
                 {feature.options.map((opt) => (
                   <option key={opt.id} value={opt.id}>
-                    {opt.text}
+                    {opt.optionValue} {/* ✅ optionValue 사용 */}
                   </option>
                 ))}
               </select>
@@ -111,10 +122,10 @@ const RegisterDetails = () => {
               상세 위치 (예: 401호, 정문 앞 소파)
             </label>
             <input
-              id="detailLocation"
+              id="foundAreaDetail"
               type="text"
-              name="detailLocation"
-              value={formData.detailLocation}
+              name="foundAreaDetail"
+              value={formData.foundAreaDetail}
               onChange={handleChange}
               className="w-full rounded-md border-gray-300 p-2 shadow-sm"
             />
@@ -124,10 +135,10 @@ const RegisterDetails = () => {
 
       <FormSection title="보관 장소 (예: 학생회관 401호)">
         <input
-          id="storageName"
+          id="depositArea"
           type="text"
-          name="storageName"
-          value={formData.storageName}
+          name="depositArea"
+          value={formData.depositArea}
           onChange={handleChange}
           placeholder="분실물을 보관하고 있는 장소를 입력해주세요"
           className="w-full rounded-md border-gray-300 p-2 shadow-sm"
@@ -136,6 +147,7 @@ const RegisterDetails = () => {
 
       <FormSection title="사진 업로드 (최소 1장, 최대 3장)">
         <div className="flex flex-col items-center justify-center">
+          <p className="pb-2 text-gray-400">가장 왼쪽에 있는 사진이 대표 사진으로 설정됩니다.</p>
           <input
             type="file"
             multiple

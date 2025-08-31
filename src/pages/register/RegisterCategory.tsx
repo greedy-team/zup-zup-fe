@@ -1,5 +1,4 @@
 import { useOutletContext } from 'react-router-dom';
-import { categoryIcons } from '../../constants/category';
 import type { RegisterContextType } from '../../types/register';
 
 const RegisterCategory = () => {
@@ -8,13 +7,13 @@ const RegisterCategory = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-bold text-gray-700 md:text-xl">카테고리를 선택해주세요</h2>
-      <div role="radiogroup" className="mb-4 grid grid-cols-3 gap-4 md:grid-cols-4">
+      <h2 className="mb-4 text-lg font-semibold text-gray-700">카테고리를 선택해주세요</h2>
+      <div role="radiogroup" className="mb-4 grid grid-cols-3 gap-4 sm:grid-cols-6">
         {categories.map((category) => (
           <label
-            key={category.categoryId}
+            key={category.id}
             className={`flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 p-4 transition-all ${
-              selectedCategory?.categoryId === category.categoryId
+              selectedCategory?.id === category.id
                 ? 'border-teal-500 bg-emerald-50'
                 : 'border-gray-200 bg-white hover:border-gray-400'
             }`}
@@ -22,17 +21,19 @@ const RegisterCategory = () => {
             <input
               type="radio"
               name="category"
-              value={category.categoryId}
-              checked={selectedCategory?.categoryId === category.categoryId}
+              value={category.id}
+              checked={selectedCategory?.id === category.id}
               onChange={() => setSelectedCategory(category)}
               className="hidden"
             />
-            <div className="mb-2 h-10 w-10 rounded sm:h-15 sm:w-15">
-              <img src={categoryIcons[category.categoryId]} alt={category.categoryName} />
+            <div className="mb-2 h-10 w-10 rounded">
+              <img
+                src={category.iconUrl}
+                alt={category.name}
+                className="h-full w-full object-contain"
+              />
             </div>
-            <span className="text-base font-medium text-gray-800 md:text-lg">
-              {category.categoryName}
-            </span>
+            <span className="text-sm font-medium text-gray-800">{category.name}</span>
           </label>
         ))}
       </div>
