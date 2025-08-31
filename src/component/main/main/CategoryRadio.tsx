@@ -1,6 +1,10 @@
 import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { CategoriesContext, SelectedModeContext } from '../../../contexts/AppContexts';
+import {
+  CategoriesContext,
+  SelectedAreaIdContext,
+  SelectedModeContext,
+} from '../../../contexts/AppContexts';
 import { isValidId } from '../../../utils/isValidId';
 
 const CategoryRadio = () => {
@@ -8,7 +12,7 @@ const CategoryRadio = () => {
 
   const { categories } = useContext(CategoriesContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
-
+  const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
   const rawCategoryId = searchParams.get('categoryId');
   const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
 
@@ -17,6 +21,7 @@ const CategoryRadio = () => {
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
     const next = new URLSearchParams();
+    next.set('schoolAreaId', String(selectedAreaId) || '0');
     if (id === 0) {
       next.delete('categoryId');
     } else {

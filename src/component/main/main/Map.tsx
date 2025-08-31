@@ -52,6 +52,7 @@ const Map = () => {
       next.set('schoolAreaId', String(areaId));
       setSelectedAreaId(areaId);
     }
+    next.set('categoryId', String(selectedCategoryId) || '0');
     next.set('page', '1');
     setSearchParams(next, { replace: true });
   };

@@ -14,7 +14,7 @@ const RegisterConfirmModal = () => {
   const { schoolAreas } = useContext(SchoolAreasContext)!;
 
   const handleCancel = () => {
-    navigate(`/main?schoolAreaId=${0}`);
+    navigate({ search: `?schoolAreaId=${0}` }, { replace: true });
     setIsRegisterConfirmModalOpen(false);
   };
 

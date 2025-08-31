@@ -14,10 +14,7 @@ const Main = () => {
   const handleRegisterButtonClick = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
     const url = new URLSearchParams();
-    url.set('schoolAreaId', '0');
-    url.set('page', '1');
-    url.set('categoryId', '0');
-    navigate(`${url.toString()}`);
+    navigate({ search: `${url.toString()}` }, { replace: true });
   };
 
   return (
