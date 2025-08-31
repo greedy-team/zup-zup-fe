@@ -2,10 +2,10 @@ import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Main from '../../component/main/main/Main';
 import {
-  getCategories,
-  getLostItemDetail,
   getLostItemSummary,
+  getCategories,
   getSchoolAreas,
+  getLostItems,
 } from '../../apis/main/mainApi';
 import {
   CategoriesContext,
@@ -65,11 +65,11 @@ const MainPage = () => {
   // 분실물 목록 데이터 가져오기 (페이지, 카테고리, 구역 변경 시) → context 상태를 채움
   useEffect(() => {
     (async () => {
-      const { items, total } = await getLostItemDetail(
+      const { items, total } = await getLostItems(
         page,
         PAGE_SIZE,
-        selectedCategoryId,
-        selectedAreaId,
+        selectedCategoryId || undefined,
+        selectedAreaId || undefined,
       );
       setItems(items);
       setTotalCount(total);
@@ -80,7 +80,7 @@ const MainPage = () => {
   useEffect(() => {
     const fetchLostItemSummary = async () => {
       try {
-        const data = await getLostItemSummary(selectedAreaId, selectedCategoryId);
+        const data = await getLostItemSummary(selectedCategoryId);
         setLostItemSummary(data);
       } catch (error) {
         console.error('분실물 요약 데이터 가져오기 실패:', error);

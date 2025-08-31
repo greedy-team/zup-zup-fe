@@ -10,14 +10,15 @@ import { isValidId } from '../../../utils/isValidId';
 const CategoryRadio = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { categories } = useContext(CategoriesContext)!;
   const { selectedMode } = useContext(SelectedModeContext)!;
   const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
+  const { categories } = useContext(CategoriesContext)!;
   const rawCategoryId = searchParams.get('categoryId');
   const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+  const allCategory = { categoryId: 0, categoryName: '전체' };
+  const categoryList = [allCategory, ...(Array.isArray(categories) ? categories : [])];
 
-  const allCategoryList = [{ categoryId: 0, categoryName: '전체' }, ...categories]; // msw에서 사용하는 전체 카테고리 추가
-
+  console.log('categoryList', categories);
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
     const next = new URLSearchParams();
@@ -42,7 +43,7 @@ const CategoryRadio = () => {
         <fieldset className="m-0 border-0 p-0">
           <legend className="sr-only">카테고리 선택</legend>
           <div className="inline-flex min-w-max gap-2 whitespace-nowrap">
-            {allCategoryList.map((category) => {
+            {categoryList.map((category) => {
               const id = category.categoryId;
               const name = category.categoryName;
               return (
