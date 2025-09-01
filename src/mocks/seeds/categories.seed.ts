@@ -35,7 +35,7 @@ export function seedCategories() {
     },
     {
       categoryId: 7,
-      categoryName: '악세서리(금속)',
+      categoryName: '악세서리',
       categoryIconUrl: 'https://img.icons8.com/?size=100&id=19632&format=png&color=000000',
     },
     {
