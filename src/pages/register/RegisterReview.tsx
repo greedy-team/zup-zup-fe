@@ -60,8 +60,8 @@ const RegisterReview = () => {
             <ul className="space-y-3 text-base">
               {formData.featureOptions.map(({ featureId, optionId }) => (
                 <li key={featureId}>
-                  <span className="text-gray-500">{questionMap.get(featureId) || '질문'}: </span>
-                  <span className="font-bold text-black">{optionsMap.get(optionId) || '답변'}</span>
+                  <p className="text-gray-500">{questionMap.get(featureId) || '질문'} </p>
+                  <p className="font-bold text-black">{optionsMap.get(optionId) || '답변'}</p>
                 </li>
               ))}
             </ul>

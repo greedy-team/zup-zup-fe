@@ -24,7 +24,7 @@ export const fetchCategoryFeatures = async (categoryId: number): Promise<Feature
 
 // 학교 지역 목록을 가져오는 API 함수
 export const fetchSchoolAreas = async (): Promise<SchoolArea[]> => {
-  const response = await fetch('/api/school-areas');
+  const response = await fetch(`${BASE_URL}/school-areas`);
   if (!response.ok) {
     throw new Error('학교 지역 목록을 가져오는 데 실패했습니다.');
   }
