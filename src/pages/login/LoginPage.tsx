@@ -30,7 +30,6 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       const payload: LoginRequest = { portalId, portalPassword };
-      alert(`${redirectPath}`);
       await loginPortal(payload);
       setAuthenticated();
       broadcastLogin();
