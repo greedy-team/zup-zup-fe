@@ -1,18 +1,37 @@
+export type LostItemBrief = {
+  id: number;
+  categoryId: number;
+  categoryName: string;
+  categoryIconUrl: string;
+  schoolAreaId: number;
+  schoolAreaName: string;
+  foundAreaDetail: string;
+  createdAt: string;
+  representativeImageUrl: string;
+};
+
 export type QuizOption = { id: number; text: string };
 export type QuizItem = { featureId: number; question: string; options: QuizOption[] };
-export type QuizAnswer = { featureId: number; selectedOptionId: number };
-export type QuizSubmitBody = { answers: QuizAnswer[] };
 
-export type QuizResult =
-  | { correct: true; detail: { imageUrl: string; description?: string | null } }
-  | { correct: false };
+export type GetQuizzesResponse = { quizzes: QuizItem[] };
 
-export type ResultModalStatus = 'success' | 'error' | 'info';
+export type QuizSubmitBody = {
+  answers: { featureId: number; selectedOptionId: number }[];
+};
 
-export type ResultModalProps = {
-  status: ResultModalStatus;
-  title: string;
-  message: string;
-  buttonText: string;
-  onConfirm: () => void;
+export type DetailResponse = {
+  id: number;
+  categoryId: number;
+  categoryName: string;
+  categoryIconUrl: string;
+  schoolAreaId: number;
+  schoolAreaName: string;
+  foundAreaDetail: string;
+  description: string;
+  imageUrls: string[];
+  createdAt: string;
+};
+
+export type DepositAreaResponse = {
+  depositArea: string;
 };
