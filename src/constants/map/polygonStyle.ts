@@ -1,10 +1,10 @@
 export const BASE_STYLE = {
-  strokeWeight: 0,
-  strokeColor: '#ffffff',
-  strokeOpacity: 0.001,
+  strokeWeight: 2,
+  strokeColor: '#555',
+  strokeOpacity: 0.3,
   strokeStyle: 'solid' as const,
   fillColor: '#ffffff',
-  fillOpacity: 0.001,
+  fillOpacity: 0.01,
 };
 export const HOVER_STYLE = {
   strokeWeight: 1,

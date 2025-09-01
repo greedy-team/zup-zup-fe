@@ -26,6 +26,20 @@ const Pagenation = () => {
     setSearchParams(next, { replace: true });
   };
 
+  //화살표를 이용해 페이지 이동
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && page > 1) {
+        setPage(page - 1);
+      }
+      if (e.key === 'ArrowRight' && page < totalPages) {
+        setPage(page + 1);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [page, totalPages, setPage]);
+
   return (
     <div className="fixed bottom-0 flex justify-center gap-2 rounded-full bg-white/90 px-4 py-2 backdrop-blur">
       <button

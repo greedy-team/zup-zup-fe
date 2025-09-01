@@ -4,8 +4,8 @@ export const MAP_MIN_LEVEL = 1;
 export const MAP_MAX_LEVEL = 2;
 
 export const ALLOWED_BOUNDARY = {
-  sw: { lat: 37.547, lng: 127.0655 },
-  ne: { lat: 37.5545, lng: 127.084 },
+  sw: { lat: 37.545, lng: 127.0655 },
+  ne: { lat: 37.5575, lng: 127.084 },
 };
 
 export const OUTER_WORLD = [

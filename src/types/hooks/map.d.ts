@@ -8,6 +8,7 @@ export type UsePolygonsHookOptions = {
   selectedMode: 'append' | 'register';
   onOpenRegisterConfirm: () => void;
   onSelectArea: (areaId: number) => void;
+  setHoverAreaId: (areaId: number) => void;
 };
 
 export type UseNumberedMarkersHookOptions = {
