@@ -84,7 +84,7 @@ const RegisterDetails = () => {
           {categoryFeatures.map((feature) => (
             <div key={feature.id}>
               <label htmlFor={String(feature.id)} className="mb-1 block font-medium text-gray-700">
-                {feature.quizQuestion} {/* ✅ API의 quizQuestion 사용 */}
+                {feature.quizQuestion}
               </label>
               <select
                 id={String(feature.id)}
@@ -100,7 +100,7 @@ const RegisterDetails = () => {
                 </option>
                 {feature.options.map((opt) => (
                   <option key={opt.id} value={opt.id}>
-                    {opt.optionValue} {/* ✅ optionValue 사용 */}
+                    {opt.optionValue}
                   </option>
                 ))}
               </select>
