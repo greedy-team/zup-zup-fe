@@ -18,7 +18,6 @@ const CategoryRadio = () => {
   const allCategory = { categoryId: 0, categoryName: '전체' };
   const categoryList = [allCategory, ...(Array.isArray(categories) ? categories : [])];
 
-  console.log('categoryList', categories);
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
     const next = new URLSearchParams();

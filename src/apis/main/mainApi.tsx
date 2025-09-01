@@ -7,7 +7,6 @@ import type {
 } from '../../types/lost/lostApi';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log('API_BASE_URL', API_BASE_URL);
 
 export const getCategories = async (): Promise<Category[]> => {
   const res = await fetch(`${API_BASE_URL}/categories`);
@@ -77,7 +76,6 @@ export const getLostItems = async (
     imageUrl: row.representativeImageUrl ?? row.thumbnailUrl ?? row.categoryIconUrl ?? '',
     status: 'registered',
   }));
-  console.log('items', items);
   const total = json.pageInfo?.totalElements ?? json.count ?? items.length;
   return { items, total };
 };
