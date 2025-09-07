@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getLostItemBrief } from '../../api/find';
 import type { LostItemBrief } from '../../types/find';
-import { useAuthFlag } from '../../contexts/AuthFlag';
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
-import { useFindOutlet } from './FindLayout';
+import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 
 export default function FindInfo() {
-  const { setNextHandler } = useFindOutlet();
-  const { setUnauthenticated } = useAuthFlag();
+  const navigate = useNavigate();
+  const { setBeforeNext } = useFindOutlet();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
 
   const [item, setItem] = useState<LostItemBrief | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // 다음 버튼: 검증 없이 통과
   useEffect(() => {
-    setNextHandler(() => true);
-    return () => setNextHandler(null);
-  }, []);
+    setBeforeNext(() => true);
+    return () => setBeforeNext(null);
+  }, [setBeforeNext]);
 
   useEffect(() => {
     (async () => {
@@ -28,9 +26,17 @@ export default function FindInfo() {
         const brief = await getLostItemBrief(lostItemId);
         setItem(brief ?? null);
       } catch (e: any) {
-        if (e?.status === 401) {
-          setUnauthenticated();
-          redirectToLoginKeepPath();
+        if (e?.status === 403) {
+          alert('해당 분실물에 대한 열람 권한이 없습니다.');
+          navigate('/', { replace: true });
+          return;
+        } else if (e?.status === 404) {
+          alert('해당 분실물 정보를 찾을 수 없습니다.');
+          navigate('/', { replace: true });
+          return;
+        } else {
+          alert('알 수 없는 오류가 발생했습니다.');
+          navigate('/', { replace: true });
           return;
         }
       } finally {
@@ -40,7 +46,8 @@ export default function FindInfo() {
   }, [lostItemId]);
 
   if (loading) return <div className="p-4 text-sm text-gray-500">불러오는 중…</div>;
-  if (!item) return <div className="p-4 text-sm text-red-600">정보를 가져오지 못했습니다.</div>;
+  if (!item)
+    return <div className="p-4 text-sm text-red-600">분실물 정보를 가져오지 못했습니다.</div>;
 
   return (
     <div className="space-y-4">
@@ -51,7 +58,7 @@ export default function FindInfo() {
       <div>
         <label className="text-sm font-semibold text-gray-600">발견 장소</label>
         <div className="mt-1 rounded-lg bg-gray-100 p-3 text-gray-800">
-          {item.schoolAreaName} {item.foundAreaDetail ? `· ${item.foundAreaDetail}` : ''}
+          {item.schoolAreaName} {item.foundAreaDetail ? ` - ${item.foundAreaDetail}` : ''}
         </div>
       </div>
       <div>
