@@ -11,6 +11,7 @@ export type LostItemBrief = {
 };
 
 export type QuizOption = { id: number; text: string };
+
 export type QuizItem = { featureId: number; question: string; options: QuizOption[] };
 
 export type GetQuizzesResponse = { quizzes: QuizItem[] };
@@ -34,4 +35,12 @@ export type DetailResponse = {
 
 export type DepositAreaResponse = {
   depositArea: string;
+};
+
+export type StepKey = 'info' | 'quiz' | 'detail' | 'pledge' | 'deposit';
+
+export type BeforeNextHandler = () => boolean | Promise<boolean>;
+
+export type FindOutletContext = {
+  setBeforeNext: (handler: BeforeNextHandler | null) => void;
 };
