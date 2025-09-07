@@ -1,116 +1,134 @@
-import { useRef, useState, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate, useParams, useOutletContext } from 'react-router-dom';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getLostItemBrief } from '../../api/find';
-import { FIND_STEPS } from '../../constants/find';
+import {
+  FIND_STEPS,
+  NON_VALUABLE_FLOW,
+  VALUABLE_FLOW,
+  PAGE_TITLES,
+  ETC_CATEGORY_ID,
+  NEXT_BUTTON_LABEL,
+} from '../../constants/find';
 import ProgressBar from '../../component/common/ProgressBar';
-import { useAuthFlag } from '../../contexts/AuthFlag';
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
-
-type OutletCtx = {
-  setNextHandler: (fn: (() => Promise<boolean> | boolean) | null) => void;
-};
+import type { StepKey, BeforeNextHandler, FindOutletContext } from '../../types/find';
 
 export default function FindLayout() {
-  const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
-  const lostItemId = Number(idParam);
+  const { lostItemId: lostItemIdParam } = useParams<{ lostItemId: string }>();
+  const lostItemId = Number(lostItemIdParam);
   const navigate = useNavigate();
   const location = useLocation();
-  const { setAuthenticated, setUnauthenticated } = useAuthFlag();
 
-  const [loading, setLoading] = useState(true);
-  const [isValuable, setIsValuable] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isValuableItem, setIsValuableItem] = useState(true);
 
-  const subpath = location.pathname.split('/').slice(-1)[0];
-  const flow = isValuable
-    ? ['info', 'quiz', 'detail', 'pledge', 'deposit']
-    : ['info', 'detail', 'pledge', 'deposit'];
+  const currentRouteSegment: StepKey =
+    (location.pathname.split('/').filter(Boolean).pop() as StepKey) ?? 'info';
 
-  const steps = isValuable ? FIND_STEPS.VALUABLE : FIND_STEPS.NON_VALUABLE;
-  const currentIndex = Math.max(0, flow.indexOf(subpath));
-  const progressCurrent = currentIndex + 1;
-
-  const TITLES: Record<string, string> = {
-    info: '물건 정보',
-    quiz: '인증 퀴즈',
-    detail: '상세 정보',
-    pledge: '약관 동의',
-    deposit: '보관 장소',
-  };
-  const title = TITLES[subpath] ?? '분실물 찾기';
+  const stepFlow = isValuableItem ? VALUABLE_FLOW : NON_VALUABLE_FLOW;
+  const stepLabels = (isValuableItem ? FIND_STEPS.VALUABLE : FIND_STEPS.NON_VALUABLE) as string[];
+  const currentStepIndex = Math.max(0, stepFlow.indexOf(currentRouteSegment));
+  const currentStepNumber = currentStepIndex + 1;
+  const currentStepKey: StepKey = stepFlow[currentStepIndex] ?? 'info';
+  const pageTitle = PAGE_TITLES[currentStepKey];
+  const nextButtonLabel = NEXT_BUTTON_LABEL[currentStepKey];
 
   useEffect(() => {
     if (!Number.isFinite(lostItemId)) {
       navigate('/', { replace: true });
       return;
     }
+    let alive = true;
     (async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         const brief = await getLostItemBrief(lostItemId);
-        setIsValuable(brief?.categoryId !== 99);
-        setAuthenticated();
+        if (!alive) return;
+        setIsValuableItem(brief?.categoryId !== ETC_CATEGORY_ID);
       } catch (e: any) {
-        if (e?.status === 401) {
-          setUnauthenticated();
-          redirectToLoginKeepPath();
+        if (!alive) return;
+        if (e?.status === 403) {
+          alert('해당 분실물에 대한 열람 권한이 없습니다.');
+          navigate('/', { replace: true });
+          return;
+        } else if (e?.status === 404) {
+          alert('해당 분실물 정보를 찾을 수 없습니다.');
+          navigate('/', { replace: true });
           return;
         }
       } finally {
-        setLoading(false);
+        if (alive) setIsLoading(false);
       }
     })();
+    return () => {
+      alive = false;
+    };
   }, [lostItemId]);
 
-  const onNextRef = useRef<(() => Promise<boolean> | boolean) | null>(null);
-  const setNextHandler: OutletCtx['setNextHandler'] = (fn) => {
-    onNextRef.current = fn;
+  const beforeNextHandlerRef = useRef<BeforeNextHandler | null>(null);
+  const setBeforeNext = useCallback<FindOutletContext['setBeforeNext']>((handler) => {
+    beforeNextHandlerRef.current = handler;
+  }, []); // OUTLET에서 해당 함수의 참조를 의존성 배열에서 관리하므로 마운트 이후의 참조값 유지로 최적화
+
+  const basePath = `/find/${lostItemId}`;
+  const goToNextStep = () => {
+    const nextStep = stepFlow[currentStepIndex + 1];
+    if (!nextStep) navigate('/', { replace: true });
+    else navigate(`${basePath}/${nextStep}`);
   };
 
-  const base = `/find/${lostItemId}`;
-  const goNext = () => {
-    const next = flow[currentIndex + 1];
-    if (!next) {
-      navigate('/', { replace: true });
-    } else {
-      navigate(`${base}/${next}`);
-    }
-  };
-
+  const [isClickingNext, setIsClickingNext] = useState(false);
   const handleClickNext = async () => {
-    if (!onNextRef.current) {
-      goNext();
+    const handler = beforeNextHandlerRef.current;
+    if (!handler) {
+      goToNextStep();
       return;
     }
-    const ok = await onNextRef.current();
-    if (ok !== false) goNext();
+    setIsClickingNext(true);
+    try {
+      const ok = await handler();
+      if (ok !== false) goToNextStep();
+    } catch (err) {
+      console.error('beforeNext error:', err);
+    } finally {
+      setIsClickingNext(false);
+    }
   };
 
-  if (loading) {
-    return <div className="mx-auto max-w-3xl p-6 text-sm text-gray-500">불러오는 중…</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
+          <h1 className="text-center text-2xl font-bold text-gray-800 md:text-3xl">분실물 찾기</h1>
+          <div className="mt-6 rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
+            로딩 중…
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-      <ProgressBar steps={steps as unknown as string[]} currentStep={progressCurrent} />
+    <main className="flex items-center justify-center">
+      <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
+        <h1 className="text-center text-2xl font-bold text-gray-800 md:text-3xl">{pageTitle}</h1>
 
-      <div className="mt-6 min-h-[320px]">
-        <Outlet context={{ setNextHandler }} />
-      </div>
+        <div className="mt-3">
+          <ProgressBar steps={stepLabels} currentStep={currentStepNumber} />
+        </div>
 
-      <div className="mt-8">
+        <div className="mt-4 flex-grow overflow-y-auto pr-2 sm:pr-4">
+          <Outlet context={{ setBeforeNext }} />
+        </div>
+
         <button
           onClick={handleClickNext}
-          className="w-full rounded-lg bg-teal-500 py-3 text-base font-bold text-white transition hover:bg-teal-600"
+          disabled={isClickingNext}
+          aria-busy={isClickingNext}
+          className="min-w-[240px] rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
         >
-          다음
+          {nextButtonLabel}
         </button>
       </div>
     </main>
   );
-}
-
-// 자식에서 사용할 훅
-export function useFindOutlet() {
-  return useOutletContext<OutletCtx>();
 }
