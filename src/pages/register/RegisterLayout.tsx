@@ -1,4 +1,3 @@
-// RegisterLayout.tsx
 import { Outlet } from 'react-router-dom';
 import { useRegisterLayout } from '../../hooks/register/useRegisterLayout';
 import ProgressBar from '../../component/common/ProgressBar';
