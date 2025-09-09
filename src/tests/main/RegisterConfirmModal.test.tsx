@@ -3,12 +3,17 @@ import userEvent from '@testing-library/user-event';
 import RegisterConfirmModal from '../../component/main/modal/RegisterConfirmModal';
 import { describe, expect, it } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import {
   AppProvider,
   RegisterConfirmModalContext,
   SchoolAreasContext,
 } from '../../contexts/AppContexts';
+
+const LocationDisplay = () => {
+  const location = useLocation();
+  return <div data-testid="location-display">{location.pathname}</div>;
+};
 
 const renderWithContexts = (isOpen: boolean) => {
   return render(
@@ -37,6 +42,7 @@ const renderWithContexts = (isOpen: boolean) => {
             }}
           >
             <RegisterConfirmModal />
+            <LocationDisplay />
           </SchoolAreasContext.Provider>
         </RegisterConfirmModalContext.Provider>
       </AppProvider>
@@ -46,8 +52,9 @@ const renderWithContexts = (isOpen: boolean) => {
 
 describe('등록 확인 모달', () => {
   it('닫혀 있으면 보이지 않는다', () => {
-    const { container } = renderWithContexts(false);
-    expect(container).toBeEmptyDOMElement();
+    renderWithContexts(false);
+    expect(screen.queryByRole('button', { name: '등록' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
   });
 
   it('열려 있으면 제목과 버튼이 보인다', () => {
@@ -56,13 +63,13 @@ describe('등록 확인 모달', () => {
     expect(screen.getByRole('button', { name: '취소' })).toBeInTheDocument();
   });
 
-  it('버튼 클릭이 동작한다', async () => {
+  it('등록 버튼 클릭 시 등록 페이지로 이동한다', async () => {
     const user = userEvent.setup();
     renderWithContexts(true);
 
     await user.click(screen.getByRole('button', { name: '등록' }));
-    // 간단 확인: 모달 트리거 후에도 컴포넌트가 존재 (내비게이션은 MemoryRouter로 처리)
-    expect(document.body).toBeTruthy();
+    // 등록 버튼 클릭 시 등록 페이지로 이동한다
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/register/1');
 
     // 취소 버튼도 클릭 가능
     await user.click(screen.getByRole('button', { name: '취소' }));
