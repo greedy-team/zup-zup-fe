@@ -1,57 +1,32 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Main from '../../component/main/main/Main';
-import type { LostItem } from '../../component/main/main/list/LostListItem';
-import { describe, expect, it, vi, afterEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import { MemoryRouter } from 'react-router-dom';
+import { AppProvider } from '../../contexts/AppContexts';
 
-vi.mock('../../component/main/main/map', () => ({
+vi.mock('../../component/main/main/Map', () => ({
   default: () => <div data-testid="map" />,
 }));
 
-afterEach(() => cleanup());
+const renderMain = () =>
+  render(
+    <MemoryRouter>
+      <AppProvider>
+        <Main />
+      </AppProvider>
+    </MemoryRouter>,
+  );
 
-const items: LostItem[] = [];
+describe('메인 하단 버튼', () => {
+  it('처음엔 "분실물 추가"가 보이고, 클릭 시 "분실물 조회"로 바뀐다', () => {
+    renderMain();
 
-describe('Main submit button disabled state', () => {
-  it('좌표가 없으면 버튼 비활성화', () => {
-    render(
-      <Main
-        selectedCategory="전체"
-        items={items}
-        selectedLat={null}
-        selectedLng={null}
-        setSelectedLat={() => {}}
-        setSelectedLng={() => {}}
-        setIsRegisterConfirmModalOpen={() => {}}
-        setSelectedArea={() => {}}
-        selectedArea="전체"
-      />,
-    );
+    const button = screen.getByRole('button', { name: '분실물 추가' });
+    expect(button).toBeInTheDocument();
 
-    expect(screen.getAllByRole('button', { name: '분실물 추가' })).toHaveLength(1);
-
-    const btn = screen.getByRole('button', { name: '분실물 추가' });
-    expect(btn).toBeDisabled();
-  });
-
-  it('좌표가 있으면 버튼 활성화', () => {
-    render(
-      <Main
-        selectedCategory="전체"
-        items={items}
-        selectedLat={37.55}
-        selectedLng={127.07}
-        setSelectedLat={() => {}}
-        setSelectedLng={() => {}}
-        setIsRegisterConfirmModalOpen={() => {}}
-        setSelectedArea={() => {}}
-        selectedArea="전체"
-      />,
-    );
-
-    expect(screen.getAllByRole('button', { name: '분실물 추가' })).toHaveLength(1);
-
-    const btn = screen.getByRole('button', { name: '분실물 추가' });
-    expect(btn).toBeEnabled();
+    // register 모드로 변경 시 텍스트가 "분실물 조회"로 바뀌는지 확인
+    button.click();
+    expect(screen.getByRole('button', { name: '분실물 조회' })).toBeInTheDocument();
   });
 });
