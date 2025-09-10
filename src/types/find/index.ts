@@ -37,8 +37,6 @@ export type DepositAreaResponse = {
   depositArea: string;
 };
 
-export type StepKey = 'info' | 'quiz' | 'detail' | 'pledge' | 'deposit';
-
 export type BeforeNextHandler = () => boolean | Promise<boolean>;
 
 export type FindOutletContext = {

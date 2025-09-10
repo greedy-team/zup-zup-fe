@@ -1,4 +1,4 @@
-import type { StepKey } from '../../types/find';
+export type StepKey = 'info' | 'quiz' | 'detail' | 'pledge' | 'deposit';
 
 export const PLEDGE_TEXT = '성숙한 분실물 찾기 문화를 함께 만들어가요!';
 
