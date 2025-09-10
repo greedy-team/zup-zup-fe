@@ -123,7 +123,7 @@ const RegisterDetails = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="detailLocation" className="mb-1 block font-medium text-gray-700">
+            <label htmlFor="foundAreaDetail" className="mb-1 block font-medium text-gray-700">
               상세 위치 (예: 401호, 정문 앞 소파)
             </label>
             <input
