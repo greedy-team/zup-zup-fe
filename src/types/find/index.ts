@@ -37,8 +37,8 @@ export type DepositAreaResponse = {
   depositArea: string;
 };
 
-export type BeforeNextHandler = () => boolean | Promise<boolean>;
+export type NextButtonValidator = () => boolean | Promise<boolean>;
 
 export type FindOutletContext = {
-  setBeforeNext: (handler: BeforeNextHandler | null) => void;
+  setNextButtonValidator: (handler: NextButtonValidator | null) => void;
 };

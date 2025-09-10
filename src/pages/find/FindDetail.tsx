@@ -9,7 +9,7 @@ import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 
 export default function FindDetail() {
   const navigate = useNavigate();
-  const { setBeforeNext } = useFindOutlet();
+  const { setNextButtonValidator } = useFindOutlet();
   const { isAuthenticated, setAuthenticated, setUnauthenticated } = useAuthFlag();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
@@ -19,9 +19,9 @@ export default function FindDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBeforeNext(() => true);
-    return () => setBeforeNext(null);
-  }, [setBeforeNext]);
+    setNextButtonValidator(() => true);
+    return () => setNextButtonValidator(null);
+  }, [setNextButtonValidator]);
 
   useEffect(() => {
     (async () => {

@@ -8,7 +8,7 @@ import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 
 export default function FindPledge() {
   const navigate = useNavigate();
-  const { setBeforeNext } = useFindOutlet();
+  const { setNextButtonValidator } = useFindOutlet();
   const { isAuthenticated, setAuthenticated, setUnauthenticated } = useAuthFlag();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
@@ -17,7 +17,7 @@ export default function FindPledge() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setBeforeNext(async () => {
+    setNextButtonValidator(async () => {
       const value = inputRef.current?.value.trim() || '';
       if (value !== PLEDGE_TEXT) {
         alert('서약 문구를 정확히 입력해주세요.');
@@ -56,8 +56,8 @@ export default function FindPledge() {
         setSubmitting(false);
       }
     });
-    return () => setBeforeNext(null);
-  }, [lostItemId, setBeforeNext]);
+    return () => setNextButtonValidator(null);
+  }, [lostItemId, setNextButtonValidator]);
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">

@@ -8,7 +8,7 @@ import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 
 export default function FindQuiz() {
   const navigate = useNavigate();
-  const { setBeforeNext } = useFindOutlet();
+  const { setNextButtonValidator } = useFindOutlet();
   const { isAuthenticated, setAuthenticated, setUnauthenticated } = useAuthFlag();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
@@ -59,7 +59,7 @@ export default function FindQuiz() {
   }, [lostItemId, isAuthenticated]);
 
   useEffect(() => {
-    setBeforeNext(async () => {
+    setNextButtonValidator(async () => {
       const canSubmit = quiz.length > 0 && quiz.every((q) => answers[q.featureId] != null);
 
       if (!canSubmit) {
@@ -108,8 +108,8 @@ export default function FindQuiz() {
       }
     });
 
-    return () => setBeforeNext(null);
-  }, [quiz, answers, lostItemId, setBeforeNext]);
+    return () => setNextButtonValidator(null);
+  }, [quiz, answers, lostItemId, setNextButtonValidator]);
 
   if (loading)
     return <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">퀴즈 불러오는 중…</div>;

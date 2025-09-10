@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getLostItemBrief } from '../../api/find';
+import type { StepKey } from '../../constants/find';
 import {
   FIND_STEPS,
   NON_VALUABLE_FLOW,
@@ -10,7 +11,7 @@ import {
   NEXT_BUTTON_LABEL,
 } from '../../constants/find';
 import ProgressBar from '../../component/common/ProgressBar';
-import type { StepKey, BeforeNextHandler, FindOutletContext } from '../../types/find';
+import type { NextButtonValidator, FindOutletContext } from '../../types/find';
 
 export default function FindLayout() {
   const { lostItemId: lostItemIdParam } = useParams<{ lostItemId: string }>();
@@ -64,10 +65,13 @@ export default function FindLayout() {
     };
   }, [lostItemId]);
 
-  const beforeNextHandlerRef = useRef<BeforeNextHandler | null>(null);
-  const setBeforeNext = useCallback<FindOutletContext['setBeforeNext']>((handler) => {
-    beforeNextHandlerRef.current = handler;
-  }, []); // OUTLET에서 해당 함수의 참조를 의존성 배열에서 관리하므로 마운트 이후의 참조값 유지로 최적화
+  const nextButtonValidatorRef = useRef<NextButtonValidator | null>(null);
+  const setNextButtonValidator = useCallback<FindOutletContext['setNextButtonValidator']>(
+    (handler) => {
+      nextButtonValidatorRef.current = handler;
+    },
+    [],
+  ); // OUTLET에서 해당 함수의 참조를 의존성 배열에서 관리하므로 마운트 이후의 참조값 유지로 최적화
 
   const basePath = `/find/${lostItemId}`;
   const goToNextStep = () => {
@@ -78,7 +82,7 @@ export default function FindLayout() {
 
   const [isClickingNext, setIsClickingNext] = useState(false);
   const handleClickNext = async () => {
-    const handler = beforeNextHandlerRef.current;
+    const handler = nextButtonValidatorRef.current;
     if (!handler) {
       goToNextStep();
       return;
@@ -117,7 +121,7 @@ export default function FindLayout() {
         </div>
 
         <div className="mt-4 flex-grow overflow-y-auto pr-2 sm:pr-4">
-          <Outlet context={{ setBeforeNext }} />
+          <Outlet context={{ setNextButtonValidator }} />
         </div>
 
         <button

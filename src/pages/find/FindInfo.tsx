@@ -7,7 +7,7 @@ import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 
 export default function FindInfo() {
   const navigate = useNavigate();
-  const { setBeforeNext } = useFindOutlet();
+  const { setNextButtonValidator } = useFindOutlet();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
 
@@ -15,9 +15,9 @@ export default function FindInfo() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBeforeNext(() => true);
-    return () => setBeforeNext(null);
-  }, [setBeforeNext]);
+    setNextButtonValidator(() => true);
+    return () => setNextButtonValidator(null);
+  }, [setNextButtonValidator]);
 
   useEffect(() => {
     (async () => {
