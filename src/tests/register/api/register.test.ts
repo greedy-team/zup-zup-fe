@@ -11,7 +11,6 @@ import type {
   LostItemRegisterRequest,
   SchoolArea,
 } from '../../../types/register';
-import { global } from 'styled-jsx/css';
 
 const BASE_URL = 'https://api.sejong-zupzup.kr/api';
 
