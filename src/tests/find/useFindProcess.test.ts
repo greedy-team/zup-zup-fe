@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { useFindProcess } from '../../hooks/find/useFindProcess';
+import { useFindProcess } from '../../hooks/find/useFindOutlet';
 import * as quizAPI from '../../api/find/quizAPI';
 import type { LostItem } from '../../component/main/main/lostListItem';
 

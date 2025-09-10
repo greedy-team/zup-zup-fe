@@ -11,6 +11,7 @@ export type LostItemBrief = {
 };
 
 export type QuizOption = { id: number; text: string };
+
 export type QuizItem = { featureId: number; question: string; options: QuizOption[] };
 
 export type GetQuizzesResponse = { quizzes: QuizItem[] };
@@ -34,4 +35,10 @@ export type DetailResponse = {
 
 export type DepositAreaResponse = {
   depositArea: string;
+};
+
+export type NextButtonValidator = () => boolean | Promise<boolean>;
+
+export type FindOutletContext = {
+  setNextButtonValidator: (handler: NextButtonValidator | null) => void;
 };

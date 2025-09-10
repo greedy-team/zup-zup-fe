@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import FindLostItemModal from '../../component/find/FindModal';
-import * as useFindProcessHook from '../../hooks/find/useFindProcess';
+import * as useFindProcessHook from '../../hooks/find/useFindOutlet';
 import type { LostItem } from '../../component/main/main/lostListItem';
 
 // useFindProcess 훅을 모의(mock) 처리합니다.
