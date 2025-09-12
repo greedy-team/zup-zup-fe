@@ -1,11 +1,16 @@
 import { useContext, useState } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
-import { SelectedModeContext, TotalCountContext } from '../../../contexts/AppContexts';
+import {
+  SelectedAreaIdContext,
+  SelectedModeContext,
+  TotalCountContext,
+} from '../../../contexts/AppContexts';
 import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
+  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);
   const { totalCount } = useContext(TotalCountContext)!;
 
@@ -14,6 +19,7 @@ const Main = () => {
   const handleRegisterButtonClick = () => {
     setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
     const url = new URLSearchParams();
+    setSelectedAreaId(0);
     navigate({ search: `${url.toString()}` }, { replace: true });
   };
 
