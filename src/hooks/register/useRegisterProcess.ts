@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCategories, fetchCategoryFeatures, postLostItem } from '../../api/register';
 import { fetchSchoolAreas } from '../../api/register';
@@ -11,6 +11,7 @@ import type {
   FeatureSelection,
   ResultModalContent,
 } from '../../types/register';
+import { SelectedModeContext } from '../../contexts/AppContexts';
 
 const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
   foundAreaDetail: '',
@@ -40,6 +41,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
+  const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
   const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
     foundAreaId: validSchoolAreaId,
@@ -112,6 +114,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         onConfirm: () => {
           setResultModalContent(null);
           navigate('/');
+          setSelectedMode('append');
         },
       });
     } catch (error) {
