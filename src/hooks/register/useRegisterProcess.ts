@@ -171,7 +171,5 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     setFormData,
     handleRegister,
     handleFeatureChange,
-    selectedMode,
-    setSelectedMode,
   };
 };
