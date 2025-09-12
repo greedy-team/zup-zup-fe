@@ -48,6 +48,7 @@ const Map = () => {
     const next = new URLSearchParams();
     if (areaId === 0) {
       next.delete('schoolAreaId');
+      setSelectedAreaId(0);
     } else {
       next.set('schoolAreaId', String(areaId));
       setSelectedAreaId(areaId);

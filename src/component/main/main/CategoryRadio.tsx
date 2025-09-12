@@ -21,7 +21,11 @@ const CategoryRadio = () => {
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
     const next = new URLSearchParams();
-    next.set('schoolAreaId', String(selectedAreaId) || '0');
+    if (selectedAreaId === 0) {
+      next.delete('schoolAreaId');
+    } else {
+      next.set('schoolAreaId', String(selectedAreaId));
+    }
     if (id === 0) {
       next.delete('categoryId');
     } else {
