@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchSchoolAreas } from '../../api/register';
 import { useRegisterProcess } from './useRegisterProcess';
 import type { SchoolArea } from '../../types/register';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
+import { SelectedModeContext } from '../../contexts/AppContexts';
 
 export const useRegisterLayout = () => {
   const { schoolAreaId } = useParams<{ schoolAreaId: string }>();
@@ -11,6 +12,7 @@ export const useRegisterLayout = () => {
   const location = useLocation();
 
   const registerProcess = useRegisterProcess(Number(schoolAreaId) || null);
+  const { setSelectedMode } = useContext(SelectedModeContext)!;
 
   const steps = REGISTER_PROCESS_STEPS.INDEXS;
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
@@ -27,7 +29,10 @@ export const useRegisterLayout = () => {
   })();
 
   const goToPrevStep = () => {
-    if (currentStep === 1) navigate('/');
+    if (currentStep === 1) {
+      setSelectedMode('append');
+      navigate('/');
+    }
     if (currentStep === 2) navigate('category');
     if (currentStep === 3) navigate('details');
   };
