@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 concurrency:
-  group: prod-${{ github.ref }}
+  group: prod-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NODE_ENV: production
       CI: true
       VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
       VITE_KAKAO_MAP_API_KEY: ${{ secrets.VITE_KAKAO_MAP_API_KEY }}
@@ -33,8 +32,10 @@ jobs:
           node -v
           npm -v
 
-      - name: Install deps (clean, reproducible)
+      - name: Install deps (include dev)
         run: npm ci
+        env:
+          NODE_ENV: development
 
       - name: Workaround rollup optional dep (Linux)
         if: runner.os == 'Linux'
@@ -54,6 +55,8 @@ jobs:
 
       - name: Build (Vite -> dist/)
         run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
