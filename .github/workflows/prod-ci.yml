@@ -21,6 +21,10 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Workaround rollup optional dep (Linux)
+        if: runner.os == 'Linux'
+        run: npm i -D @rollup/rollup-linux-x64-gnu --no-save
+
       - name: Check (lint+typecheck+test)
         run: |
           if jq -e '.scripts.check' package.json > /dev/null; then
