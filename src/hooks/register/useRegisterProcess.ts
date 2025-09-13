@@ -41,7 +41,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
-  const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
+  const { setSelectedMode } = useContext(SelectedModeContext)!;
   const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
     foundAreaId: validSchoolAreaId,

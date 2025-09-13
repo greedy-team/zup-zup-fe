@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useRegisterLayout } from '../../../hooks/register/useRegisterLayout';
-import * as api from '../../../api/register';
-import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
-import type { SchoolArea } from '../../../types/register';
 
+vi.mock('../../../contexts/AppContexts', () => {
+  const React = require('react');
+  return {
+    SelectedModeContext: React.createContext({
+      selectedMode: 'append',
+      setSelectedMode: vi.fn(),
+    }),
+  };
+});
+
+// 라우터 mock
 const mockNavigate = vi.fn();
 const mockUseLocation = vi.fn();
 vi.mock('react-router-dom', () => ({
@@ -12,6 +19,12 @@ vi.mock('react-router-dom', () => ({
   useParams: () => ({ schoolAreaId: '1' }),
   useLocation: () => mockUseLocation(),
 }));
+
+import { useRegisterLayout } from '../../../hooks/register/useRegisterLayout'; // [변경] 모킹 뒤에 import
+import * as api from '../../../api/register';
+import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
+
+import type { SchoolArea } from '../../../types/register';
 
 vi.mock('../../../api/register');
 vi.mock('../../../hooks/register/useRegisterProcess');

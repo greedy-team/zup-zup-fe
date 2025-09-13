@@ -1,6 +1,18 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+
+vi.mock('../../../contexts/AppContexts', () => {
+  const React = require('react');
+  return {
+    SelectedModeContext: React.createContext({
+      selectedMode: 'append',
+      setSelectedMode: vi.fn(),
+    }),
+  };
+});
+
 import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
+
 import * as api from '../../../api/register';
 import type { Category, Feature, SchoolArea } from '../../../types/register';
 
