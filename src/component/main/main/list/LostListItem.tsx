@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import type {
   ListItemComponentProps,
   StatusBadgeComponentProps,
 } from '../../../../types/main/components';
 import { useNavigate } from 'react-router-dom';
+import { SelectedAreaIdContext } from '../../../../contexts/AppContexts';
 
 // 분실물 등록 시간 포맷팅
 function formatKST(iso: string) {
@@ -36,6 +37,7 @@ export default function LostListItem({ item, className }: ListItemComponentProps
   const [imgError, setImgError] = useState(false);
 
   const navigate = useNavigate();
+  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
 
   return (
     <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
@@ -69,7 +71,10 @@ export default function LostListItem({ item, className }: ListItemComponentProps
 
           <button
             className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50"
-            onClick={() => navigate(`/find/${item.lostItemId}`)}
+            onClick={() => {
+              setSelectedAreaId(0);
+              navigate(`/find/${item.lostItemId}`);
+            }}
           >
             분실물 찾기
           </button>
