@@ -32,18 +32,8 @@ jobs:
           node -v
           npm -v
 
-      - name: Install deps (include dev)
-        run: npm ci
-        env:
-          NODE_ENV: development
-
-      - name: Workaround rollup optional dep (Linux)
-        if: runner.os == 'Linux'
-        run: npm i -D @rollup/rollup-linux-x64-gnu --no-save
-
-      - name: Workaround lightningcss optional dep (Linux)
-        if: runner.os == 'Linux'
-        run: npm i -D lightningcss-linux-x64-gnu --no-save
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
 
       - name: Check (lint+typecheck+test)
         run: |
