@@ -1,8 +1,8 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 
 vi.mock('../../../contexts/AppContexts', () => {
-  const React = require('react');
   return {
     SelectedModeContext: React.createContext({
       selectedMode: 'append',
