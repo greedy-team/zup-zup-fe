@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import InfoIcon from '../common/Icons/InfoIcon';
 import CheckIcon from '../common/Icons/CheckIcon';
 import WrongIcon from '../common/Icons/WrongIcon';
-import type { ResultModalProps } from '../../types/find';
+import type { ResultModalContent } from '../../types/register';
 
 const ICONS = {
   success: { component: <CheckIcon />, bg: 'bg-green-500' },
@@ -10,7 +10,7 @@ const ICONS = {
   info: { component: <InfoIcon />, bg: 'bg-teal-500' },
 };
 
-const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultModalProps) => {
+const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultModalContent) => {
   const { component: Icon, bg: iconBgClass } = ICONS[status];
 
   const buttonRef = useRef<HTMLButtonElement>(null);
