@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "coverage": "vitest run --coverage",
-    "test": "vitest"
+    "test": "vitest",
+    "check": "npm run lint && npm run typecheck && npm run test"
   },
   "dependencies": {
     "react": "^19.1.0",

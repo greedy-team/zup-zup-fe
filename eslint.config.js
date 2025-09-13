@@ -29,7 +29,7 @@ const tsAirbnb = compat.extends('airbnb-typescript').map((cfg) => ({
 }));
 
 export default [
-  { ignores: ['dist', 'node_modules', 'public/mockServiceWorker.js', 'eslint.config.js'] }
+  { ignores: ['dist', 'node_modules', 'public/mockServiceWorker.js', 'eslint.config.js'] },
   {
     plugins: {
       react: reactPlugin,
