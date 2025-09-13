@@ -4,11 +4,17 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: prod-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     env:
+      NODE_ENV: production
+      CI: true
       VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
       VITE_KAKAO_MAP_API_KEY: ${{ secrets.VITE_KAKAO_MAP_API_KEY }}
 
@@ -22,12 +28,21 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install deps
+      - name: Verify Node & npm
+        run: |
+          node -v
+          npm -v
+
+      - name: Install deps (clean, reproducible)
         run: npm ci
 
       - name: Workaround rollup optional dep (Linux)
         if: runner.os == 'Linux'
         run: npm i -D @rollup/rollup-linux-x64-gnu --no-save
+
+      - name: Workaround lightningcss optional dep (Linux)
+        if: runner.os == 'Linux'
+        run: npm i -D lightningcss-linux-x64-gnu --no-save
 
       - name: Check (lint+typecheck+test)
         run: |
