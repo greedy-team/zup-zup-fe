@@ -18,13 +18,16 @@ export default function LostList() {
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col px-4 py-4">
+    <div className="flex min-h-0 flex-1 flex-col px-4 py-4 md:h-[100dvh] md:overflow-hidden">
       <div className="relative hidden md:block">
         <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
         <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+      <div
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 10rem)' }}
+      >
         <ul className="m-0 list-none space-y-3 p-0">
           {items.map((item) => (
             <LostListItem key={item.lostItemId} item={item} />
