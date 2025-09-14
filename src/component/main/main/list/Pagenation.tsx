@@ -41,7 +41,7 @@ const Pagenation = () => {
   }, [page, totalPages, setPage]);
 
   return (
-    <div className="fixed bottom-0 flex justify-center gap-2 rounded-full bg-white/90 px-4 py-2 pb-[env(safe-area-inset-bottom)] backdrop-blur [-webkit-backdrop-filter:blur(8px)]">
+    <div className="fixed bottom-[calc(env(safe-area-inset-bottom))] left-1/2 z-40 flex w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center justify-center gap-2 bg-white px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+1rem)] md:left-[190px] md:w-[calc(380px-2rem)] md:max-w-[calc(380px-2rem)]">
       <button
         className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
         disabled={page <= 1}

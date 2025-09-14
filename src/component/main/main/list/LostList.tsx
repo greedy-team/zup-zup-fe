@@ -18,21 +18,21 @@ export default function LostList() {
   }
 
   return (
-    <div className="overflow-y-auto px-4 py-4">
+    <div className="flex min-h-0 flex-1 flex-col px-4 py-4">
       <div className="relative hidden md:block">
         <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
         <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
       </div>
 
-      <div className="max-h-[61vh] min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 [scrollbar-gutter:stable]">
-        <ul className="m-0 list-none space-y-3 p-0 pb-6">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+        <ul className="m-0 list-none space-y-3 p-0">
           {items.map((item) => (
             <LostListItem key={item.lostItemId} item={item} />
           ))}
         </ul>
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center bg-white">
         <Pagenation />
       </div>
     </div>
