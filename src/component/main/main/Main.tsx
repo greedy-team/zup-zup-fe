@@ -37,7 +37,7 @@ const Main = () => {
           </button>
 
           <div
-            className={`absolute inset-0 z-20 flex transform flex-col bg-white transition-transform duration-300 ease-out md:hidden ${
+            className={`absolute inset-0 z-40 flex transform flex-col bg-white transition-transform duration-300 ease-out md:hidden ${
               isMobileListOpen ? 'translate-y-0' : 'pointer-events-none translate-y-full'
             }`}
           >
