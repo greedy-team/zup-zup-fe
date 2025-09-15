@@ -25,7 +25,7 @@ const RegisterLayout = () => {
       {resultModalContent && <ResultModal {...resultModalContent} />}
 
       <div className="relative flex h-[87dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
-        <h1 className="text-center text-2xl font-bold text-gray-800 md:text-3xl">분실물 등록</h1>
+        <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">분실물 등록</h1>
         <ProgressBar steps={steps} currentStep={currentStep} />
 
         {/* Outlet 영역 */}
@@ -37,7 +37,7 @@ const RegisterLayout = () => {
         <div className="mt-auto flex flex-shrink-0 items-center justify-between border-t pt-4 md:pt-6">
           <button
             onClick={goToPrevStep}
-            className="rounded-lg bg-gray-200 px-8 py-4 text-base font-bold text-gray-700 hover:bg-gray-300 md:text-xl"
+            className="rounded-lg bg-gray-200 px-8 py-4 text-base font-normal text-gray-700 hover:bg-gray-300 md:text-xl"
           >
             {currentStep === 1 ? '취소' : '이전'}
           </button>
@@ -49,7 +49,7 @@ const RegisterLayout = () => {
                 disabled={
                   (currentStep === 1 && !selectedCategory) || (currentStep === 2 && !isStep2Valid)
                 }
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-bold text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-gray-300 md:text-xl"
+                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-gray-300 md:text-xl"
               >
                 다음
               </button>
@@ -57,7 +57,7 @@ const RegisterLayout = () => {
               <button
                 onClick={handleRegister}
                 disabled={isLoading}
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-bold text-white hover:bg-teal-600 disabled:bg-gray-300 md:text-xl"
+                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:bg-teal-600 disabled:bg-gray-300 md:text-xl"
               >
                 {isLoading ? <SpinnerIcon /> : '등록하기'}
               </button>
