@@ -9,7 +9,7 @@ const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({
   children,
 }) => (
   <div className="mb-6">
-    <h3 className="mb-3 text-lg font-bold text-gray-800">{title}</h3>
+    <h3 className="mb-3 text-xl font-medium text-gray-800">{title}</h3>
     <div className="rounded-lg bg-gray-100 p-6">{children}</div>
   </div>
 );
@@ -112,8 +112,8 @@ const RegisterDetails = () => {
       <FormSection title="위치 상세 정보">
         <div className="space-y-4">
           <div>
-            <label className="mb-1 block font-medium text-gray-700">선택된 건물</label>
-            <div className="w-full rounded-md border-gray-200 bg-gray-200 p-2 text-gray-700 shadow-inner">
+            <label className="mb-1 block font-normal text-gray-700">선택된 건물</label>
+            <div className="w-full rounded-md border-gray-200 bg-gray-200 p-2 font-medium text-gray-700 shadow-inner">
               {selectedAreaName || '지도에서 건물을 먼저 선택해주세요.'}
             </div>
           </div>
@@ -160,7 +160,7 @@ const RegisterDetails = () => {
           {formData.images.length < 3 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-lg bg-teal-500 px-6 py-2 font-bold text-white transition hover:cursor-pointer hover:bg-teal-600"
+              className="rounded-lg bg-teal-500 px-6 py-2 font-normal text-white transition hover:cursor-pointer hover:bg-teal-600"
             >
               업로드
             </button>
@@ -176,7 +176,7 @@ const RegisterDetails = () => {
                   />
                   <button
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white transition hover:bg-red-600"
+                    className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-normal text-white transition hover:bg-red-600"
                   >
                     X
                   </button>
