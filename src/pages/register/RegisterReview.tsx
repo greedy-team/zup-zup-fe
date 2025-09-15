@@ -8,7 +8,7 @@ const InfoBox: React.FC<{ title: string; children: React.ReactNode; className?: 
   className,
 }) => (
   <div className={`rounded-lg bg-gray-100 p-4 ${className}`}>
-    <h4 className="mb-2 font-bold text-gray-500">{title}</h4>
+    <h4 className="mb-2 text-xl font-medium text-gray-500">{title}</h4>
     <div className="text-gray-800">{children}</div>
   </div>
 );
@@ -33,12 +33,12 @@ const RegisterReview = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold text-gray-700">입력 정보를 확인해주세요</h2>
+      <h2 className="mb-4 text-xl font-normal text-gray-700">입력 정보를 확인해주세요</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* 왼쪽 */}
         <div className="space-y-3 md:col-span-1">
           <InfoBox title="카테고리">
-            <p className="text-base font-bold">{selectedCategory?.name || '선택되지 않음'}</p>
+            <p className="text-base font-normal">{selectedCategory?.name || '선택되지 않음'}</p>
           </InfoBox>
           <InfoBox title="등록된 사진" className="min-h-[200px]">
             <div className="grid grid-cols-3 gap-2">
@@ -61,13 +61,13 @@ const RegisterReview = () => {
               {formData.featureOptions.map(({ featureId, optionId }) => (
                 <li key={featureId}>
                   <p className="text-gray-500">{questionMap.get(featureId) || '질문'} </p>
-                  <p className="font-bold text-black">{optionsMap.get(optionId) || '답변'}</p>
+                  <p className="font-normal text-black">{optionsMap.get(optionId) || '답변'}</p>
                 </li>
               ))}
             </ul>
           </InfoBox>
           <InfoBox title="보관 장소">
-            <p className="text-base font-bold text-black">{formData.depositArea}</p>
+            <p className="text-base font-normal text-black">{formData.depositArea}</p>
           </InfoBox>
         </div>
 
@@ -75,14 +75,14 @@ const RegisterReview = () => {
         <div className="space-y-3 lg:col-span-1">
           <InfoBox title="위치 정보">
             <p className="mb-2 text-base text-gray-500">
-              건물: <span className="font-bold text-black">{selectedAreaName || '선택 X'}</span>
+              건물: <span className="font-normal text-black">{selectedAreaName || '선택 X'}</span>
             </p>
             <p className="text-base text-gray-500">
-              상세 위치: <span className="font-bold text-black">{formData.foundAreaDetail}</span>
+              상세 위치: <span className="font-normal text-black">{formData.foundAreaDetail}</span>
             </p>
           </InfoBox>
           <InfoBox title="상세 정보">
-            <p className="text-base font-bold whitespace-pre-wrap text-black">
+            <p className="text-base font-normal whitespace-pre-wrap text-black">
               {formData.description || '입력된 내용이 없습니다.'}
             </p>
           </InfoBox>
