@@ -31,7 +31,7 @@ export const useRegisterLayout = () => {
   const goToPrevStep = () => {
     if (currentStep === 1) {
       setSelectedMode('append');
-      navigate('/');
+      navigate('/', { replace: true });
     }
     if (currentStep === 2) navigate('category');
     if (currentStep === 3) navigate('details');
@@ -44,10 +44,13 @@ export const useRegisterLayout = () => {
         return;
       }
 
-      navigate({
-        pathname: 'details',
-        search: `?categoryId=${registerProcess.selectedCategory.id}`,
-      });
+      navigate(
+        {
+          pathname: 'details',
+          search: `?categoryId=${registerProcess.selectedCategory.id}`,
+        },
+        { replace: true },
+      );
     }
     if (currentStep === 2) {
       if (!registerProcess.selectedCategory) {
@@ -55,10 +58,13 @@ export const useRegisterLayout = () => {
         return;
       }
 
-      navigate({
-        pathname: 'review',
-        search: `?categoryId=${registerProcess.selectedCategory.id}`,
-      });
+      navigate(
+        {
+          pathname: 'review',
+          search: `?categoryId=${registerProcess.selectedCategory.id}`,
+        },
+        { replace: true },
+      );
     }
   };
 

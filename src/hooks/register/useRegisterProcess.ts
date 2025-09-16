@@ -130,7 +130,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         buttonText: '홈으로',
         onConfirm: () => {
           setResultModalContent(null);
-          navigate('/');
+          navigate('/', { replace: true });
           setSelectedMode('append');
         },
       });
@@ -142,6 +142,8 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         buttonText: '확인',
         onConfirm: () => {
           setResultModalContent(null);
+          navigate('/', { replace: true });
+          setSelectedMode('append');
         },
       });
     } finally {
