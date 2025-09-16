@@ -100,7 +100,7 @@ export default function FindLayout() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
         <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
           <h1 className="text-center text-2xl font-bold text-gray-800 md:text-3xl">분실물 찾기</h1>
           <div className="mt-6 rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
@@ -112,15 +112,15 @@ export default function FindLayout() {
   }
 
   return (
-    <main className="flex items-center justify-center">
-      <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
+    <main className="flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 pb-10 lg:p-8 lg:pb-12">
         <h1 className="text-center text-2xl font-bold text-gray-800 md:text-3xl">{pageTitle}</h1>
 
         <div className="mt-3">
           <ProgressBar steps={stepLabels} currentStep={currentStepNumber} />
         </div>
 
-        <div className="mt-4 flex-grow overflow-y-auto pr-2 sm:pr-4">
+        <div className="mt-4 flex-grow overflow-y-auto pr-2 pb-3 sm:pr-3 md:pb-4">
           <Outlet context={{ setNextButtonValidator }} />
         </div>
 
