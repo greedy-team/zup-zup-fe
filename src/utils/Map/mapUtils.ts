@@ -1,4 +1,4 @@
-import { getNumberPinImage } from '../../constants/map/numberedPinImage';
+import lostCountCircle from '../../../assets/LostCountCircle.png';
 
 type LatLngLike = { lat: number; lng: number };
 
@@ -6,15 +6,46 @@ export function createNumberedMarker(
   map: kakao.maps.Map,
   pos: LatLngLike,
   count: number,
-): kakao.maps.Marker | null {
-  if (count <= 0) return null; // 개수 0이면 마커 생성 안 함
-  const image = getNumberPinImage(count);
-  const marker = new kakao.maps.Marker({
+): kakao.maps.CustomOverlay | null {
+  if (count <= 0) return null; // 개수 0이면 원 생성 안 함
+
+  const display = count < 100 ? count : '99+';
+  const size = 40;
+
+  const content = document.createElement('div');
+  content.style.width = `${size}px`;
+  content.style.height = `${size}px`;
+  content.style.background = `url(${lostCountCircle}) center/contain no-repeat`;
+  content.style.display = 'flex';
+  content.style.alignItems = 'center';
+  content.style.justifyContent = 'center';
+  content.style.color = '#0f172a';
+  content.style.fontWeight = '700';
+  content.style.fontSize = '13px';
+  content.style.textShadow = '0 1px 1px rgba(255,255,255,0.6)';
+  content.style.textAlign = 'center';
+  content.style.pointerEvents = 'none';
+  content.textContent = display.toString();
+
+  const overlay = new kakao.maps.CustomOverlay({
     map,
     position: new window.kakao.maps.LatLng(pos.lat, pos.lng),
-    image, // 숫자 핀 적용
+    content,
+    xAnchor: 0.5,
+    yAnchor: 1,
     clickable: false,
     zIndex: 1000,
   });
-  return marker;
+
+  //클릭이벤트가 원을 관통하도록 하는 코드
+  requestAnimationFrame(() => {
+    const wrapper = content.parentElement as HTMLElement | null;
+    if (wrapper) {
+      wrapper.style.pointerEvents = 'none';
+      wrapper.style.userSelect = 'none';
+      wrapper.style.touchAction = 'none';
+    }
+  });
+
+  return overlay;
 }

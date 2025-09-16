@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { fetchCategories, fetchCategoryFeatures, postLostItem } from '../../api/register';
 import { fetchSchoolAreas } from '../../api/register';
 import type {
@@ -28,7 +28,19 @@ const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
  */
 export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+
   const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
+
+  // URL이 /details 인지 확인
+  const isDetailsRoute = location.pathname.includes('/details');
+
+  // 쿼리에서 categoryId 읽기 (없거나 NaN이면 null)
+  const categoryIdFromQuery = (() => {
+    const v = Number(searchParams.get('categoryId'));
+    return Number.isFinite(v) ? v : null;
+  })();
 
   // 유효한 schoolAreaId 결정(인자 우선, 없으면 URL 파라미터 사용)
   const validSchoolAreaId = useMemo(() => {
@@ -50,7 +62,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
   // schoolAreaId 변경 시 formData 동기화
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, schoolAreaId: validSchoolAreaId }));
+    setFormData((prev) => ({ ...prev, foundAreaId: validSchoolAreaId || null }));
   }, [validSchoolAreaId]);
 
   // 초기 렌더링 시, 카테고리 목록을 가져오기
@@ -62,19 +74,24 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  // 카테고리가 선택되면 해당 카테고리의 특징을 가져오기
+  // 카테고리 쿼리스트링이 바뀔 때마다 카테고리 특징 fetch
   useEffect(() => {
-    if (selectedCategory) {
-      setIsLoading(true);
-      setFormData((prev) => ({ ...prev, features: [] })); // 선택된 카테고리 변경 시 특징 초기화
-      fetchCategoryFeatures(selectedCategory.id)
-        .then(setCategoryFeatures)
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
-    } else {
-      setCategoryFeatures([]);
-    }
-  }, [selectedCategory]);
+    if (!isDetailsRoute) return;
+    if (!categoryIdFromQuery) return;
+
+    // details 진입 시 사용자가 이전에 고른 특징 초기화
+    setFormData((prev) => ({ ...prev, featureOptions: [] }));
+
+    setIsLoading(true);
+    fetchCategoryFeatures(categoryIdFromQuery)
+      .then(setCategoryFeatures)
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [isDetailsRoute, categoryIdFromQuery]);
 
   // 2단계로 넘어가기 위한 검증 변수
   const isStep2Valid =
@@ -157,7 +174,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         console.error('학교 지역 검증 실패', err);
         navigate('/');
       });
-  }, [validSchoolAreaId]);
+  }, []);
 
   return {
     isLoading,

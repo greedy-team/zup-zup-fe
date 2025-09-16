@@ -27,12 +27,12 @@ const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultMo
         >
           {Icon}
         </div>
-        <h2 className="mt-6 text-2xl font-bold text-gray-800">{title}</h2>
+        <h2 className="mt-6 text-2xl font-medium text-gray-800">{title}</h2>
         <p className="mt-2 text-gray-600">{message}</p>
         <button
           ref={buttonRef}
           onClick={onConfirm}
-          className="mt-8 w-full rounded-lg bg-teal-500 py-3 text-base font-bold text-white transition hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:outline-none"
+          className="mt-8 w-full rounded-lg bg-teal-500 py-3 text-base font-medium text-white transition hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:outline-none"
         >
           {buttonText}
         </button>

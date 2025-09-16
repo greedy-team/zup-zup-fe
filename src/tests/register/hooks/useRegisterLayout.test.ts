@@ -117,22 +117,50 @@ describe('useRegisterLayout 훅 테스트', () => {
   });
 
   it('goToNextStep이 현재 단계에 따라 올바르게 navigate를 호출해야 한다', async () => {
-    // Step 1 -> Step 2
-    mockUseLocation.mockReturnValue({ pathname: '/register/1/category' });
-    const { result: resultFromStep1 } = renderHook(() => useRegisterLayout());
-    await waitFor(() => expect(resultFromStep1.current.schoolAreas).not.toBeNull());
-    act(() => {
-      resultFromStep1.current.goToNextStep();
-    });
-    expect(mockNavigate).toHaveBeenCalledWith('details');
+    window.alert = vi.fn();
 
-    // Step 2 -> Step 3
-    mockUseLocation.mockReturnValue({ pathname: '/register/1/details' });
-    const { result: resultFromStep2 } = renderHook(() => useRegisterLayout());
-    await waitFor(() => expect(resultFromStep2.current.schoolAreas).not.toBeNull());
+    // --- Step 1 -> Step 2 ---
+    mockUseLocation.mockReturnValue({ pathname: '/register/1/category' });
+    (useRegisterProcess as Mock).mockImplementation(() => ({
+      isLoading: false,
+      categories: [],
+      selectedCategory: { id: 42, name: '휴대폰', iconUrl: 'icons.com' },
+    }));
+
+    const { result: r1, unmount: unmount1 } = renderHook(() => useRegisterLayout());
+    await waitFor(() => expect(r1.current.schoolAreas).toEqual(mockSchoolAreas));
+
     act(() => {
-      resultFromStep2.current.goToNextStep();
+      r1.current.goToNextStep();
     });
-    expect(mockNavigate).toHaveBeenCalledWith('review');
+
+    expect(mockNavigate).toHaveBeenCalledWith({
+      pathname: 'details',
+      search: '?categoryId=42',
+    });
+
+    // 다음 케이스를 깔끔하게 위해 정리
+    mockNavigate.mockClear();
+    unmount1();
+
+    // --- Step 2 -> Step 3 ---
+    mockUseLocation.mockReturnValue({ pathname: '/register/1/details' });
+    (useRegisterProcess as Mock).mockImplementation(() => ({
+      isLoading: false,
+      categories: [],
+      selectedCategory: { id: 99, name: '지갑', iconUrl: 'y' },
+    }));
+
+    const { result: r2 } = renderHook(() => useRegisterLayout());
+    await waitFor(() => expect(r2.current.schoolAreas).toEqual(mockSchoolAreas));
+
+    act(() => {
+      r2.current.goToNextStep();
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith({
+      pathname: 'review',
+      search: '?categoryId=99',
+    });
   });
 });
