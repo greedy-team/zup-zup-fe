@@ -214,7 +214,7 @@ describe('useRegisterProcess 훅 테스트', () => {
     });
 
     expect(result.current.resultModalContent).toBeNull();
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
 
   it('handleRegister 호출 시 실패하면 에러 모달을 표시해야 한다', async () => {

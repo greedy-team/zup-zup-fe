@@ -108,12 +108,20 @@ describe('useRegisterLayout 훅 테스트', () => {
 
   it('첫 단계에서 goToPrevStep을 호출하면 홈으로 이동해야 한다', async () => {
     mockUseLocation.mockReturnValue({ pathname: '/register/1/category' });
+
     const { result } = renderHook(() => useRegisterLayout());
-    await waitFor(() => expect(result.current.schoolAreas).not.toBeNull());
+
+    // fetchSchoolAreas가 mockSchoolAreas로 resolve된 걸 확실히 기다림
+    await waitFor(() => {
+      expect(result.current.schoolAreas).toEqual(mockSchoolAreas);
+    });
+
     act(() => {
       result.current.goToPrevStep();
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+
+    // 두 번째 인자 { replace: true }까지 함께 검증
+    expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
 
   it('goToNextStep이 현재 단계에 따라 올바르게 navigate를 호출해야 한다', async () => {
@@ -128,18 +136,21 @@ describe('useRegisterLayout 훅 테스트', () => {
     }));
 
     const { result: r1, unmount: unmount1 } = renderHook(() => useRegisterLayout());
-    await waitFor(() => expect(r1.current.schoolAreas).toEqual(mockSchoolAreas));
+
+    await waitFor(() => {
+      expect(r1.current.schoolAreas).toEqual(mockSchoolAreas);
+    });
 
     act(() => {
       r1.current.goToNextStep();
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith({
-      pathname: 'details',
-      search: '?categoryId=42',
-    });
+    // 두 번째 인자 포함해서 검증
+    expect(mockNavigate).toHaveBeenCalledWith(
+      { pathname: 'details', search: '?categoryId=42' },
+      { replace: true },
+    );
 
-    // 다음 케이스를 깔끔하게 위해 정리
     mockNavigate.mockClear();
     unmount1();
 
@@ -152,15 +163,18 @@ describe('useRegisterLayout 훅 테스트', () => {
     }));
 
     const { result: r2 } = renderHook(() => useRegisterLayout());
-    await waitFor(() => expect(r2.current.schoolAreas).toEqual(mockSchoolAreas));
+
+    await waitFor(() => {
+      expect(r2.current.schoolAreas).toEqual(mockSchoolAreas);
+    });
 
     act(() => {
       r2.current.goToNextStep();
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith({
-      pathname: 'review',
-      search: '?categoryId=99',
-    });
+    expect(mockNavigate).toHaveBeenCalledWith(
+      { pathname: 'review', search: '?categoryId=99' },
+      { replace: true },
+    );
   });
 });
