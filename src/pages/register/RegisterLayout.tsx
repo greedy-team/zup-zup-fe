@@ -21,7 +21,7 @@ const RegisterLayout = () => {
   } = registerLayoutProps;
 
   return (
-    <div className="inset-0 flex items-center justify-center">
+    <div className="inset-0 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {resultModalContent && <ResultModal {...resultModalContent} />}
 
       <div className="relative flex h-[87dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
