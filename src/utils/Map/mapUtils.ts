@@ -36,5 +36,16 @@ export function createNumberedMarker(
     clickable: false,
     zIndex: 1000,
   });
+
+  //클릭이벤트가 원을 관통하도록 하는 코드
+  requestAnimationFrame(() => {
+    const wrapper = content.parentElement as HTMLElement | null;
+    if (wrapper) {
+      wrapper.style.pointerEvents = 'none';
+      wrapper.style.userSelect = 'none';
+      wrapper.style.touchAction = 'none';
+    }
+  });
+
   return overlay;
 }
