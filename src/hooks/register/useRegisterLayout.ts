@@ -38,8 +38,28 @@ export const useRegisterLayout = () => {
   };
 
   const goToNextStep = () => {
-    if (currentStep === 1) navigate('details');
-    if (currentStep === 2) navigate('review');
+    if (currentStep === 1) {
+      if (!registerProcess.selectedCategory) {
+        alert('카테고리를 선택해주세요.');
+        return;
+      }
+
+      navigate({
+        pathname: 'details',
+        search: `?categoryId=${registerProcess.selectedCategory.id}`,
+      });
+    }
+    if (currentStep === 2) {
+      if (!registerProcess.selectedCategory) {
+        alert('카테고리를 선택해주세요.');
+        return;
+      }
+
+      navigate({
+        pathname: 'review',
+        search: `?categoryId=${registerProcess.selectedCategory.id}`,
+      });
+    }
   };
 
   return {
