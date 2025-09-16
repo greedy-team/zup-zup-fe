@@ -23,6 +23,25 @@
 
     <meta name="naver-site-verification" content="6a467708fbca4a38ce51e92fa4fc7600760a7be7" />
     <meta name="google-site-verification" content="n8e_U8h9rcpZEdy6zo8i8WaURAECV2U734g0eO0pS4c" />
+
+    <script type="module">
+      const key = import.meta.env.VITE_KAKAO_MAP_API_KEY;
+      if (!key) {
+        console.error('Kakao Map API 키가 설정되지 않았습니다');
+      } else {
+        const sdk = document.createElement('script');
+        sdk.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&autoload=false&libraries=services,drawing`;
+        sdk.async = true;
+        sdk.defer = true;
+        sdk.onload = () => {
+          window.kakao.maps.load(() => {
+            window.dispatchEvent(new Event('kakao-maps-ready'));
+          });
+        };
+        sdk.onerror = () => console.error('Kakao Maps SDK 로드 실패');
+        document.head.appendChild(sdk);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
