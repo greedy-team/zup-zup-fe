@@ -2,6 +2,8 @@ import { useOutletContext } from 'react-router-dom';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
 import type { RegisterContextType } from '../../types/register';
 import { useRef } from 'react';
+import { MAX_IMAGES } from '../../constants/register';
+import heic2any from 'heic2any';
 
 // 재사용 섹션 컴포넌트
 const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({
@@ -17,6 +19,22 @@ const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({
 const RegisterDetails = () => {
   const { isLoading, formData, setFormData, categoryFeatures, schoolAreas, handleFeatureChange } =
     useOutletContext<RegisterContextType>();
+
+  const isHeic = (file: File) =>
+    file.type === 'image/heic' || file.type === 'image/heif' || /\.hei[cf]$/i.test(file.name);
+
+  const convertHeicToJpeg = async (file: File): Promise<File> => {
+    const heic2any = (await import('heic2any')).default as any;
+
+    const blob: Blob = await heic2any({
+      blob: file,
+      toType: 'image/jpeg',
+      quality: 0.92,
+    });
+
+    const newName = file.name.replace(/\.(heic|heif)$/i, '.jpg');
+    return new File([blob], newName, { type: 'image/jpeg', lastModified: file.lastModified });
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,23 +53,42 @@ const RegisterDetails = () => {
   };
 
   // 이미지 업로드 핸들러
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const files = Array.from(e.target.files);
 
-    if (formData.images.length + files.length > 3) {
+    const incoming = Array.from(e.target.files);
+
+    // 개수 제한 체크
+    if (formData.images.length + incoming.length > MAX_IMAGES) {
       alert('사진은 최대 3장까지 업로드할 수 있습니다.');
+      e.target.value = ''; // 같은 파일 재선택 허용
       return;
     }
 
-    const newImages = [...formData.images, ...files];
-    const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
+    try {
+      // HEIC만 변환, 나머지는 그대로 유지
+      const processed = await Promise.all(
+        incoming.map(async (file) => {
+          try {
+            return isHeic(file) ? await convertHeicToJpeg(file) : file;
+          } catch (err) {
+            console.error('HEIC 변환 실패, 원본 사용:', err);
+            return file; // 폴백: 변환 실패 시 원본 유지(또는 스킵 정책도 가능)
+          }
+        }),
+      );
 
-    setFormData((prev) => ({
-      ...prev,
-      images: newImages,
-      imageOrder: newOrder,
-    }));
+      const newImages = [...formData.images, ...processed];
+      const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
+
+      setFormData((prev) => ({
+        ...prev,
+        images: newImages,
+        imageOrder: newOrder,
+      }));
+    } finally {
+      e.target.value = ''; // 입력 초기화(동일 파일 재업로드 가능)
+    }
   };
 
   // 이미지 삭제 핸들러
