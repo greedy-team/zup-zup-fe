@@ -56,7 +56,7 @@ export default function FindQuiz() {
         setLoading(false);
       }
     })();
-  }, [lostItemId, isAuthenticated]);
+  }, [lostItemId, isAuthenticated, setAuthenticated, setUnauthenticated, navigate]);
 
   useEffect(() => {
     setNextButtonValidator(async () => {
@@ -109,7 +109,16 @@ export default function FindQuiz() {
     });
 
     return () => setNextButtonValidator(null);
-  }, [quiz, answers, lostItemId, setNextButtonValidator]);
+  }, [
+    quiz,
+    answers,
+    lostItemId,
+    setNextButtonValidator,
+    isAuthenticated,
+    setAuthenticated,
+    setUnauthenticated,
+    navigate,
+  ]);
 
   if (loading)
     return <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">퀴즈 불러오는 중…</div>;
