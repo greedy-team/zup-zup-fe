@@ -1,6 +1,28 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import * as api from '../../../api/register';
+import type { Category, Feature, SchoolArea } from '../../../types/register';
+import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
+
+// 라우터 mock 핸들러들
+const mockNavigate = vi.fn();
+const mockUseLocation = vi.fn();
+const mockUseSearchParams = vi.fn();
+
+// 기본값: /register/category, 쿼리 없음
+mockUseLocation.mockReturnValue({ pathname: '/register/category' });
+mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
+
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
+  useParams: () => ({ schoolAreaId: '1' }),
+  useLocation: () => mockUseLocation(),
+  useSearchParams: () => mockUseSearchParams(),
+}));
+
+// API 모듈 모의 설정
+vi.mock('../../../api/register');
 
 vi.mock('../../../contexts/AppContexts', () => {
   return {
@@ -10,21 +32,6 @@ vi.mock('../../../contexts/AppContexts', () => {
     }),
   };
 });
-
-import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
-
-import * as api from '../../../api/register';
-import type { Category, Feature, SchoolArea } from '../../../types/register';
-
-// react-router-dom 모의 설정
-const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
-  useParams: () => ({ schoolAreaId: '1' }),
-}));
-
-// API 모듈 모의 설정
-vi.mock('../../../api/register');
 
 describe('useRegisterProcess 훅 테스트', () => {
   const mockCategories: Category[] = [
@@ -63,7 +70,10 @@ describe('useRegisterProcess 훅 테스트', () => {
   ];
 
   beforeEach(() => {
-    // 각 API 모의 함수 설정
+    // 기본 라우트 상황: category 화면, 쿼리 없음
+    mockUseLocation.mockReturnValue({ pathname: '/register/1/category' });
+    mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
+
     vi.spyOn(api, 'fetchCategories').mockResolvedValue(mockCategories);
     vi.spyOn(api, 'fetchCategoryFeatures').mockResolvedValue(mockFeatures);
     vi.spyOn(api, 'postLostItem').mockResolvedValue({ success: false });
@@ -111,19 +121,20 @@ describe('useRegisterProcess 훅 테스트', () => {
     });
   });
 
-  it('카테고리 선택 시 해당 카테고리의 특징을 fetch해야 한다', async () => {
+  it('details 진입 + categoryId 쿼리가 있으면 해당 카테고리의 특징을 fetch한다', async () => {
+    // 경로를 details로, 쿼리에 categoryId=1 셋업
+    mockUseLocation.mockReturnValue({ pathname: '/register/details' });
+    mockUseSearchParams.mockReturnValue([new URLSearchParams('categoryId=1'), vi.fn()]);
+
     const { result } = renderHook(() => useRegisterProcess());
-    await waitFor(() => expect(result.current.isLoading).toBe(false)); // 초기 로딩 완료 대기
 
-    act(() => {
-      result.current.setSelectedCategory(mockCategories[0]);
-    });
+    // 초기 카테고리 fetch 끝날 때까지 대기
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    expect(result.current.isLoading).toBe(true);
+    // details 진입 이펙트로 특징 fetch가 호출되는지 확인
     await waitFor(() => {
-      expect(api.fetchCategoryFeatures).toHaveBeenCalledWith(mockCategories[0].id);
+      expect(api.fetchCategoryFeatures).toHaveBeenCalledWith(1);
       expect(result.current.categoryFeatures).toEqual(mockFeatures);
-      expect(result.current.isLoading).toBe(false);
     });
   });
 
@@ -143,9 +154,12 @@ describe('useRegisterProcess 훅 테스트', () => {
   });
 
   it('isStep2Valid가 모든 조건 충족 시 true를 반환해야 한다', async () => {
+    mockUseLocation.mockReturnValue({ pathname: '/register/1/details' });
+    mockUseSearchParams.mockReturnValue([new URLSearchParams('categoryId=1'), vi.fn()]);
+
     const { result } = renderHook(() => useRegisterProcess());
-    // 카테고리 선택 및 특징 로드
-    act(() => result.current.setSelectedCategory(mockCategories[0]));
+
+    // 특징 로딩까지 대기
     await waitFor(() => expect(result.current.categoryFeatures).toHaveLength(mockFeatures.length));
 
     expect(result.current.isStep2Valid).toBe(false);
@@ -154,11 +168,12 @@ describe('useRegisterProcess 훅 테스트', () => {
     act(() => {
       result.current.setFormData((prev) => ({
         ...prev,
+        foundAreaId: 1,
         foundAreaDetail: '정문 앞',
         depositArea: '학생회관',
         images: [new File([''], 'test.jpg')],
         imageOrder: [0],
-        featureOptions: [{ featureId: 1, optionId: 1 }], // 모든 특징 선택 완료
+        featureOptions: [{ featureId: 1, optionId: 1 }],
       }));
     });
 
