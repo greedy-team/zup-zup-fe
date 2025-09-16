@@ -63,7 +63,7 @@ export default function FindLayout() {
     return () => {
       alive = false;
     };
-  }, [lostItemId]);
+  }, [lostItemId, navigate]);
 
   const nextButtonValidatorRef = useRef<NextButtonValidator | null>(null);
   const setNextButtonValidator = useCallback<FindOutletContext['setNextButtonValidator']>(

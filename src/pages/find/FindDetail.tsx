@@ -59,7 +59,7 @@ export default function FindDetail() {
         setLoading(false);
       }
     })();
-  }, [lostItemId, setAuthenticated, setUnauthenticated]);
+  }, [lostItemId, isAuthenticated, setAuthenticated, setUnauthenticated, navigate]);
 
   if (loading)
     return <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">불러오는 중…</div>;

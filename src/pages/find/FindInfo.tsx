@@ -43,7 +43,7 @@ export default function FindInfo() {
         setLoading(false);
       }
     })();
-  }, [lostItemId]);
+  }, [lostItemId, navigate]);
 
   if (loading) return <div className="p-4 text-sm text-gray-500">불러오는 중…</div>;
   if (!item)

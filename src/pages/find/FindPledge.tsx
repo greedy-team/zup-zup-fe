@@ -57,7 +57,14 @@ export default function FindPledge() {
       }
     });
     return () => setNextButtonValidator(null);
-  }, [lostItemId, setNextButtonValidator]);
+  }, [
+    lostItemId,
+    setNextButtonValidator,
+    isAuthenticated,
+    setAuthenticated,
+    setUnauthenticated,
+    navigate,
+  ]);
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
