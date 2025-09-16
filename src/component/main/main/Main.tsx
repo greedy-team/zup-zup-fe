@@ -57,7 +57,7 @@ const Main = () => {
           </div>
 
           <button
-            className="absolute right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-30 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+            className="absolute right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-30 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 md:bottom-[calc(9rem+env(safe-area-inset-bottom))]"
             onClick={handleRegisterButtonClick}
           >
             {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
