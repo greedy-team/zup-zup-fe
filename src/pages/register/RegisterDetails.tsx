@@ -79,35 +79,40 @@ const RegisterDetails = () => {
 
   return (
     <div className="space-y-4">
-      <FormSection title="카테고리 특징">
-        <div className="space-y-4">
-          {categoryFeatures.map((feature) => (
-            <div key={feature.id}>
-              <label htmlFor={String(feature.id)} className="mb-1 block font-medium text-gray-700">
-                {feature.quizQuestion}
-              </label>
-              <select
-                id={String(feature.id)}
-                name={String(feature.id)}
-                value={
-                  formData.featureOptions.find((f) => f.featureId === feature.id)?.optionId || ''
-                }
-                onChange={(e) => handleFeatureChange(feature.id, Number(e.target.value))}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-teal-500 focus:ring-teal-500"
-              >
-                <option value="" disabled>
-                  선택해주세요
-                </option>
-                {feature.options.map((opt) => (
-                  <option key={opt.id} value={opt.id}>
-                    {opt.optionValue}
+      {categoryFeatures.length > 0 && (
+        <FormSection title="카테고리 특징">
+          <div className="space-y-4">
+            {categoryFeatures.map((feature) => (
+              <div key={feature.id}>
+                <label
+                  htmlFor={String(feature.id)}
+                  className="mb-1 block font-medium text-gray-700"
+                >
+                  {feature.quizQuestion}
+                </label>
+                <select
+                  id={String(feature.id)}
+                  name={String(feature.id)}
+                  value={
+                    formData.featureOptions.find((f) => f.featureId === feature.id)?.optionId || ''
+                  }
+                  onChange={(e) => handleFeatureChange(feature.id, Number(e.target.value))}
+                  className="w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                >
+                  <option value="" disabled>
+                    선택해주세요
                   </option>
-                ))}
-              </select>
-            </div>
-          ))}
-        </div>
-      </FormSection>
+                  {feature.options.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.optionValue}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        </FormSection>
+      )}
 
       <FormSection title="위치 상세 정보">
         <div className="space-y-4">
@@ -118,7 +123,7 @@ const RegisterDetails = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="detailLocation" className="mb-1 block font-medium text-gray-700">
+            <label htmlFor="foundAreaDetail" className="mb-1 block font-medium text-gray-700">
               상세 위치 (예: 401호, 정문 앞 소파)
             </label>
             <input

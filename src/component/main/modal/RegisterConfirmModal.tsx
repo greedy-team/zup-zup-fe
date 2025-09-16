@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   RegisterConfirmModalContext,
   SchoolAreasContext,
+  SelectedAreaIdContext,
   SelectedModeContext,
 } from '../../../contexts/AppContexts';
 
@@ -14,11 +15,12 @@ const RegisterConfirmModal = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { setSelectedMode } = useContext(SelectedModeContext)!;
-
+  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
   const { schoolAreas } = useContext(SchoolAreasContext)!;
 
   const handleCancel = () => {
+    setSelectedAreaId(0);
     navigate({ search: `?schoolAreaId=${0}` }, { replace: true });
     setSelectedMode('append');
     setIsRegisterConfirmModalOpen(false);
@@ -45,6 +47,7 @@ const RegisterConfirmModal = () => {
           <button
             className="rounded-lg bg-teal-600 px-4 py-2 text-white hover:bg-teal-700"
             onClick={() => {
+              setSelectedAreaId(0);
               setIsRegisterConfirmModalOpen(false);
               navigate(`/register/${selectedAreaId}`);
             }}

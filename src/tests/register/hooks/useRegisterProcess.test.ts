@@ -1,106 +1,241 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import React from 'react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
-import * as api from '../../../api/register';
-import type { Category, Feature } from '../../../types/register';
 
+vi.mock('../../../contexts/AppContexts', () => {
+  return {
+    SelectedModeContext: React.createContext({
+      selectedMode: 'append',
+      setSelectedMode: vi.fn(),
+    }),
+  };
+});
+
+import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
+
+import * as api from '../../../api/register';
+import type { Category, Feature, SchoolArea } from '../../../types/register';
+
+// react-router-dom 모의 설정
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
+  useParams: () => ({ schoolAreaId: '1' }),
+}));
+
+// API 모듈 모의 설정
 vi.mock('../../../api/register');
 
 describe('useRegisterProcess 훅 테스트', () => {
-  const mockOnClose = vi.fn();
-  const mockCategories: Category[] = [{ categoryId: 1, categoryName: 'Phone' }];
+  const mockCategories: Category[] = [
+    {
+      id: 1,
+      name: '휴대폰',
+      iconUrl: 'https://img.icons8.com/?size=100&id=79&format=png&color=000000',
+    },
+  ];
   const mockFeatures: Feature[] = [
-    { featureId: 1, featureText: 'Color?', options: [{ id: 1, text: 'Red' }] },
+    {
+      id: 1,
+      name: '색상',
+      quizQuestion: '다음 중 분실물의 색상으로 가장 적절한 것은 무엇인가요?',
+      options: [
+        { id: 1, optionValue: '빨강' },
+        { id: 2, optionValue: '파랑' },
+      ],
+    },
+  ];
+  const mockSchoolAreas: SchoolArea[] = [
+    {
+      id: 1,
+      areaName: '집현관',
+      areaPolygon: {
+        coordinates: [
+          { lat: 37.549313, lng: 127.0741179 },
+          { lat: 37.5493215, lng: 127.0733401 },
+          { lat: 37.5484602, lng: 127.0732891 },
+          { lat: 37.548439, lng: 127.0740777 },
+          { lat: 37.549313, lng: 127.0741179 },
+        ],
+      },
+      marker: { lat: 37.5490786, lng: 127.0735303 },
+    },
   ];
 
   beforeEach(() => {
+    // 각 API 모의 함수 설정
     vi.spyOn(api, 'fetchCategories').mockResolvedValue(mockCategories);
     vi.spyOn(api, 'fetchCategoryFeatures').mockResolvedValue(mockFeatures);
-    vi.spyOn(api, 'postLostItem').mockResolvedValue({ success: true });
-    mockOnClose.mockClear();
+    vi.spyOn(api, 'postLostItem').mockResolvedValue({ success: false });
+    vi.spyOn(api, 'fetchSchoolAreas').mockResolvedValue(mockSchoolAreas);
   });
 
-  it('초기 상태 및 카테고리 fetch 확인', async () => {
-    const { result } = renderHook(() => useRegisterProcess(mockOnClose, 1));
-    expect(result.current.currentStep).toBe(1);
+  afterEach(() => {
+    vi.clearAllMocks(); // 각 테스트 후 모든 모의 초기화
+  });
+
+  it('초기 렌더링 시 카테고리와 학교 구역을 fetch해야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
+
     expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
+      expect(api.fetchCategories).toHaveBeenCalledTimes(1);
+      expect(api.fetchSchoolAreas).toHaveBeenCalledTimes(1);
       expect(result.current.categories).toEqual(mockCategories);
       expect(result.current.isLoading).toBe(false);
     });
   });
 
-  it('다음 및 이전 단계로 이동', () => {
-    const { result } = renderHook(() => useRegisterProcess(mockOnClose, 1));
-    act(() => result.current.goToNextStep());
-    expect(result.current.currentStep).toBe(2);
-    act(() => result.current.goToPrevStep());
-    expect(result.current.currentStep).toBe(1);
-  });
-
-  it('카테고리 선택 시 feature fetch', async () => {
-    const { result } = renderHook(() => useRegisterProcess(mockOnClose, 1));
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-
-    act(() => {
-      result.current.setSelectedCategory(mockCategories[0]);
-    });
+  it('유효하지 않은 schoolAreaId일 경우 홈으로 리다이렉트해야 한다', async () => {
+    vi.spyOn(api, 'fetchSchoolAreas').mockResolvedValue([
+      {
+        id: 3,
+        areaName: '모짜르트홀',
+        areaPolygon: {
+          coordinates: [
+            { lat: 37.5484411, lng: 127.0739704 },
+            { lat: 37.5481136, lng: 127.073949 },
+            { lat: 37.5481072, lng: 127.0741796 },
+            { lat: 37.5484351, lng: 127.074193 },
+            { lat: 37.5484411, lng: 127.0739704 },
+          ],
+        },
+        marker: { lat: 37.548313, lng: 127.0740775 },
+      },
+    ]);
+    renderHook(() => useRegisterProcess());
 
     await waitFor(() => {
-      expect(api.fetchCategoryFeatures).toHaveBeenCalledWith(mockCategories[0].categoryId);
-      expect(result.current.categoryFeatures).toEqual(mockFeatures);
+      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
   });
 
-  it('handleFeatureChange가 form state를 업데이트해야 함', async () => {
-    const { result } = renderHook(() => useRegisterProcess(mockOnClose, 1));
-    act(() => {
-      result.current.handleFeatureChange(1, 101);
-    });
-    expect(result.current.formData.features).toEqual([{ featureId: 1, optionId: 101 }]);
+  it('카테고리 선택 시 해당 카테고리의 특징을 fetch해야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
+    await waitFor(() => expect(result.current.isLoading).toBe(false)); // 초기 로딩 완료 대기
 
-    act(() => {
-      result.current.handleFeatureChange(1, 102); // 같은 featureId로 다시 호출
-    });
-    expect(result.current.formData.features).toEqual([{ featureId: 1, optionId: 102 }]);
-  });
-
-  it('최종 등록 성공 처리', async () => {
-    const { result } = renderHook(() => useRegisterProcess(mockOnClose, 1));
-
-    // 3단계로 이동
-    act(() => {
-      result.current.goToNextStep();
-      result.current.goToNextStep();
-    });
-
-    // 카테고리 설정
     act(() => {
       result.current.setSelectedCategory(mockCategories[0]);
     });
 
-    // setSelectedCategory가 유발하는 비동기 작업(feature fetch)이 끝나기를 기다림
+    expect(result.current.isLoading).toBe(true);
+    await waitFor(() => {
+      expect(api.fetchCategoryFeatures).toHaveBeenCalledWith(mockCategories[0].id);
+      expect(result.current.categoryFeatures).toEqual(mockFeatures);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  it('handleFeatureChange가 formData의 featureOptions를 올바르게 업데이트해야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
+    await waitFor(() => expect(result.current.isLoading).toBe(false)); // 초기 로딩 완료 대기
+
+    act(() => {
+      result.current.handleFeatureChange(1, 1); // featureId: 1, optionId: 1
+    });
+    expect(result.current.formData.featureOptions).toEqual([{ featureId: 1, optionId: 1 }]);
+
+    act(() => {
+      result.current.handleFeatureChange(1, 2); // 같은 featureId, 다른 optionId
+    });
+    expect(result.current.formData.featureOptions).toEqual([{ featureId: 1, optionId: 2 }]);
+  });
+
+  it('isStep2Valid가 모든 조건 충족 시 true를 반환해야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
+    // 카테고리 선택 및 특징 로드
+    act(() => result.current.setSelectedCategory(mockCategories[0]));
+    await waitFor(() => expect(result.current.categoryFeatures).toHaveLength(mockFeatures.length));
+
+    expect(result.current.isStep2Valid).toBe(false);
+
+    // 폼 데이터 채우기
+    act(() => {
+      result.current.setFormData((prev) => ({
+        ...prev,
+        foundAreaDetail: '정문 앞',
+        depositArea: '학생회관',
+        images: [new File([''], 'test.jpg')],
+        imageOrder: [0],
+        featureOptions: [{ featureId: 1, optionId: 1 }], // 모든 특징 선택 완료
+      }));
+    });
+
+    expect(result.current.isStep2Valid).toBe(true);
+  });
+
+  it('handleRegister 호출 시 성공적으로 등록하고 성공 모달을 표시해야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    // 이제 handleRegister 호출
+    // 등록에 필요한 상태 설정
+    act(() => {
+      result.current.setSelectedCategory(mockCategories[0]);
+      result.current.setFormData({
+        foundAreaId: 1,
+        foundAreaDetail: '정문 앞',
+        depositArea: '학생회관',
+        featureOptions: [{ featureId: 1, optionId: 1 }],
+        description: '테스트 설명',
+        images: [new File([''], 'test.jpg')],
+        imageOrder: [0],
+      });
+    });
+
     await act(async () => {
       await result.current.handleRegister();
     });
 
-    // resultModalContent가 생성될 때까지 대기
-    await waitFor(() => expect(result.current.resultModalContent).not.toBeNull());
+    await waitFor(() => {
+      expect(api.postLostItem).toHaveBeenCalled();
+      expect(result.current.resultModalContent).not.toBeNull();
+      expect(result.current.resultModalContent?.status).toBe('success');
+    });
 
-    // 모달 내용 검증
-    expect(result.current.resultModalContent?.status).toBe('success');
-
-    // 모달의 확인 버튼 클릭 시뮬레이션
+    // 성공 모달의 확인 버튼 클릭 시뮬레이션
     act(() => {
       result.current.resultModalContent?.onConfirm();
     });
 
-    // 모달이 닫히고 (content가 null로) onClose가 호출되었는지 확인
     expect(result.current.resultModalContent).toBeNull();
-    expect(mockOnClose).toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/');
+  });
+
+  it('handleRegister 호출 시 실패하면 에러 모달을 표시해야 한다', async () => {
+    const errorMessage = '등록에 실패했습니다.';
+    vi.spyOn(api, 'postLostItem').mockRejectedValue(new Error(errorMessage));
+    const { result } = renderHook(() => useRegisterProcess());
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    act(() => {
+      result.current.setSelectedCategory(mockCategories[0]);
+      result.current.setFormData({
+        foundAreaId: 1,
+        foundAreaDetail: '정문 앞',
+        depositArea: '학생회관',
+        featureOptions: [{ featureId: 1, optionId: 1 }],
+        description: '테스트 설명',
+        images: [new File([''], 'test.jpg')],
+        imageOrder: [0],
+      });
+    });
+
+    await act(async () => {
+      await result.current.handleRegister();
+    });
+
+    await waitFor(() => {
+      expect(result.current.resultModalContent).not.toBeNull();
+      expect(result.current.resultModalContent?.status).toBe('error');
+      expect(result.current.resultModalContent?.message).toBe(errorMessage);
+    });
+
+    // 에러 모달의 확인 버튼 클릭 시뮬레이션
+    act(() => {
+      result.current.resultModalContent?.onConfirm();
+    });
+
+    expect(result.current.resultModalContent).toBeNull();
   });
 });
