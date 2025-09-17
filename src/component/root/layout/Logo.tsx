@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import ZupzupDetailLogo from '../../../../assets/logo5.png';
-import ZupzupLiteLogo from '../../../../assets/logo7.png';
+import ZupzupLiteLogo from '../../../../assets/zupzupLiteLogo1.jpg';
+import ZupzupDetailLogo from '../../../../assets/zupzupDetailLogo1.jpg';
 
 const Logo = () => {
   return (

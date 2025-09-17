@@ -22,8 +22,8 @@ const Header = () => {
           <span className="block text-teal-600">줍줍!!</span>
         </p>
 
-        {/* 로그인 버튼의 위치를 오른쪽 위에 고정 */}
-        <div className="absolute top-2 right-4">
+        {/* 로그인 버튼의 위치를 오른쪽 위에 고정 작은 화면에서는 오른쪽 중앙에 고정*/}
+        <div className="absolute top-1/2 right-4 -translate-y-1/2 sm:top-2 sm:translate-y-0">
           <Authentication />
         </div>
       </div>
