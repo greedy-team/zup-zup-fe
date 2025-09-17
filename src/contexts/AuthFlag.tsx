@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useCallback, useState } from 'react';
 
 type AuthContextValue = {
   isAuthenticated: boolean; // 현재 탭의 UI 구성을 위한 로그인 상태 관리 프론트엔드에서는 확실한 로그인 여부를 확인이 불가하므로 해당 값은 UI적 용도임
@@ -52,22 +52,20 @@ export function AuthFlagProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('storage', handleStorage); // 언마운트시 이벤트 리스너를 해제하기 위해서
   }, []);
 
-  const value = useMemo<AuthContextValue>(
-    () => ({
-      isAuthenticated,
-      setAuthenticated: () => {
-        setIsAuthenticated(true);
-        writeAuthFlag(true);
-      },
-      setUnauthenticated: () => {
-        setIsAuthenticated(false);
-        writeAuthFlag(false);
-      },
-    }),
-    [isAuthenticated],
-  );
+  const setAuthenticated = useCallback(() => {
+    setIsAuthenticated(true);
+    writeAuthFlag(true);
+  }, []);
+  const setUnauthenticated = useCallback(() => {
+    setIsAuthenticated(false);
+    writeAuthFlag(false);
+  }, []);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, setAuthenticated, setUnauthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuthFlag() {
