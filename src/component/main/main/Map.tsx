@@ -115,7 +115,7 @@ const Map = () => {
       )}
 
       {hoverArea && (
-        <div className="absolute bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-3 z-10 hidden rounded-md bg-white/90 px-6 py-2 text-base shadow md:bottom-[calc(9rem+env(safe-area-inset-bottom))] md:block">
+        <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-100 z-10 hidden rounded-md bg-white/90 px-6 py-2 text-base shadow md:block">
           {hoverArea?.areaName}
         </div>
       )}
