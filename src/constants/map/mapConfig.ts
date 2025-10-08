@@ -1,7 +1,7 @@
 export const MAP_DEFAULT_CENTER = { lat: 37.550701948532236, lng: 127.07428227734258 };
 export const MAP_LEVEL = 2;
 export const MAP_MIN_LEVEL = 1;
-export const MAP_MAX_LEVEL = 2;
+export const MAP_MAX_LEVEL = 3;
 
 export const ALLOWED_BOUNDARY = {
   sw: { lat: 37.545, lng: 127.0655 },
