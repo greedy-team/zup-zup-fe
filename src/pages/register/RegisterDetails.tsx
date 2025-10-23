@@ -10,10 +10,7 @@ const RegisterDetails = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 텍스트 입력 필드 변경 핸들러
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
