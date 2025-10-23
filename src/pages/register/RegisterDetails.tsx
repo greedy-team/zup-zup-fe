@@ -1,18 +1,8 @@
+import { useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
+import FormSection from '../../component/register/FormSection';
 import type { RegisterContextType } from '../../types/register';
-import { useRef } from 'react';
-
-// 재사용 섹션 컴포넌트
-const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({
-  title,
-  children,
-}) => (
-  <div className="mb-6">
-    <h3 className="mb-3 text-xl font-medium text-gray-800">{title}</h3>
-    <div className="rounded-lg bg-gray-100 p-6">{children}</div>
-  </div>
-);
 
 const RegisterDetails = () => {
   const { isLoading, formData, setFormData, categoryFeatures, schoolAreas, handleFeatureChange } =
