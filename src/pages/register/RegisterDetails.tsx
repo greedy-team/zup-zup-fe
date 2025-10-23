@@ -18,13 +18,10 @@ const RegisterDetails = () => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === 'foundAreaDetail' || name === 'depositArea'
-          ? value.replace(/^\s+/, '') // 앞 공백 제거
-          : value,
+        name === 'foundAreaDetail' || name === 'depositArea' ? value.replace(/^\s+/, '') : value,
     }));
   };
 
-  // 이미지 업로드 핸들러
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -44,7 +41,6 @@ const RegisterDetails = () => {
     }));
   };
 
-  // 이미지 삭제 핸들러
   const handleRemoveImage = (indexToRemove: number) => {
     const newImages = formData.images.filter((_, index) => index !== indexToRemove);
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
