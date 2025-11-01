@@ -29,7 +29,7 @@ const Main = () => {
         <aside className="relative hidden h-full border-r md:block">
           <LostList />
 
-          {selectedMode === 'register' && <div className="absolute inset-0 z-10 bg-gray-500/30" />}
+          {selectedMode === 'register' && <div className="absolute inset-0 z-70 bg-gray-500/30" />}
         </aside>
         <section className="relative h-full min-h-0 min-w-0">
           <Map />
