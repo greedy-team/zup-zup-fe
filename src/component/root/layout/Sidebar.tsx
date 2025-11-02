@@ -2,7 +2,7 @@ import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext } from 'react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
 import ProfileIcon from '../../../../assets/profile.png';
@@ -13,13 +13,17 @@ const Sidebar = () => {
   const { isAuthenticated } = useAuthFlag();
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isOnMain = pathname === '/';
   const handleRegisterButtonClick = () => {
+    if (!isOnMain) return;
     setSelectedMode('register');
     const url = new URLSearchParams();
     setSelectedAreaId(0);
     navigate({ search: `${url.toString()}` }, { replace: true });
   };
   const handleFindButtonClick = () => {
+    if (!isOnMain) return;
     setSelectedMode('find');
     const url = new URLSearchParams();
     setSelectedAreaId(0);
@@ -34,7 +38,7 @@ const Sidebar = () => {
         <div className="flex flex-shrink-0 flex-col items-center justify-center gap-0 px-0">
           <button
             onClick={handleFindButtonClick}
-            className={`hover:gray-100 group flex aspect-square w-full flex-col items-center justify-center ${selectedMode === 'find' ? 'bg-teal-700' : 'bg-teal-50'} `}
+            className={`hover:gray-100 group flex aspect-square w-full cursor-pointer flex-col items-center justify-center ${selectedMode === 'find' ? 'bg-teal-700' : 'bg-teal-50'} `}
           >
             <FindIcon
               className={`h-8 w-8 ${selectedMode === 'find' ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
@@ -47,7 +51,7 @@ const Sidebar = () => {
           </button>
           <button
             onClick={handleRegisterButtonClick}
-            className={`hover:gray-100 group flex aspect-square w-full flex-col items-center justify-center ${selectedMode === 'register' ? 'bg-teal-700' : 'bg-teal-50'} `}
+            className={`hover:gray-100 group flex aspect-square w-full cursor-pointer flex-col items-center justify-center ${selectedMode === 'register' ? 'bg-teal-700' : 'bg-teal-50'} `}
           >
             <PlusIcon
               className={`h-8 w-8 ${selectedMode === 'register' ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}

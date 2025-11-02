@@ -28,11 +28,11 @@ export default function Authentication() {
     <div className="flex flex-shrink-0 flex-col items-center justify-center">
       {!isAuthenticated ? (
         <button type="button" onClick={goLoginPage}>
-          <img src={LoginIcon} alt="login" className="h-8 w-8" />
+          <img src={LoginIcon} alt="login" className="h-8 w-8 cursor-pointer" />
         </button>
       ) : (
         <button type="button" onClick={handleLogout}>
-          <img src={LogoutIcon} alt="logout" className="h-8 w-8" />
+          <img src={LogoutIcon} alt="logout" className="h-8 w-8 cursor-pointer" />
         </button>
       )}
     </div>
