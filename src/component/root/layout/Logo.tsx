@@ -3,17 +3,18 @@ import ZupzupLiteJpg from '../../../../assets/zupzupLiteLogo1.jpg';
 import ZupzupDetailJpg from '../../../../assets/zupzupDetailLogo1.jpg';
 import ZupzupLiteWebp from '../../../../assets/lite.webp';
 import ZupzupDetailWebp from '../../../../assets/detail.webp';
+import tmpLogo from '../../../../assets/tmpLogo.png';
 
 const Logo = () => {
   return (
     <Link to="/" className="flex flex-shrink-0 items-center gap-3" aria-label="메인 페이지로 이동">
       <picture>
         {/* 작은 화면: WebP → JPG */}
-        <source media="(max-width: 480px)" type="image/webp" srcSet={ZupzupLiteWebp} />
-        <source media="(max-width: 480px)" srcSet={ZupzupLiteJpg} />
+        <source media="(max-width: 480px)" type="image/webp" srcSet={tmpLogo} />
+        <source media="(max-width: 480px)" srcSet={tmpLogo} />
 
         {/* 기본(큰 화면): WebP → JPG */}
-        <source type="image/webp" srcSet={ZupzupDetailWebp} />
+        <source type="image/webp" srcSet={tmpLogo} />
 
         {/* 최종 폴백 */}
         <img
