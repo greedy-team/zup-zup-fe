@@ -5,9 +5,12 @@ import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/Ap
 import { useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
+import ProfileIcon from '../../../../assets/profile.png';
+import { useAuthFlag } from '../../../contexts/AuthFlag';
 
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
+  const { isAuthenticated } = useAuthFlag();
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const navigate = useNavigate();
   const handleRegisterButtonClick = () => {
@@ -56,7 +59,13 @@ const Sidebar = () => {
             </span>
           </button>
         </div>
-        <div className="mt-auto">
+
+        <div className="mt-auto mb-4">
+          {isAuthenticated && (
+            <div className="mt-auto mb-4 flex flex-shrink-0 flex-col items-center justify-center">
+              <img src={ProfileIcon} alt="profile" className="h-8 w-8" />
+            </div>
+          )}
           <Authentication />
         </div>
       </div>
