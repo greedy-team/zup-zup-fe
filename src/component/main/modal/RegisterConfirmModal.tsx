@@ -22,7 +22,7 @@ const RegisterConfirmModal = () => {
   const handleCancel = () => {
     setSelectedAreaId(0);
     navigate({ search: `?schoolAreaId=${0}` }, { replace: true });
-    setSelectedMode('append');
+    setSelectedMode('find');
     setIsRegisterConfirmModalOpen(false);
   };
 

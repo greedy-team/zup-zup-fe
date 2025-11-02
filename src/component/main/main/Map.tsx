@@ -95,7 +95,7 @@ const Map = () => {
     <div className="min-w-0">
       <CategoryRadio />
 
-      {selectedMode === 'append' && selectedArea && (
+      {selectedMode === 'find' && selectedArea && (
         <div className="absolute top-30 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
           {selectedArea?.areaName}
         </div>

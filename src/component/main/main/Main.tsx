@@ -1,32 +1,17 @@
 import { useContext, useState } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
-import {
-  SelectedAreaIdContext,
-  SelectedModeContext,
-  TotalCountContext,
-} from '../../../contexts/AppContexts';
-import { useNavigate } from 'react-router-dom';
+import { SelectedModeContext, TotalCountContext } from '../../../contexts/AppContexts';
 
 const Main = () => {
-  const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
-  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
+  const { selectedMode } = useContext(SelectedModeContext)!;
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);
   const { totalCount } = useContext(TotalCountContext)!;
-
-  const navigate = useNavigate();
-
-  const handleRegisterButtonClick = () => {
-    setSelectedMode(selectedMode === 'register' ? 'append' : 'register');
-    const url = new URLSearchParams();
-    setSelectedAreaId(0);
-    navigate({ search: `${url.toString()}` }, { replace: true });
-  };
 
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 min-w-0 grid-cols-1 md:grid-cols-[380px_1fr]">
-        <aside className="relative hidden h-full border-r md:block">
+        <aside className="relative hidden h-full border-r border-gray-300 md:block">
           <LostList />
 
           {selectedMode === 'register' && <div className="absolute inset-0 z-70 bg-gray-500/30" />}
@@ -61,13 +46,6 @@ const Main = () => {
               <LostList />
             </div>
           </div>
-
-          <button
-            className="fixed right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-30 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 ]"
-            onClick={handleRegisterButtonClick}
-          >
-            {selectedMode === 'register' ? '분실물 조회' : '분실물 추가'}
-          </button>
         </section>
       </div>
     </main>
