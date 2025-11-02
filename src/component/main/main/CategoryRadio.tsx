@@ -42,10 +42,10 @@ const CategoryRadio = () => {
 
   return (
     <>
-      <div className="scrollbar-hide relative z-10 w-full touch-pan-x overflow-x-auto px-4 py-3 [-webkit-overflow-scrolling:touch]">
+      <div className="scrollbar-hide relative z-10 mt-2 w-full touch-pan-x overflow-x-auto px-4 py-3 [-webkit-overflow-scrolling:touch] md:overflow-visible">
         <fieldset className="m-0 border-0 p-0">
           <legend className="sr-only">카테고리 선택</legend>
-          <div className="inline-flex min-w-max gap-2 whitespace-nowrap">
+          <div className="inline-flex min-w-max gap-2 whitespace-nowrap md:min-w-0 md:flex-wrap md:gap-x-2 md:gap-y-7 md:whitespace-normal">
             {categoryList.map((category) => {
               const id = category.categoryId;
               const name = category.categoryName;
@@ -62,7 +62,7 @@ const CategoryRadio = () => {
                   />
                   <label
                     htmlFor={name}
-                    className="cursor-pointer rounded-full border border-gray-400/20 bg-white px-4.5 py-2 text-sm peer-checked:border-gray-400/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
+                    className="cursor-pointer rounded-full border border-gray-400/20 bg-white px-6 py-3 text-base peer-checked:border-gray-400/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
                   >
                     {name}
                   </label>
