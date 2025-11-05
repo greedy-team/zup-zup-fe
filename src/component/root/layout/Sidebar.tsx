@@ -15,16 +15,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const isOnMain = pathname === '/';
-  const handleRegisterButtonClick = () => {
+  const handleChangeMode = (mode: 'register' | 'find') => {
     if (!isOnMain) return;
-    setSelectedMode('register');
-    const url = new URLSearchParams();
-    setSelectedAreaId(0);
-    navigate({ search: `${url.toString()}` }, { replace: true });
-  };
-  const handleFindButtonClick = () => {
-    if (!isOnMain) return;
-    setSelectedMode('find');
+    setSelectedMode(mode);
     const url = new URLSearchParams();
     setSelectedAreaId(0);
     navigate({ search: `${url.toString()}` }, { replace: true });
@@ -37,7 +30,7 @@ const Sidebar = () => {
         </div>
         <div className="flex flex-shrink-0 flex-col items-center justify-center gap-0 px-0">
           <button
-            onClick={handleFindButtonClick}
+            onClick={() => handleChangeMode('find')}
             className={`hover:gray-100 group flex aspect-square w-full cursor-pointer flex-col items-center justify-center ${selectedMode === 'find' ? 'bg-teal-700' : 'bg-teal-50'} `}
           >
             <FindIcon
@@ -50,7 +43,7 @@ const Sidebar = () => {
             </span>
           </button>
           <button
-            onClick={handleRegisterButtonClick}
+            onClick={() => handleChangeMode('register')}
             className={`hover:gray-100 group flex aspect-square w-full cursor-pointer flex-col items-center justify-center ${selectedMode === 'register' ? 'bg-teal-700' : 'bg-teal-50'} `}
           >
             <PlusIcon
