@@ -12,8 +12,19 @@ const ImageLightbox = ({ open, images, onClose }: ImageLightboxProps) => {
     <Lightbox
       open={open}
       close={onClose}
-      slides={images.map((src: string) => ({ src }))}
-      controller={{ closeOnBackdropClick: true }} // 배경 클릭 시 닫기
+      slides={images.map((src) => ({ src }))}
+      styles={{
+        root: {
+          backgroundColor: 'rgba(15, 23, 42, 0.45)',
+        },
+        container: {
+          maxWidth: '60vw',
+          maxHeight: '70vh',
+          margin: 'auto',
+          borderRadius: '16px',
+          overflow: 'hidden',
+        },
+      }}
     />
   );
 };
