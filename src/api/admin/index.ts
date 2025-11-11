@@ -13,7 +13,7 @@ export async function fetchPendingLostItems(params: {
   queryParams.set('page', String(page));
   queryParams.set('limit', String(PENDING_LOST_ITEMS_LIMIT));
 
-  const res = await fetch(`${BASE_URL}/api/admin/lost-items/pending?${queryParams}`, {
+  const res = await fetch(`${BASE_URL}/admin/lost-items/pending?${queryParams}`, {
     method: 'GET',
     credentials: 'include',
   });
@@ -36,7 +36,7 @@ export async function fetchPendingLostItems(params: {
 export async function approveLostItems(
   pendingLostItemIds: number[],
 ): Promise<AdminLostItemActionResponse> {
-  const res = await fetch(`${BASE_URL}/api/admin/lost-items/approve`, {
+  const res = await fetch(`${BASE_URL}/admin/lost-items/approve`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -63,7 +63,7 @@ export async function approveLostItems(
 export async function rejectLostItems(
   pendingLostItemIds: number[],
 ): Promise<AdminLostItemActionResponse> {
-  const res = await fetch(`${BASE_URL}/api/admin/lost-items/reject`, {
+  const res = await fetch(`${BASE_URL}/admin/lost-items/reject`, {
     method: 'POST',
     credentials: 'include',
     headers: {
