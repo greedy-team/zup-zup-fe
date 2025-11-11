@@ -42,7 +42,7 @@ export async function approveLostItems(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(pendingLostItemIds),
+    body: JSON.stringify({ lostItemIds: pendingLostItemIds }),
   });
 
   const data = await res.json();
@@ -69,7 +69,7 @@ export async function rejectLostItems(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(pendingLostItemIds),
+    body: JSON.stringify({ lostItemIds: pendingLostItemIds }),
   });
 
   const data = await res.json();
