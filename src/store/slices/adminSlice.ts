@@ -5,7 +5,7 @@ export type AdminPageState = {
 
   actions: {
     toggleSelectedLostItemId: (id: number) => void;
-    setSelectedLostItemIds: (id: number[]) => void;
+    setSelectedLostItemIds: (ids: number[]) => void;
     clearSelectedLostItemIds: () => void;
   };
 };
