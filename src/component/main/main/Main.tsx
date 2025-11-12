@@ -16,10 +16,12 @@ const Main = () => {
 
           {selectedMode === 'register' && <div className="absolute inset-0 z-70 bg-gray-500/30" />}
         </aside>
-        <section className="relative h-full min-h-0 min-w-0">
-          <Map />
+        <section className="relative flex h-full min-h-0 min-w-0 flex-col">
+          <div className="min-h-0 flex-1">
+            <Map />
+          </div>
           <button
-            className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-1/2 z-30 block -translate-x-1/2 rounded-full bg-teal-600 px-4 py-3 text-sm text-white shadow-lg hover:bg-teal-700 md:hidden"
+            className="z-30 mb-2 w-20 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 md:hidden"
             onClick={() => setIsMobileListOpen(true)}
           >
             분실물
