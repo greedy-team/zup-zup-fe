@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContexts';
 import { AuthFlagProvider } from './contexts/AuthFlag';
+import { Toaster } from 'react-hot-toast';
 // 헤더 부분 (카테고리 제외)
 import RootLayout from './layouts/RootLayout';
 // 메인 (카테고리 필터(찾기랑 등록에는 필요 없음 ) + 목록 + 지도)  헤당 쿼리의 스트링 값은 필수가 아님 카테고리가 전체인 경우 전체 구역인 경우 → /?categoryId=&schoolAreaId=&page=
@@ -63,6 +64,7 @@ export default function App() {
           </AppProvider>
         </AuthFlagProvider>
       </BrowserRouter>
+      <Toaster />
     </QueryClientProvider>
   );
 }
