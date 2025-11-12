@@ -6,11 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
 import ProfileIcon from '../../../../assets/profile.png';
-import { useAuthFlag } from '../../../contexts/AuthFlag';
 
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
-  const { isAuthenticated } = useAuthFlag();
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -58,11 +56,13 @@ const Sidebar = () => {
         </div>
 
         <div className="mt-auto mb-4">
-          {isAuthenticated && (
-            <div className="mt-auto mb-4 flex flex-shrink-0 flex-col items-center justify-center">
-              <img src={ProfileIcon} alt="profile" className="h-8 w-8" />
-            </div>
-          )}
+          <button className={`${iconBtn} aspect-square`} aria-label="마이페이지" disabled={true}>
+            <img src={ProfileIcon} alt="mypage" className="h-8 w-8" />
+            <span className="text-sm text-gray-600 group-hover:text-teal-500">마이</span>
+          </button>
+        </div>
+
+        <div className="mb-4">
           <Authentication />
         </div>
       </div>
