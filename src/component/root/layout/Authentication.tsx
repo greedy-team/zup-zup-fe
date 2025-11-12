@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthFlag, broadcastLogout } from '../../../contexts/AuthFlag';
 import { logout } from '../../../api/auth';
 import LoginIcon from '../../../../assets/login.png';
@@ -7,9 +7,6 @@ import LogoutIcon from '../../../../assets/logout.png';
 export default function Authentication() {
   const { isAuthenticated, setUnauthenticated } = useAuthFlag();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-  if (pathname.startsWith('/login')) return null;
 
   const goLoginPage = () => {
     navigate('/login');
