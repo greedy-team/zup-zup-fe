@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { PendingLostItemsResponse, AdminLostItemActionResponse } from '../../../types/admin';
 import type { ApiError } from '../../../types/common';
 import { fetchPendingLostItems, approveLostItems, rejectLostItems } from '..';
+import toast from 'react-hot-toast';
 
 export function usePendingLostItems(page: number = 1) {
   return useQuery<PendingLostItemsResponse, ApiError>({
@@ -18,12 +19,13 @@ export const useApproveLostItemsMutation = () => {
   return useMutation<AdminLostItemActionResponse, ApiError, number[]>({
     mutationFn: (pendingLostItemIds) => approveLostItems(pendingLostItemIds),
     onSuccess: () => {
+      toast.success('해당 분실물이 승인되었습니다.');
       queryClient.invalidateQueries({
         queryKey: ['lost-items', 'pending'],
       });
     },
     onError: (err) => {
-      alert(`${err.status} : ${err.detail}`);
+      toast.error(`${err.status} : ${err.detail}`);
     },
   });
 };
@@ -34,12 +36,13 @@ export const useRejectLostItemsMutation = () => {
   return useMutation<AdminLostItemActionResponse, ApiError, number[]>({
     mutationFn: (pendingLostItemIds) => rejectLostItems(pendingLostItemIds),
     onSuccess: () => {
+      toast.success('해당 분실물이 반려되었습니다.');
       queryClient.invalidateQueries({
         queryKey: ['lost-items', 'pending'],
       });
     },
     onError: (err) => {
-      alert(`${err.status} : ${err.detail}`);
+      toast.error(`${err.status} : ${err.detail}`);
     },
   });
 };
