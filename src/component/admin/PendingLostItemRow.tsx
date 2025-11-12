@@ -62,7 +62,7 @@ const PendingLostItemRow = ({
             {pendingLostItem.featureOptions.map((opt) => (
               <li key={opt.id}>
                 <div className="font-semibold">{opt.quizQuestion}</div>
-                <div>{opt.optionValue}</div>
+                <div className="text-teal-700">{opt.optionValue}</div>
               </li>
             ))}
           </ul>
