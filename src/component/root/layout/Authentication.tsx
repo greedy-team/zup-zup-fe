@@ -22,7 +22,7 @@ export default function Authentication() {
   };
 
   return (
-    <div className="flex flex-shrink-0 flex-col items-center justify-center">
+    <div className="flex aspect-square flex-shrink-0 flex-col items-center justify-center">
       {!isAuthenticated ? (
         <button type="button" onClick={goLoginPage}>
           <img src={LoginIcon} alt="login" className="h-8 w-8 cursor-pointer" />
