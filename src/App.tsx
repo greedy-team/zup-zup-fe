@@ -1,6 +1,8 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContexts';
 import { AuthFlagProvider } from './contexts/AuthFlag';
+import { Toaster } from 'react-hot-toast';
 // 헤더 부분 (카테고리 제외)
 import RootLayout from './layouts/RootLayout';
 // 메인 (카테고리 필터(찾기랑 등록에는 필요 없음 ) + 목록 + 지도)  헤당 쿼리의 스트링 값은 필수가 아님 카테고리가 전체인 경우 전체 구역인 경우 → /?categoryId=&schoolAreaId=&page=
@@ -19,42 +21,50 @@ import RegisterLayout from './pages/register/RegisterLayout'; // 규칙 검사 �
 import RegisterCategory from './pages/register/RegisterCategory'; // 1) 카테고리 선택
 import RegisterDetails from './pages/register/RegisterDetails'; // 2) 상세 정보 입력
 import RegisterReview from './pages/register/RegisterReview'; // 3) 최종 확인 등록 버튼 누르고 등록 완료 모달이 뜨고 해당 모달의 확인을 눌러 메인으로 리다이렉트
+// 관리자(Admin)  페이지
+import AdminPage from './pages/admin/AdminPage';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthFlagProvider>
-        <AppProvider>
-          <Routes>
-            {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
-            <Route element={<RootLayout />}>
-              {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
-              <Route index element={<MainPage />} />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthFlagProvider>
+          <AppProvider>
+            <Routes>
+              {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
+              <Route element={<RootLayout />}>
+                {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
+                <Route index element={<MainPage />} />
 
-              <Route path="login" element={<LoginPage />} />
+                <Route path="login" element={<LoginPage />} />
 
-              {/* 찾기: (/find/:lostItemId/*) */}
-              <Route path="find/:lostItemId" element={<FindLayout />}>
-                <Route index element={<Navigate to="info" replace />} />
-                <Route path="info" element={<FindInfo />} />
-                <Route path="quiz" element={<FindQuiz />} />
-                <Route path="detail" element={<FindDetail />} />
-                <Route path="pledge" element={<FindPledge />} />
-                <Route path="deposit" element={<FindDeposit />} />
+                {/* 찾기: (/find/:lostItemId/*) */}
+                <Route path="find/:lostItemId" element={<FindLayout />}>
+                  <Route index element={<Navigate to="info" replace />} />
+                  <Route path="info" element={<FindInfo />} />
+                  <Route path="quiz" element={<FindQuiz />} />
+                  <Route path="detail" element={<FindDetail />} />
+                  <Route path="pledge" element={<FindPledge />} />
+                  <Route path="deposit" element={<FindDeposit />} />
+                </Route>
+
+                {/* 등록: (/register/:schoolAreaId/*) */}
+                <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
+                  <Route index element={<Navigate to="category" replace />} />
+                  <Route path="category" element={<RegisterCategory />} />
+                  <Route path="details" element={<RegisterDetails />} />
+                  <Route path="review" element={<RegisterReview />} />
+                </Route>
+                <Route path="*" element={<MainPage />} />
               </Route>
-
-              {/* 등록: (/register/:schoolAreaId/*) */}
-              <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
-                <Route index element={<Navigate to="category" replace />} />
-                <Route path="category" element={<RegisterCategory />} />
-                <Route path="details" element={<RegisterDetails />} />
-                <Route path="review" element={<RegisterReview />} />
-              </Route>
-              <Route path="*" element={<MainPage />} />
-            </Route>
-          </Routes>
-        </AppProvider>
-      </AuthFlagProvider>
-    </BrowserRouter>
+              <Route path="admin" element={<AdminPage />} />
+            </Routes>
+          </AppProvider>
+        </AuthFlagProvider>
+      </BrowserRouter>
+      <Toaster />
+    </QueryClientProvider>
   );
 }
