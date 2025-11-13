@@ -75,8 +75,8 @@ const Sidebar = () => {
           </div>
         </button>
 
-        {/* 4) 마이페이지(추후 구현 예정, 현재는 disabled) */}
-        <button className={`${iconBtn}`} aria-label="마이페이지" disabled>
+        {/* 4) 마이페이지(추후 구현 예정, 현재는 로그인 페이지로 redirect) */}
+        <button onClick={() => navigate('/login')} className={`${iconBtn}`} aria-label="마이페이지">
           <img src={ProfileIcon} alt="mypage" className="h-6 w-6 sm:h-15 sm:w-15" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg">마이</span>
         </button>
