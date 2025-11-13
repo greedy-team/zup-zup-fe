@@ -88,7 +88,7 @@ const PendingLostItemsActionBar = ({ currentPageLostItemIds }: PendingLostItemsA
               : 'cursor-not-allowed border-red-200 bg-red-100 text-red-300'
           }`}
         >
-          {rejectMutation.isPending ? '삭제 중...' : '삭제'}
+          {rejectMutation.isPending ? '반려 중...' : '반려'}
         </button>
       </div>
     </div>
