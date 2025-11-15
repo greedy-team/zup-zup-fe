@@ -5,7 +5,7 @@ export type UsePolygonsHookOptions = {
   map: kakao.maps.Map | null;
   schoolAreas: SchoolArea[];
   selectedAreaId: number;
-  selectedMode: 'append' | 'register';
+  selectedMode: 'find' | 'register';
   onOpenRegisterConfirm: () => void;
   onSelectArea: (areaId: number) => void;
   setHoverAreaId: (areaId: number) => void;

@@ -2,7 +2,7 @@ import { createContext, useState, type ReactNode } from 'react';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/lost/lostApi';
 import type { SchoolArea } from '../types/map/map';
 
-export type Mode = 'register' | 'append';
+export type Mode = 'register' | 'find';
 
 export type CategoriesCtx = {
   categories: Category[];
@@ -89,7 +89,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
-  const [selectedMode, setSelectedMode] = useState<Mode>('append');
+  const [selectedMode, setSelectedMode] = useState<Mode>('find');
   const [lostItemSummary, setLostItemSummary] = useState<LostItemSummaryRow[]>([]);
   const [isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
