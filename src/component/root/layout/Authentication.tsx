@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
-import { redirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
+import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 
 export default function Authentication() {
   const isAuthenticated = useAuthFlag();
@@ -9,6 +9,7 @@ export default function Authentication() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
   if (pathname.startsWith('/login')) return null;
 
