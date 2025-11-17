@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContexts';
-import { AuthFlagProvider } from './contexts/AuthFlag';
 import { Toaster } from 'react-hot-toast';
 // 헤더 부분 (카테고리 제외)
 import RootLayout from './layouts/RootLayout';
@@ -30,39 +29,37 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthFlagProvider>
-          <AppProvider>
-            <Routes>
-              {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
-              <Route element={<RootLayout />}>
-                {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
-                <Route index element={<MainPage />} />
+        <AppProvider>
+          <Routes>
+            {/* 공통 레이아웃인 헤더를 넣을 부분(카테고리를 제외한 부분) */}
+            <Route element={<RootLayout />}>
+              {/* 메인: (/?categoryId=&schoolAreaId=&page=), 필터/페이지네이션을 쿼리 스트링으로 판단 */}
+              <Route index element={<MainPage />} />
 
-                <Route path="login" element={<LoginPage />} />
+              <Route path="login" element={<LoginPage />} />
 
-                {/* 찾기: (/find/:lostItemId/*) */}
-                <Route path="find/:lostItemId" element={<FindLayout />}>
-                  <Route index element={<Navigate to="info" replace />} />
-                  <Route path="info" element={<FindInfo />} />
-                  <Route path="quiz" element={<FindQuiz />} />
-                  <Route path="detail" element={<FindDetail />} />
-                  <Route path="pledge" element={<FindPledge />} />
-                  <Route path="deposit" element={<FindDeposit />} />
-                </Route>
-
-                {/* 등록: (/register/:schoolAreaId/*) */}
-                <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
-                  <Route index element={<Navigate to="category" replace />} />
-                  <Route path="category" element={<RegisterCategory />} />
-                  <Route path="details" element={<RegisterDetails />} />
-                  <Route path="review" element={<RegisterReview />} />
-                </Route>
-                <Route path="*" element={<MainPage />} />
+              {/* 찾기: (/find/:lostItemId/*) */}
+              <Route path="find/:lostItemId" element={<FindLayout />}>
+                <Route index element={<Navigate to="info" replace />} />
+                <Route path="info" element={<FindInfo />} />
+                <Route path="quiz" element={<FindQuiz />} />
+                <Route path="detail" element={<FindDetail />} />
+                <Route path="pledge" element={<FindPledge />} />
+                <Route path="deposit" element={<FindDeposit />} />
               </Route>
-              <Route path="admin" element={<AdminPage />} />
-            </Routes>
-          </AppProvider>
-        </AuthFlagProvider>
+
+              {/* 등록: (/register/:schoolAreaId/*) */}
+              <Route path="register/:schoolAreaId" element={<RegisterLayout />}>
+                <Route index element={<Navigate to="category" replace />} />
+                <Route path="category" element={<RegisterCategory />} />
+                <Route path="details" element={<RegisterDetails />} />
+                <Route path="review" element={<RegisterReview />} />
+              </Route>
+              <Route path="*" element={<MainPage />} />
+            </Route>
+            <Route path="admin" element={<AdminPage />} />
+          </Routes>
+        </AppProvider>
       </BrowserRouter>
       <Toaster />
     </QueryClientProvider>
