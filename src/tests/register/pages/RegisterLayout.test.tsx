@@ -9,14 +9,29 @@ const mockFns = {
   goToPrevStep: vi.fn(),
   goToNextStep: vi.fn(),
   handleRegister: vi.fn(),
+  setSelectedCategory: vi.fn(),
+  dispatch: vi.fn(),
+  resetForm: vi.fn(),
 };
 let mockState: any = {
-  steps: ['기본정보', '보관장소', '확인'],
+  steps: [{ title: '기본정보' }, { title: '보관장소' }, { title: '확인' }],
   currentStep: 1,
   resultModalContent: null,
   isLoading: false,
   selectedCategory: null,
   isStep2Valid: true,
+  categories: [],
+  categoryFeatures: [],
+  formData: {
+    foundAreaId: 1,
+    foundAreaDetail: '',
+    depositArea: '',
+    images: [],
+    imageOrder: [],
+    featureOptions: [],
+    description: '',
+  },
+  schoolAreas: [],
   ...mockFns,
 };
 vi.mock('../../../hooks/register/useRegisterLayout', () => {
