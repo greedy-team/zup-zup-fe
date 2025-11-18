@@ -6,7 +6,7 @@ import { useAuthFlag } from '../../../contexts/AuthFlag';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
-import ProfileIcon from '../../../../assets/profile.png';
+import ProfileIcon from '../../../../assets/profile.svg?react';
 
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
@@ -83,7 +83,7 @@ const Sidebar = () => {
           className={`${iconBtn}`}
           aria-label="마이페이지"
         >
-          <img src={ProfileIcon} alt="mypage" className="h-6 w-6 sm:h-15 sm:w-15" />
+          <ProfileIcon className="h-6 w-6 sm:h-15 sm:w-15" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg">마이</span>
         </button>
 
@@ -135,7 +135,7 @@ const Sidebar = () => {
             className={`${iconBtn} aspect-square`}
             aria-label="마이페이지"
           >
-            <img src={ProfileIcon} alt="mypage" className="h-8 w-8" />
+            <ProfileIcon className="h-8 w-8" />
             <span className="text-sm text-gray-600 group-hover:text-teal-500">마이</span>
           </button>
         </div>
