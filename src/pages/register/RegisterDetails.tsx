@@ -5,7 +5,7 @@ import FormSection from '../../component/register/FormSection';
 import type { RegisterContextType } from '../../types/register';
 
 const RegisterDetails = () => {
-  const { isLoading, formData, dispatch, categoryFeatures, schoolAreas } =
+  const { isLoading, formData, setField, setFeature, setImages, categoryFeatures, schoolAreas } =
     useOutletContext<RegisterContextType>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -14,11 +14,11 @@ const RegisterDetails = () => {
     const { name, value } = e.target;
     const processedValue =
       name === 'foundAreaDetail' || name === 'depositArea' ? value.replace(/^\s+/, '') : value;
-    dispatch({ type: 'SET_FIELD', payload: { name, value: processedValue } });
+    setField(name, processedValue);
   };
 
   const handleFeatureChange = (featureId: number, optionId: number) => {
-    dispatch({ type: 'SET_FEATURE', payload: { featureId, optionId } });
+    setFeature({ featureId, optionId });
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,21 +26,21 @@ const RegisterDetails = () => {
     const files = Array.from(e.target.files);
 
     if (formData.images.length + files.length > 3) {
-      alert('사진은 최대 3장까지 업로드할 수 있습니다.');
+      alert('사진은 최대 3장까지 업로드할 수 있습니다.'); // toast로 수정 필요
       return;
     }
 
     const newImages = [...formData.images, ...files];
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    dispatch({ type: 'SET_IMAGES', payload: { images: newImages, imageOrder: newOrder } });
+    setImages(newImages, newOrder);
   };
 
   const handleRemoveImage = (indexToRemove: number) => {
     const newImages = formData.images.filter((_, index) => index !== indexToRemove);
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    dispatch({ type: 'SET_IMAGES', payload: { images: newImages, imageOrder: newOrder } });
+    setImages(newImages, newOrder);
   };
 
   if (isLoading) {

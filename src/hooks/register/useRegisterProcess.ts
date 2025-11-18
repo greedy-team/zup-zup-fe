@@ -23,7 +23,8 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     categoryIdFromQuery,
   );
 
-  const { formData, dispatch, resetForm } = useRegisterState(validSchoolAreaId);
+  const { formData, setField, setImages, setFeature, resetForm } =
+    useRegisterState(validSchoolAreaId);
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
@@ -117,16 +118,18 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
   return {
     isLoading,
+    schoolAreas,
     categories,
     selectedCategory,
     setSelectedCategory,
     categoryFeatures,
     formData,
-    dispatch,
+    setField,
+    setImages,
+    setFeature,
+    resetForm,
+    handleRegister,
     isStep2Valid,
     resultModalContent,
-    handleRegister,
-    resetForm,
-    schoolAreas,
   };
 };

@@ -1,16 +1,6 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import { clearFormData, loadFormData, saveFormData } from '../../utils/register/registerStorage';
 import type { FeatureSelection, RegisterFormData } from '../../types/register';
-
-type RegisterState = RegisterFormData;
-
-type Action =
-  | { type: 'SET_FIELD'; payload: { name: string; value: string } }
-  | { type: 'SET_IMAGES'; payload: { images: File[]; imageOrder: number[] } }
-  | { type: 'SET_FEATURE'; payload: FeatureSelection }
-  | { type: 'SET_FOUND_AREA'; payload: { foundAreaId: number | null } }
-  | { type: 'REHYDRATE_STATE'; payload: RegisterState }
-  | { type: 'RESET_FORM' };
 
 const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
   foundAreaDetail: '',
@@ -21,34 +11,8 @@ const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
   imageOrder: [],
 };
 
-const reducer = (state: RegisterState, action: Action): RegisterState => {
-  switch (action.type) {
-    case 'SET_FIELD':
-      return { ...state, [action.payload.name]: action.payload.value };
-    case 'SET_IMAGES':
-      return { ...state, images: action.payload.images, imageOrder: action.payload.imageOrder };
-    case 'SET_FEATURE': {
-      const otherFeatures = state.featureOptions.filter(
-        (f) => f.featureId !== action.payload.featureId,
-      );
-      return { ...state, featureOptions: [...otherFeatures, action.payload] };
-    }
-    case 'SET_FOUND_AREA':
-      return { ...state, foundAreaId: action.payload.foundAreaId };
-    case 'REHYDRATE_STATE':
-      return { ...action.payload };
-    case 'RESET_FORM':
-      return {
-        ...INITIAL_FORM_DATA,
-        foundAreaId: state.foundAreaId,
-      };
-    default:
-      return state;
-  }
-};
-
 export const useRegisterState = (validSchoolAreaId: number | null) => {
-  const [formData, dispatch] = useReducer(reducer, {
+  const [formData, setFormData] = useState<RegisterFormData>({
     ...INITIAL_FORM_DATA,
     foundAreaId: validSchoolAreaId,
   });
@@ -58,7 +22,7 @@ export const useRegisterState = (validSchoolAreaId: number | null) => {
     const rehydrateForm = async () => {
       const savedData = await loadFormData();
       if (savedData) {
-        dispatch({ type: 'REHYDRATE_STATE', payload: savedData });
+        setFormData(savedData);
       }
     };
     rehydrateForm();
@@ -74,13 +38,55 @@ export const useRegisterState = (validSchoolAreaId: number | null) => {
 
   // schoolAreaId 변경 시 formData 동기화
   useEffect(() => {
-    dispatch({ type: 'SET_FOUND_AREA', payload: { foundAreaId: validSchoolAreaId } });
+    setFormData((prev) => ({
+      ...prev,
+      foundAreaId: validSchoolAreaId,
+    }));
   }, [validSchoolAreaId]);
 
+  // 기존 SET_FIELD
+  const setField = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // 기존 SET_IMAGES
+  const setImages = (images: File[], imageOrder: number[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      images,
+      imageOrder,
+    }));
+  };
+
+  // 기존 SET_FEATURE
+  const setFeature = (feature: FeatureSelection) => {
+    setFormData((prev) => {
+      const otherFeatures = prev.featureOptions.filter((f) => f.featureId !== feature.featureId);
+      return {
+        ...prev,
+        featureOptions: [...otherFeatures, feature],
+      };
+    });
+  };
+
+  // 기존 RESET_FORM
   const resetForm = () => {
-    dispatch({ type: 'RESET_FORM' });
+    setFormData((prev) => ({
+      ...INITIAL_FORM_DATA,
+      // 지역(건물) 선택은 유지
+      foundAreaId: prev.foundAreaId,
+    }));
     clearFormData();
   };
 
-  return { formData, dispatch, resetForm };
+  return {
+    formData,
+    setField,
+    setImages,
+    setFeature,
+    resetForm,
+  };
 };
