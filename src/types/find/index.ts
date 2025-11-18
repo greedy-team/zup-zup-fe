@@ -33,6 +33,13 @@ export type DetailResponse = {
   createdAt: string;
 };
 
+export type PledgeResponse = {
+  pledgeId: number;
+  lostItemId: number;
+  ownerId: number;
+  pledgeDateTime: string;
+};
+
 export type DepositAreaResponse = {
   depositArea: string;
 };

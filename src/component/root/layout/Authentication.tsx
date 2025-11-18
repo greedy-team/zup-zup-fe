@@ -5,20 +5,21 @@ import LoginIcon from '../../../../assets/login.svg?react';
 import LogoutIcon from '../../../../assets/logout.svg?react';
 
 export default function Authentication() {
-  const { isAuthenticated, setUnauthenticated } = useAuthFlag();
+  const isAuthenticated = useAuthFlag();
+  const logoutMutation = useLogoutMutation();
+
   const navigate = useNavigate();
 
   const goLoginPage = () => {
-    navigate('/login');
+    redirectToLoginKeepPath();
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch {}
-    setUnauthenticated();
-    broadcastLogout();
-    navigate('/', { replace: true });
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        navigate('/', { replace: true });
+      },
+    });
   };
 
   return (
