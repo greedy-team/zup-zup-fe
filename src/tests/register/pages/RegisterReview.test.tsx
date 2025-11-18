@@ -21,16 +21,10 @@ vi.mock('react-router-dom', async () => {
 const mockFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 
 const defaultMockContext: RegisterContextType = {
+  isLoading: false,
+  categories: [],
   selectedCategory: { id: 1, name: '전자기기', iconUrl: '' },
-  formData: {
-    foundAreaId: 1,
-    foundAreaDetail: '401호 앞',
-    depositArea: '학생회관 1층',
-    images: [mockFile],
-    imageOrder: [0],
-    featureOptions: [{ featureId: 1, optionId: 2 }],
-    description: '검은색 케이스',
-  },
+  setSelectedCategory: vi.fn(),
   categoryFeatures: [
     {
       id: 1,
@@ -42,6 +36,16 @@ const defaultMockContext: RegisterContextType = {
       ],
     },
   ],
+  formData: {
+    foundAreaId: 1,
+    foundAreaDetail: '401호 앞',
+    depositArea: '학생회관 1층',
+    images: [mockFile],
+    imageOrder: [0],
+    featureOptions: [{ featureId: 1, optionId: 2 }],
+    description: '검은색 케이스',
+  },
+  dispatch: vi.fn(),
   schoolAreas: [
     {
       id: 1,
@@ -50,15 +54,10 @@ const defaultMockContext: RegisterContextType = {
       marker: { lat: 0, lng: 0 },
     },
   ],
-  // 아래는 이 컴포넌트에서 사용되지 않지만, 타입 만족을 위해 추가
-  isLoading: false,
-  categories: [],
-  setSelectedCategory: vi.fn(),
-  setFormData: vi.fn(),
-  handleFeatureChange: vi.fn(),
   isStep2Valid: true,
   resultModalContent: null,
   handleRegister: vi.fn(),
+  resetForm: vi.fn(),
 };
 
 const renderComponent = (context: Partial<RegisterContextType> = {}) => {
