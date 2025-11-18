@@ -1,106 +1,72 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { fetchCategories, fetchCategoryFeatures, postLostItem } from '../../api/register';
-import { fetchSchoolAreas } from '../../api/register';
-import type {
-  SchoolArea,
-  Category,
-  Feature,
-  RegisterFormData,
-  LostItemRegisterRequest,
-  FeatureSelection,
-  ResultModalContent,
-} from '../../types/register';
+import { useContext, useEffect, useState } from 'react';
+import { postLostItem, fetchSchoolAreas } from '../../api/register';
+import { useRegisterRouter } from './useRegisterRouter';
+import { useRegisterData } from './useRegisterData';
+import { useRegisterState } from './useRegisterState';
 import { SelectedModeContext } from '../../contexts/AppContexts';
-
-const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
-  foundAreaDetail: '',
-  depositArea: '',
-  featureOptions: [],
-  description: '',
-  images: [],
-  imageOrder: [],
-};
+import type {
+  Category,
+  LostItemRegisterRequest,
+  ResultModalContent,
+  SchoolArea,
+} from '../../types/register';
 
 /**
- * 라우팅 기반 등록 프로세스 커스텀 훅
- * - schoolAreaId는 인자 또는 URL 파라미터 중 유효한 값을 사용
+ * 라우팅 기반 등록 프로세스를 위한 모든 하위 훅을 조합하는 컨테이너 훅
  */
 export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
+  const { navigate, isDetailsRoute, categoryIdFromQuery, validSchoolAreaId } =
+    useRegisterRouter(schoolAreaIdArg);
 
-  const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
+  const { isLoading, categories, categoryFeatures } = useRegisterData(
+    isDetailsRoute,
+    categoryIdFromQuery,
+  );
 
-  // URL이 /details 인지 확인
-  const isDetailsRoute = location.pathname.includes('/details');
+  const { formData, dispatch, clearPersistedData } = useRegisterState(validSchoolAreaId);
 
-  // 쿼리에서 categoryId 읽기 (없거나 NaN이면 null)
-  const categoryIdFromQuery = (() => {
-    const v = Number(searchParams.get('categoryId'));
-    return Number.isFinite(v) ? v : null;
-  })();
-
-  // 유효한 schoolAreaId 결정(인자 우선, 없으면 URL 파라미터 사용)
-  const validSchoolAreaId = useMemo(() => {
-    if (typeof schoolAreaIdArg === 'number') return schoolAreaIdArg;
-    const n = Number(schoolAreaIdParam);
-    return Number.isFinite(n) ? n : null;
-  }, [schoolAreaIdArg, schoolAreaIdParam]);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);
-  const { setSelectedMode } = useContext(SelectedModeContext)!;
-  const [formData, setFormData] = useState<RegisterFormData>({
-    ...INITIAL_FORM_DATA,
-    foundAreaId: validSchoolAreaId,
-  });
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
+  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
+  const { setSelectedMode } = useContext(SelectedModeContext)!;
 
-  // schoolAreaId 변경 시 formData 동기화
+  // 페이지 새로고침 시 URL 쿼리 파라미터를 이용해 selectedCategory 상태 복원
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, foundAreaId: validSchoolAreaId || null }));
-  }, [validSchoolAreaId]);
+    if (categoryIdFromQuery && categories.length > 0) {
+      const categoryFromUrl = categories.find((c) => c.id === categoryIdFromQuery);
+      if (categoryFromUrl) {
+        setSelectedCategory(categoryFromUrl);
+      }
+    } else {
+      setSelectedCategory(null);
+    }
+  }, [categories, categoryIdFromQuery]);
 
-  // 초기 렌더링 시, 카테고리 목록을 가져오기
+  // schoolAreaId 유효성 검증 및 schoolAreas 데이터 fetch
   useEffect(() => {
-    setIsLoading(true);
-    fetchCategories()
-      .then(setCategories)
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  // 카테고리 쿼리스트링이 바뀔 때마다 카테고리 특징 fetch
-  useEffect(() => {
-    if (!isDetailsRoute) return;
-    if (!categoryIdFromQuery) return;
-
-    // details 진입 시 사용자가 이전에 고른 특징 초기화
-    setFormData((prev) => ({ ...prev, featureOptions: [] }));
-
-    setIsLoading(true);
-    fetchCategoryFeatures(categoryIdFromQuery)
-      .then(setCategoryFeatures)
-      .catch((err) => {
-        console.error(err);
+    fetchSchoolAreas()
+      .then((areas) => {
+        setSchoolAreas(areas);
+        if (validSchoolAreaId && !areas.some((area) => area.id === validSchoolAreaId)) {
+          alert(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`); // toast로 수정 필요
+          navigate('/');
+        }
       })
-      .finally(() => {
-        setIsLoading(false);
+      .catch((err) => {
+        console.error('학교 지역 검증 실패', err); // toast로 수정 필요
+        navigate('/');
       });
-  }, [isDetailsRoute, categoryIdFromQuery]);
+  }, [validSchoolAreaId, navigate]);
 
   // 2단계로 넘어가기 위한 검증 변수
   const isStep2Valid =
-    formData.featureOptions.length === categoryFeatures.length &&
+    !!formData.foundAreaId &&
+    categoryFeatures.every((feature) =>
+      formData.featureOptions.some((option) => option.featureId === feature.id),
+    ) &&
     !!formData.foundAreaDetail.trim() &&
     !!formData.depositArea.trim() &&
-    formData.images.length > 0 &&
-    formData.imageOrder.length === formData.images.length &&
-    !!formData.foundAreaId;
+    formData.images.length > 0;
 
   // 최종 등록 함수
   const handleRegister = async () => {
@@ -108,8 +74,6 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       console.error('카테고리 또는 학교 구역이 선택되지 않았습니다.');
       return;
     }
-
-    setIsLoading(true);
 
     const requestData: LostItemRegisterRequest = {
       categoryId: selectedCategory.id,
@@ -123,6 +87,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
     try {
       await postLostItem(requestData, formData.images);
+      await clearPersistedData();
       setResultModalContent({
         status: 'success',
         title: '등록 완료!',
@@ -135,6 +100,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         },
       });
     } catch (error) {
+      await clearPersistedData();
       setResultModalContent({
         status: 'error',
         title: '등록 실패',
@@ -146,49 +112,21 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
           setSelectedMode('append');
         },
       });
-    } finally {
-      setIsLoading(false);
     }
   };
-
-  // 카테고리 특징 변경 핸들러
-  const handleFeatureChange = (featureId: number, optionId: number) => {
-    setFormData((prev) => {
-      const otherFeatures = prev.featureOptions.filter((f) => f.featureId !== featureId);
-      const newFeature: FeatureSelection = { featureId, optionId };
-      return { ...prev, featureOptions: [...otherFeatures, newFeature] };
-    });
-  };
-
-  // schoolAreaId 유효성 검증
-  useEffect(() => {
-    if (validSchoolAreaId == null) return;
-
-    fetchSchoolAreas()
-      .then((areas: SchoolArea[]) => {
-        const exists = areas.some((area) => area.id === validSchoolAreaId);
-        if (!exists) {
-          console.warn(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.error('학교 지역 검증 실패', err);
-        navigate('/');
-      });
-  }, []);
 
   return {
     isLoading,
     categories,
     selectedCategory,
+    setSelectedCategory,
     categoryFeatures,
     formData,
+    dispatch,
     isStep2Valid,
     resultModalContent,
-    setSelectedCategory,
-    setFormData,
     handleRegister,
-    handleFeatureChange,
+    clearPersistedData,
+    schoolAreas,
   };
 };
