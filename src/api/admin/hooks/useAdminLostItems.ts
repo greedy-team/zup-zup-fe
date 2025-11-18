@@ -3,6 +3,8 @@ import type { PendingLostItemsResponse, AdminLostItemActionResponse } from '../.
 import type { ApiError } from '../../../types/common';
 import { fetchPendingLostItems, approveLostItems, rejectLostItems } from '..';
 import toast from 'react-hot-toast';
+import { defaultQueryRetry } from '../../common/querySetting';
+import { showApiErrorToast } from '../../common/apiErrorToast';
 
 export function usePendingLostItems(page: number = 1) {
   return useQuery<PendingLostItemsResponse, ApiError>({
@@ -10,6 +12,7 @@ export function usePendingLostItems(page: number = 1) {
     queryFn: () => fetchPendingLostItems({ page }),
     placeholderData: (prev) => prev,
     staleTime: Infinity,
+    retry: defaultQueryRetry,
   });
 }
 
@@ -24,9 +27,7 @@ export const useApproveLostItemsMutation = () => {
         queryKey: ['lost-items', 'pending'],
       });
     },
-    onError: (err) => {
-      toast.error(`${err.status} : ${err.detail}`);
-    },
+    onError: showApiErrorToast,
   });
 };
 
@@ -41,8 +42,6 @@ export const useRejectLostItemsMutation = () => {
         queryKey: ['lost-items', 'pending'],
       });
     },
-    onError: (err) => {
-      toast.error(`${err.status} : ${err.detail}`);
-    },
+    onError: showApiErrorToast,
   });
 };

@@ -1,69 +1,62 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { postPledge } from '../../api/find';
+import toast from 'react-hot-toast';
 import { PLEDGE_TEXT } from '../../constants/find';
-import { useAuthFlag } from '../../contexts/AuthFlag';
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+import { useAuthActions } from '../../store/hooks/useAuth';
+import { useRedirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+import { usePledgeMutation } from '../../api/find/hooks/useFind';
+import type { ApiError } from '../../types/common';
 import { useFindOutlet } from '../../hooks/find/useFindOutlet';
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 export default function FindPledge() {
   const navigate = useNavigate();
   const { setNextButtonValidator } = useFindOutlet();
-  const { isAuthenticated, setAuthenticated, setUnauthenticated } = useAuthFlag();
+  const { setAuthenticated, setUnauthenticated } = useAuthActions();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
-  const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const pledgeMutation = usePledgeMutation(lostItemId);
 
   useEffect(() => {
     setNextButtonValidator(async () => {
       const value = inputRef.current?.value.trim() || '';
+
       if (value !== PLEDGE_TEXT) {
-        alert('서약 문구를 정확히 입력해주세요.');
+        toast.error('서약 문구를 정확히 입력해주세요.');
         return false;
       }
-      setSubmitting(true);
+
       try {
-        await postPledge(lostItemId);
+        await pledgeMutation.mutateAsync();
         setAuthenticated();
         return true;
-      } catch (e: any) {
-        if (e?.status === 400) {
-          alert('퀴즈를 통과하지 못해서 해당 분실물의 서약을 진행할 수 없습니다.');
-          navigate('/', { replace: true });
-        }
-        if (isAuthenticated && e?.status === 401) {
-          alert('로그인 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
+      } catch (e) {
+        const err = e as ApiError | undefined;
+        if (!err) return false;
+
+        showApiErrorToast(err);
+
+        if (err.status === 401) {
           setUnauthenticated();
           redirectToLoginKeepPath();
-        }
-        if (e?.status === 401) {
-          alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
-          redirectToLoginKeepPath();
-        } else if (e?.status === 404) {
-          alert('해당 id의 분실물이 존재하지 않습니다.');
-          navigate('/', { replace: true });
-        } else if (e?.status === 409) {
-          alert('이미 서약이 완료된 분실물 입니다.');
-          navigate('/', { replace: true });
         } else {
-          alert('알 수 없는 오류가 발생했습니다.');
           navigate('/', { replace: true });
         }
         return false;
-      } finally {
-        setSubmitting(false);
       }
     });
+
     return () => setNextButtonValidator(null);
   }, [
-    lostItemId,
+    pledgeMutation,
     setNextButtonValidator,
-    isAuthenticated,
     setAuthenticated,
     setUnauthenticated,
     navigate,
+    redirectToLoginKeepPath,
   ]);
 
   return (
@@ -98,13 +91,13 @@ export default function FindPledge() {
         type="text"
         className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
         placeholder="상단 문구를 똑같이 입력해주세요."
-        disabled={submitting}
+        disabled={pledgeMutation.isPending}
         onKeyDown={(e) => {
           if (e.key === 'Enter') e.preventDefault();
         }}
         onPaste={(e) => {
           e.preventDefault();
-          alert('붙여넣기가 불가능합니다. 직접 입력해 주세요.');
+          toast.error('붙여넣기가 불가능합니다. 직접 입력해 주세요.');
         }}
       />
     </div>

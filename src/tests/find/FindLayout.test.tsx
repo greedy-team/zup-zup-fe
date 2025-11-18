@@ -23,7 +23,6 @@ describe('FindLayout: 스텝/버튼/이동', () => {
       http.get('*/lost-items/:id', ({ params }) => {
         const { id } = params as any;
         return HttpResponse.json({
-          //비귀중품 응답 오버라이드
           id: Number(id),
           categoryId: ETC_CATEGORY_ID,
           categoryName: '기타',

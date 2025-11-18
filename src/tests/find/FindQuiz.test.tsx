@@ -1,120 +1,149 @@
-import { describe, it, expect, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderFind } from '../utils/renderFind';
-import { server } from '../setup';
 import { http, HttpResponse } from 'msw';
+import { server } from '../setup';
+import { renderFind } from '../utils/renderFind';
+
+const mockRedirectToLoginKeepPath = vi.fn();
 
 vi.mock('../../utils/auth/loginRedirect', () => ({
-  redirectToLoginKeepPath: vi.fn(),
+  useRedirectToLoginKeepPath: () => mockRedirectToLoginKeepPath,
 }));
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+
+vi.mock('../../api/common/apiErrorToast', () => ({
+  showApiErrorToast: vi.fn(),
+}));
+
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 describe('FindQuiz', () => {
-  it('선택 없이 제출 시 alert, 선택 후 제출 시 detail 이동', async () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockRedirectToLoginKeepPath.mockClear();
+  });
+
+  it('FindQuiz > 선택 없이 제출 시 진행 안 되고, 선택 후 제출 시 detail 이동', async () => {
     renderFind('/find/10/quiz');
 
-    await screen.findByText('색상은?');
-    const submitBtn = screen.getByRole('button', { name: '퀴즈 제출' });
+    const submitButton = await screen.findByRole('button', { name: '퀴즈 제출' });
 
-    await userEvent.click(submitBtn);
-    expect(window.alert).toHaveBeenCalledWith('모든 문항을 선택해주세요.');
+    await userEvent.click(submitButton);
 
-    const red = await screen.findByRole('radio', { name: '빨강' });
-    await userEvent.click(red);
-    await userEvent.click(submitBtn);
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
+    await userEvent.click(submitButton);
 
     expect(await screen.findByRole('heading', { name: '상세 정보' })).toBeInTheDocument();
   });
 
-  it('GET /quizzes 401(미로그인) 발생 시 alert + 로그인 리다이렉트 호출', async () => {
+  it('FindQuiz > GET /quizzes 401(미로그인) 발생 시 로딩 영역 노출', async () => {
     server.use(http.get('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 401 })));
 
     renderFind('/find/10/quiz');
 
-    await screen.findByRole('button', { name: '퀴즈 제출' });
-    expect(window.alert).toHaveBeenCalled();
-    expect(redirectToLoginKeepPath).toHaveBeenCalled();
+    expect(await screen.findByText('퀴즈 불러오는 중…')).toBeInTheDocument();
   });
 
-  it('퀴즈 없음일시 빈 상태', async () => {
-    server.use(http.get('*/lost-items/:id/quizzes', () => HttpResponse.json({ quizzes: [] })));
+  it('FindQuiz > 퀴즈 없음일시 빈 상태', async () => {
+    server.use(
+      http.get('*/lost-items/:id/quizzes', () =>
+        HttpResponse.json({ quizzes: [] }, { status: 200 }),
+      ),
+    );
+
     renderFind('/find/10/quiz');
 
     expect(await screen.findByText('퀴즈가 없습니다.')).toBeInTheDocument();
   });
 
-  it('POST /quizzes 401(미로그인) 발생 시 alert + 로그인 리다이렉트 호출, 이동 안 함', async () => {
-    server.use(
-      http.get('*/lost-items/:id/quizzes', () =>
-        HttpResponse.json({
-          quizzes: [{ featureId: 1, question: '색상은?', options: [{ id: 10, text: '빨강' }] }],
-        }),
-      ),
-    );
+  it('FindQuiz > POST /quizzes 401(미로그인) 발생 시 toast 호출 + 홈 이동 없음', async () => {
     server.use(
       http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 401 })),
     );
 
     renderFind('/find/10/quiz');
 
-    await screen.findByText('색상은?');
-
-    const red = await screen.findByRole('radio', { name: '빨강' });
-    await userEvent.click(red);
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
     await userEvent.click(screen.getByRole('button', { name: '퀴즈 제출' }));
 
-    expect(window.alert).toHaveBeenCalled();
-    expect(redirectToLoginKeepPath).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(showApiErrorToast).toHaveBeenCalled();
+    });
 
-    expect(screen.queryByRole('heading', { name: '상세 정보' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '인증 퀴즈' })).toBeInTheDocument();
   });
 
-  it.each([403, 404, 409])('POST /quizzes %s 발생 시 alert + 홈 이동', async (code) => {
+  it('FindQuiz > POST /quizzes 403 발생 시 toast + 홈 이동', async () => {
     server.use(
-      http.get('*/lost-items/:id/quizzes', () =>
-        HttpResponse.json({
-          quizzes: [{ featureId: 1, question: '색상은?', options: [{ id: 10, text: '빨강' }] }],
-        }),
-      ),
-    );
-    server.use(
-      http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: code })),
+      http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 403 })),
     );
 
     renderFind('/find/10/quiz');
 
-    await screen.findByText('색상은?');
-
-    const red = await screen.findByRole('radio', { name: '빨강' });
-    await userEvent.click(red);
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
     await userEvent.click(screen.getByRole('button', { name: '퀴즈 제출' }));
 
-    expect(window.alert).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(showApiErrorToast).toHaveBeenCalled();
+    });
+
     expect(await screen.findByText('Home')).toBeInTheDocument();
   });
 
-  it('POST /quizzes 기타 에러 발생 시 alert + 홈 이동', async () => {
+  it('FindQuiz > POST /quizzes 404 발생 시 toast + 홈 이동', async () => {
     server.use(
-      http.get('*/lost-items/:id/quizzes', () =>
-        HttpResponse.json({
-          quizzes: [{ featureId: 1, question: '색상은?', options: [{ id: 10, text: '빨강' }] }],
-        }),
-      ),
+      http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 404 })),
     );
+
+    renderFind('/find/404/quiz');
+
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
+    await userEvent.click(screen.getByRole('button', { name: '퀴즈 제출' }));
+
+    await waitFor(() => {
+      expect(showApiErrorToast).toHaveBeenCalled();
+    });
+
+    expect(await screen.findByText('Home')).toBeInTheDocument();
+  });
+
+  it('FindQuiz > POST /quizzes 409 발생 시 toast + 홈 이동', async () => {
+    server.use(
+      http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 409 })),
+    );
+
+    renderFind('/find/10/quiz');
+
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
+    await userEvent.click(screen.getByRole('button', { name: '퀴즈 제출' }));
+
+    await waitFor(() => {
+      expect(showApiErrorToast).toHaveBeenCalled();
+    });
+
+    expect(await screen.findByText('Home')).toBeInTheDocument();
+  });
+
+  it('FindQuiz > POST /quizzes 기타 에러 발생 시 toast + 홈 이동', async () => {
     server.use(
       http.post('*/lost-items/:id/quizzes', () => new HttpResponse(null, { status: 500 })),
     );
 
     renderFind('/find/10/quiz');
 
-    await screen.findByText('색상은?');
-
-    const red = await screen.findByRole('radio', { name: '빨강' });
-    await userEvent.click(red);
+    const [option] = await screen.findAllByRole('radio');
+    await userEvent.click(option);
     await userEvent.click(screen.getByRole('button', { name: '퀴즈 제출' }));
 
-    expect(window.alert).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(showApiErrorToast).toHaveBeenCalled();
+    });
+
     expect(await screen.findByText('Home')).toBeInTheDocument();
   });
 });

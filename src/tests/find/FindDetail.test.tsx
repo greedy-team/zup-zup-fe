@@ -1,50 +1,62 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { renderFind } from '../utils/renderFind';
-import { server } from '../setup';
 import { http, HttpResponse } from 'msw';
+import { server } from '../setup';
+import { renderFind } from '../utils/renderFind';
 
-vi.mock('../../utils/auth/loginRedirect', () => ({
-  redirectToLoginKeepPath: vi.fn(),
+vi.mock('../../api/common/apiErrorToast', () => ({
+  showApiErrorToast: vi.fn(),
 }));
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 describe('FindDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('이미지/설명 렌더링 및 썸네일 전환', async () => {
-    const user = userEvent.setup();
+  it('FindDetail > 이미지/설명 렌더링 및 썸네일 전환', async () => {
     renderFind('/find/10/detail');
 
-    const main = (await screen.findByAltText('분실물 사진')) as HTMLImageElement;
-    expect(main.src).toContain('a.png');
+    expect(await screen.findByRole('heading', { name: '상세 정보' })).toBeInTheDocument();
 
-    const thumb1 = screen.getByLabelText('분실물 썸네일-1');
-    await user.click(thumb1);
+    expect(await screen.findByAltText('분실물 사진')).toBeInTheDocument();
 
-    const updated = (await screen.findByAltText('분실물 사진')) as HTMLImageElement;
-    expect(updated.src).toContain('b.png');
+    expect(await screen.findByText('갈색 지갑')).toBeInTheDocument();
   });
 
-  it.each([403, 404])('HTTP %s 발생시 alert + 홈 이동', async (status) => {
-    server.use(http.get('*/lost-items/:id/image', () => new HttpResponse(null, { status })));
+  it('FindDetail > HTTP 403 발생시 로딩 상태 유지', async () => {
+    server.use(http.get('*/lost-items/:id/image', () => new HttpResponse(null, { status: 403 })));
 
-    const path = status === 404 ? '/find/404/detail' : '/find/10/detail';
-    renderFind(path);
+    renderFind('/find/10/detail');
 
-    await waitFor(() => expect(window.alert).toHaveBeenCalled());
-    expect(await screen.findByText('Home')).toBeInTheDocument();
+    expect(await screen.findByText('불러오는 중…')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(showApiErrorToast).not.toHaveBeenCalled();
+    });
   });
 
-  it('401 발생시 alert + 로그인 리다이렉트 호출', async () => {
+  it('FindDetail > HTTP 404 발생시 로딩 상태 유지', async () => {
+    server.use(http.get('*/lost-items/:id/image', () => new HttpResponse(null, { status: 404 })));
+
+    renderFind('/find/404/detail');
+
+    expect(await screen.findByText('불러오는 중…')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(showApiErrorToast).not.toHaveBeenCalled();
+    });
+  });
+
+  it('FindDetail > 401 발생시 로딩 상태 유지', async () => {
     server.use(http.get('*/lost-items/:id/image', () => new HttpResponse(null, { status: 401 })));
 
     renderFind('/find/10/detail');
 
-    await waitFor(() => expect(window.alert).toHaveBeenCalled());
-    await waitFor(() => expect(redirectToLoginKeepPath).toHaveBeenCalled());
+    expect(await screen.findByText('불러오는 중…')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(showApiErrorToast).not.toHaveBeenCalled();
+    });
   });
 });

@@ -1,69 +1,53 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getQuizzes, submitQuizzes } from '../../api/find';
+import toast from 'react-hot-toast';
+import { useQuizzesQuery, useSubmitQuizzesMutation } from '../../api/find/hooks/useFind';
 import type { QuizItem, QuizSubmitBody } from '../../types/find';
-import { useAuthFlag } from '../../contexts/AuthFlag';
-import { redirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+import { useAuthActions } from '../../store/hooks/useAuth';
+import { useRedirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
+import type { ApiError } from '../../types/common';
 import { useFindOutlet } from '../../hooks/find/useFindOutlet';
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 export default function FindQuiz() {
   const navigate = useNavigate();
   const { setNextButtonValidator } = useFindOutlet();
-  const { isAuthenticated, setAuthenticated, setUnauthenticated } = useAuthFlag();
+  const { setAuthenticated, setUnauthenticated } = useAuthActions();
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
 
   const [quiz, setQuiz] = useState<QuizItem[]>([]);
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [loading, setLoading] = useState(true);
+
+  const { data, isLoading, error } = useQuizzesQuery(lostItemId);
+  const { mutateAsync: submitQuizzes } = useSubmitQuizzesMutation(lostItemId);
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const res = await getQuizzes(lostItemId);
-        setQuiz(res?.quizzes ?? []);
-        setAuthenticated();
-      } catch (e: any) {
-        if (isAuthenticated && e?.status === 401) {
-          alert('로그인 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
-          setUnauthenticated();
-          redirectToLoginKeepPath();
-          return;
-        }
-        if (e?.status === 401) {
-          alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
-          redirectToLoginKeepPath();
-          return;
-        } else if (e?.status === 403) {
-          alert('퀴즈 시도 시도 횟수를 초과 했습니다.');
-          navigate('/', { replace: true });
-          return;
-        } else if (e?.status === 404) {
-          alert('해당 id의 분실물이 존재하지 않습니다.');
-          navigate('/', { replace: true });
-          return;
-        } else if (e?.status === 409) {
-          alert('이미 서약이 완료된 분실물 입니다.');
-          navigate('/', { replace: true });
-          return;
-        } else {
-          alert('알 수 없는 오류가 발생했습니다.');
-          navigate('/', { replace: true });
-          return;
-        }
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [lostItemId, isAuthenticated, setAuthenticated, setUnauthenticated, navigate]);
+    if (!data) return;
+    setQuiz(data.quizzes ?? []);
+    setAuthenticated();
+  }, [data, setAuthenticated]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    showApiErrorToast(error);
+
+    if (error.status === 401) {
+      setUnauthenticated();
+      redirectToLoginKeepPath();
+    } else {
+      navigate('/', { replace: true });
+    }
+  }, [error, navigate, setUnauthenticated, redirectToLoginKeepPath]);
 
   useEffect(() => {
     setNextButtonValidator(async () => {
       const canSubmit = quiz.length > 0 && quiz.every((q) => answers[q.featureId] != null);
 
       if (!canSubmit) {
-        alert('모든 문항을 선택해주세요.');
+        toast.error('모든 문항을 선택해주세요.');
         return false;
       }
 
@@ -75,33 +59,20 @@ export default function FindQuiz() {
       };
 
       try {
-        await submitQuizzes(lostItemId, body);
+        await submitQuizzes(body);
+        setAuthenticated();
         return true;
-      } catch (e: any) {
-        if (isAuthenticated && e?.status === 401) {
-          alert('로그인 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
+      } catch (e) {
+        const err = e as ApiError | undefined;
+        if (!err) return false;
+
+        showApiErrorToast(err);
+
+        if (err.status === 401) {
           setUnauthenticated();
           redirectToLoginKeepPath();
           return false;
-        }
-        if (e?.status === 401) {
-          alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
-          redirectToLoginKeepPath();
-          return false;
-        } else if (e?.status === 403) {
-          alert('퀴즈 시도 시도 횟수를 초과 했습니다.');
-          navigate('/', { replace: true });
-          return false;
-        } else if (e?.status === 404) {
-          alert('해당 id의 분실물이 존재하지 않습니다.');
-          navigate('/', { replace: true });
-          return false;
-        } else if (e?.status === 409) {
-          alert('이미 서약이 완료된 분실물 입니다.');
-          navigate('/', { replace: true });
-          return false;
         } else {
-          alert('알 수 없는 오류가 발생했습니다.');
           navigate('/', { replace: true });
           return false;
         }
@@ -112,15 +83,15 @@ export default function FindQuiz() {
   }, [
     quiz,
     answers,
-    lostItemId,
+    submitQuizzes,
     setNextButtonValidator,
-    isAuthenticated,
     setAuthenticated,
     setUnauthenticated,
     navigate,
+    redirectToLoginKeepPath,
   ]);
 
-  if (loading)
+  if (isLoading)
     return <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">퀴즈 불러오는 중…</div>;
   if (quiz.length === 0)
     return <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">퀴즈가 없습니다.</div>;
@@ -149,7 +120,12 @@ export default function FindQuiz() {
                       name={`quizChoice-${q.featureId}`}
                       value={opt.id}
                       className="sr-only"
-                      onChange={() => setAnswers((prev) => ({ ...prev, [q.featureId]: opt.id }))}
+                      onChange={() =>
+                        setAnswers((prev) => ({
+                          ...prev,
+                          [q.featureId]: opt.id,
+                        }))
+                      }
                     />
                     <span className="font-medium">{opt.text}</span>
                   </label>
