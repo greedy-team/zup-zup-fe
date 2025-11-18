@@ -1,25 +1,28 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthFlag, broadcastLogout } from '../../../contexts/AuthFlag';
-import { logout } from '../../../api/auth';
+import { useAuthFlag } from '../../../store/hooks/useAuth';
+import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
+import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 
 export default function Authentication() {
-  const { isAuthenticated, setUnauthenticated } = useAuthFlag();
+  const isAuthenticated = useAuthFlag();
+  const logoutMutation = useLogoutMutation();
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
   if (pathname.startsWith('/login')) return null;
 
   const goLoginPage = () => {
-    navigate('/login');
+    redirectToLoginKeepPath();
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch {}
-    setUnauthenticated();
-    broadcastLogout();
-    navigate('/', { replace: true });
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        navigate('/', { replace: true });
+      },
+    });
   };
 
   return (

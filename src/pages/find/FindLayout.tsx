@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { getLostItemBrief } from '../../api/find';
+import { useLostItemBriefQuery } from '../../api/find/hooks/useFind';
 import type { StepKey } from '../../constants/find';
 import {
   PAGE_TITLES,
@@ -12,6 +12,7 @@ import {
 } from '../../constants/find';
 import ProgressBar from '../../component/common/ProgressBar';
 import type { NextButtonValidator, FindOutletContext } from '../../types/find';
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 export default function FindLayout() {
   const { lostItemId: lostItemIdParam } = useParams<{ lostItemId: string }>();
@@ -19,8 +20,29 @@ export default function FindLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, error } = useLostItemBriefQuery(lostItemId);
+
+  const [isClickingNext, setIsClickingNext] = useState(false);
   const [isValuableItem, setIsValuableItem] = useState(true);
+
+  useEffect(() => {
+    if (!Number.isFinite(lostItemId)) {
+      navigate('/', { replace: true });
+    }
+  }, [lostItemId, navigate]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    showApiErrorToast(error);
+    navigate('/', { replace: true });
+  }, [error, navigate]);
+
+  useEffect(() => {
+    if (data) {
+      setIsValuableItem(data.categoryId !== ETC_CATEGORY_ID);
+    }
+  }, [data]);
 
   const currentRouteSegment: StepKey =
     (location.pathname.split('/').filter(Boolean).pop() as StepKey) ?? 'info';
@@ -33,45 +55,13 @@ export default function FindLayout() {
   const nextButtonLabel = NEXT_BUTTON_LABEL[currentStepKey];
   const pageTitle = PAGE_TITLES[currentStepKey];
 
-  useEffect(() => {
-    if (!Number.isFinite(lostItemId)) {
-      navigate('/', { replace: true });
-      return;
-    }
-    let alive = true;
-    (async () => {
-      setIsLoading(true);
-      try {
-        const brief = await getLostItemBrief(lostItemId);
-        if (!alive) return;
-        setIsValuableItem(brief?.categoryId !== ETC_CATEGORY_ID);
-      } catch (e: any) {
-        if (!alive) return;
-        if (e?.status === 403) {
-          alert('해당 분실물에 대한 열람 권한이 없습니다.');
-          navigate('/', { replace: true });
-          return;
-        } else if (e?.status === 404) {
-          alert('해당 분실물 정보를 찾을 수 없습니다.');
-          navigate('/', { replace: true });
-          return;
-        }
-      } finally {
-        if (alive) setIsLoading(false);
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [lostItemId, navigate]);
-
   const nextButtonValidatorRef = useRef<NextButtonValidator | null>(null);
   const setNextButtonValidator = useCallback<FindOutletContext['setNextButtonValidator']>(
     (handler) => {
       nextButtonValidatorRef.current = handler;
     },
     [],
-  ); // OUTLET에서 해당 함수의 참조를 의존성 배열에서 관리하므로 마운트 이후의 참조값 유지로 최적화
+  );
 
   const basePath = `/find/${lostItemId}`;
   const goToNextStep = () => {
@@ -80,7 +70,6 @@ export default function FindLayout() {
     else navigate(`${basePath}/${nextStep}`);
   };
 
-  const [isClickingNext, setIsClickingNext] = useState(false);
   const handleClickNext = async () => {
     const handler = nextButtonValidatorRef.current;
     if (!handler) {

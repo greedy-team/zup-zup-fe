@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { getLostItemBrief } from '../../api/find';
-import type { LostItemBrief } from '../../types/find';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useLostItemBriefQuery } from '../../api/find/hooks/useFind';
 import { useFindOutlet } from '../../hooks/find/useFindOutlet';
+import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
 export default function FindInfo() {
   const navigate = useNavigate();
@@ -11,8 +10,7 @@ export default function FindInfo() {
   const { lostItemId: idParam } = useParams<{ lostItemId: string }>();
   const lostItemId = Number(idParam);
 
-  const [item, setItem] = useState<LostItemBrief | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: item, isLoading, error } = useLostItemBriefQuery(lostItemId);
 
   useEffect(() => {
     setNextButtonValidator(() => true);
@@ -20,32 +18,13 @@ export default function FindInfo() {
   }, [setNextButtonValidator]);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const brief = await getLostItemBrief(lostItemId);
-        setItem(brief ?? null);
-      } catch (e: any) {
-        if (e?.status === 403) {
-          alert('해당 분실물에 대한 열람 권한이 없습니다.');
-          navigate('/', { replace: true });
-          return;
-        } else if (e?.status === 404) {
-          alert('해당 분실물 정보를 찾을 수 없습니다.');
-          navigate('/', { replace: true });
-          return;
-        } else {
-          alert('알 수 없는 오류가 발생했습니다.');
-          navigate('/', { replace: true });
-          return;
-        }
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [lostItemId, navigate]);
+    if (!error) return;
 
-  if (loading) return <div className="p-4 text-sm text-gray-500">불러오는 중…</div>;
+    showApiErrorToast(error);
+    navigate('/', { replace: true });
+  }, [error, navigate]);
+
+  if (isLoading) return <div className="p-4 text-sm text-gray-500">불러오는 중…</div>;
   if (!item)
     return <div className="p-4 text-sm text-red-600">분실물 정보를 가져오지 못했습니다.</div>;
 
@@ -64,7 +43,7 @@ export default function FindInfo() {
       <div>
         <label className="text-sm font-semibold text-gray-600">등록 날짜</label>
         <div className="mt-1 rounded-lg bg-gray-100 p-3 text-gray-800">
-          {new Date(item.createdAt).toLocaleDateString('ko-KR')}
+          {new Date(item.createdAt).toLocaleString()}
         </div>
       </div>
     </div>

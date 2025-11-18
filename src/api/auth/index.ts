@@ -1,20 +1,48 @@
-import { apiFetch } from '../common/apiClient';
+import type { LoginFormValues, LoginResponse } from '../../types/auth';
+import type { ApiError } from '../../types/common';
 
-export type LoginRequest = {
-  portalId: string;
-  portalPassword: string;
-};
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const LOGIN_URL = '/auth/login/portal';
-const LOGOUT_URL = '/auth/logout';
-
-export function loginPortal(payload: LoginRequest) {
-  return apiFetch<void>(LOGIN_URL, {
+export async function loginPortal(payload: LoginFormValues): Promise<LoginResponse> {
+  const res = await fetch(`${BASE_URL}/auth/login/portal`, {
     method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '포털 로그인 오류',
+      detail: data?.detail ?? '포털 로그인 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/auth/login/portal',
+    };
+    throw error;
+  }
+
+  return data as LoginResponse;
 }
 
-export function logout() {
-  return apiFetch<void>(LOGOUT_URL, { method: 'POST' });
+export async function logout(): Promise<void> {
+  const res = await fetch(`${BASE_URL}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  const data = await res.json().catch(() => undefined);
+
+  if (!res.ok) {
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '로그아웃 오류',
+      detail: data?.detail ?? '로그아웃 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/auth/logout',
+    };
+    throw error;
+  }
+
+  return;
 }

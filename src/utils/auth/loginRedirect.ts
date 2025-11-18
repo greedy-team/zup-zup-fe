@@ -1,11 +1,16 @@
-let isLoginRedirecting = false;
+import { useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export function redirectToLoginKeepPath() {
-  if (isLoginRedirecting) return;
-  if (location.pathname === '/login') return;
-  isLoginRedirecting = true;
+export function useRedirectToLoginKeepPath() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const from = `${location.pathname}${location.search}`;
-  const redirect = encodeURIComponent(from);
-  location.assign(`/login?redirect=${redirect}`);
+  return useCallback(() => {
+    if (location.pathname === '/login') return;
+
+    const from = `${location.pathname}${location.search}`;
+    const redirect = encodeURIComponent(from);
+
+    navigate(`/login?redirect=${redirect}`, { replace: true });
+  }, [location.pathname, location.search, navigate]);
 }
