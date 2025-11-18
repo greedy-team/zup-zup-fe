@@ -1,6 +1,6 @@
 import Authentication from './Authentication';
 import Logo from './Logo';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
 import { useAuthFlag } from '../../../contexts/AuthFlag';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,14 +14,21 @@ const Sidebar = () => {
   const { isAuthenticated } = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const isOnMain = pathname === '/';
+
+  useEffect(() => {
+    if (pathname.startsWith('/register')) {
+      setSelectedMode('register');
+    }
+    if (pathname.startsWith('/find')) {
+      setSelectedMode('find');
+    }
+  }, [pathname, setSelectedMode]);
 
   const handleChangeMode = (mode: 'register' | 'find') => {
-    if (!isOnMain) return;
     setSelectedMode(mode);
     const url = new URLSearchParams();
     setSelectedAreaId(0);
-    navigate({ search: `${url.toString()}` }, { replace: true });
+    navigate({ pathname: '/', search: `${url.toString()}` }, { replace: true });
   };
 
   const goHome = () => navigate('/');
