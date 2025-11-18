@@ -5,18 +5,20 @@ import FormSection from '../../component/register/FormSection';
 import type { RegisterContextType } from '../../types/register';
 
 const RegisterDetails = () => {
-  const { isLoading, formData, setFormData, categoryFeatures, schoolAreas, handleFeatureChange } =
+  const { isLoading, formData, dispatch, categoryFeatures, schoolAreas } =
     useOutletContext<RegisterContextType>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        name === 'foundAreaDetail' || name === 'depositArea' ? value.replace(/^\s+/, '') : value,
-    }));
+    const processedValue =
+      name === 'foundAreaDetail' || name === 'depositArea' ? value.replace(/^\s+/, '') : value;
+    dispatch({ type: 'SET_FIELD', payload: { name, value: processedValue } });
+  };
+
+  const handleFeatureChange = (featureId: number, optionId: number) => {
+    dispatch({ type: 'SET_FEATURE', payload: { featureId, optionId } });
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,22 +33,14 @@ const RegisterDetails = () => {
     const newImages = [...formData.images, ...files];
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    setFormData((prev) => ({
-      ...prev,
-      images: newImages,
-      imageOrder: newOrder,
-    }));
+    dispatch({ type: 'SET_IMAGES', payload: { images: newImages, imageOrder: newOrder } });
   };
 
   const handleRemoveImage = (indexToRemove: number) => {
     const newImages = formData.images.filter((_, index) => index !== indexToRemove);
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    setFormData((prev) => ({
-      ...prev,
-      images: newImages,
-      imageOrder: newOrder,
-    }));
+    dispatch({ type: 'SET_IMAGES', payload: { images: newImages, imageOrder: newOrder } });
   };
 
   if (isLoading) {
