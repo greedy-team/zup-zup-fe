@@ -23,7 +23,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     categoryIdFromQuery,
   );
 
-  const { formData, dispatch, clearPersistedData } = useRegisterState(validSchoolAreaId);
+  const { formData, dispatch, resetForm } = useRegisterState(validSchoolAreaId);
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
@@ -87,7 +87,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
     try {
       await postLostItem(requestData, formData.images);
-      await clearPersistedData();
+      await resetForm();
       setResultModalContent({
         status: 'success',
         title: '등록 완료!',
@@ -100,7 +100,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         },
       });
     } catch (error) {
-      await clearPersistedData();
+      await resetForm();
       setResultModalContent({
         status: 'error',
         title: '등록 실패',
@@ -126,7 +126,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     isStep2Valid,
     resultModalContent,
     handleRegister,
-    clearPersistedData,
+    resetForm,
     schoolAreas,
   };
 };

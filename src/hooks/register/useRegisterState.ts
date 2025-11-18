@@ -9,7 +9,8 @@ type Action =
   | { type: 'SET_IMAGES'; payload: { images: File[]; imageOrder: number[] } }
   | { type: 'SET_FEATURE'; payload: FeatureSelection }
   | { type: 'SET_FOUND_AREA'; payload: { foundAreaId: number | null } }
-  | { type: 'REHYDRATE_STATE'; payload: RegisterState };
+  | { type: 'REHYDRATE_STATE'; payload: RegisterState }
+  | { type: 'RESET_FORM' };
 
 const INITIAL_FORM_DATA: Omit<RegisterFormData, 'foundAreaId'> = {
   foundAreaDetail: '',
@@ -36,6 +37,11 @@ const reducer = (state: RegisterState, action: Action): RegisterState => {
       return { ...state, foundAreaId: action.payload.foundAreaId };
     case 'REHYDRATE_STATE':
       return { ...action.payload };
+    case 'RESET_FORM':
+      return {
+        ...INITIAL_FORM_DATA,
+        foundAreaId: state.foundAreaId,
+      };
     default:
       return state;
   }
@@ -71,5 +77,10 @@ export const useRegisterState = (validSchoolAreaId: number | null) => {
     dispatch({ type: 'SET_FOUND_AREA', payload: { foundAreaId: validSchoolAreaId } });
   }, [validSchoolAreaId]);
 
-  return { formData, dispatch, clearPersistedData: clearFormData };
+  const resetForm = () => {
+    dispatch({ type: 'RESET_FORM' });
+    clearFormData();
+  };
+
+  return { formData, dispatch, resetForm };
 };
