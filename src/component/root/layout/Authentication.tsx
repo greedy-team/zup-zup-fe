@@ -1,13 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuthFlag, broadcastLogout } from '../../../contexts/AuthFlag';
-import { logout } from '../../../api/auth';
+import { useAuthFlag } from '../../../store/hooks/useAuth';
 import LoginIcon from '../../../../assets/login.svg?react';
 import LogoutIcon from '../../../../assets/logout.svg?react';
+import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
+import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 
 export default function Authentication() {
   const isAuthenticated = useAuthFlag();
   const logoutMutation = useLogoutMutation();
-
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
   const navigate = useNavigate();
 
   const goLoginPage = () => {

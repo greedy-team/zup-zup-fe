@@ -2,7 +2,7 @@ import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext, useEffect } from 'react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
-import { useAuthFlag } from '../../../contexts/AuthFlag';
+import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
@@ -11,7 +11,7 @@ import ProfileIcon from '../../../../assets/profile.svg?react';
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
-  const { isAuthenticated } = useAuthFlag();
+  const isAuthenticated = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
