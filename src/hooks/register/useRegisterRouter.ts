@@ -7,8 +7,6 @@ export const useRegisterRouter = (schoolAreaIdArg?: number | null) => {
   const location = useLocation();
   const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
 
-  const isDetailsRoute = location.pathname.includes('/details');
-
   const categoryIdFromQuery = useMemo(() => {
     const v = Number(searchParams.get('categoryId'));
     return Number.isFinite(v) ? v : null;
@@ -24,7 +22,6 @@ export const useRegisterRouter = (schoolAreaIdArg?: number | null) => {
     navigate,
     location,
     searchParams,
-    isDetailsRoute,
     categoryIdFromQuery,
     validSchoolAreaId,
   };

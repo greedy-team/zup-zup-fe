@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchCategories, fetchCategoryFeatures } from '../../api/register';
 import type { Category, Feature } from '../../types/register';
 
-export const useRegisterData = (isDetailsRoute: boolean, categoryIdFromQuery: number | null) => {
+export const useRegisterData = (categoryIdFromQuery: number | null) => {
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryFeatures, setCategoryFeatures] = useState<Feature[]>([]);

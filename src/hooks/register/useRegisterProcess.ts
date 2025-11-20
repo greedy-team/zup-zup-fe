@@ -15,13 +15,9 @@ import type {
  * 라우팅 기반 등록 프로세스를 위한 모든 하위 훅을 조합하는 컨테이너 훅
  */
 export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
-  const { navigate, isDetailsRoute, categoryIdFromQuery, validSchoolAreaId } =
-    useRegisterRouter(schoolAreaIdArg);
+  const { navigate, categoryIdFromQuery, validSchoolAreaId } = useRegisterRouter(schoolAreaIdArg);
 
-  const { isLoading, categories, categoryFeatures } = useRegisterData(
-    isDetailsRoute,
-    categoryIdFromQuery,
-  );
+  const { isLoading, categories, categoryFeatures } = useRegisterData(categoryIdFromQuery);
 
   const { formData, setField, setImages, setFeature, resetForm } =
     useRegisterState(validSchoolAreaId);
