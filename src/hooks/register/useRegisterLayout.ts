@@ -24,7 +24,7 @@ export const useRegisterLayout = () => {
   const goToPrevStep = () => {
     if (currentStep === 1) {
       registerProcess.resetForm();
-      setSelectedMode('append');
+      setSelectedMode('register');
       navigate('/', { replace: true });
     }
     if (currentStep === 2) {
