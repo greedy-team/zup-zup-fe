@@ -18,10 +18,10 @@ import type {
 export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const { navigate, categoryIdFromQuery, validSchoolAreaId } = useRegisterRouter(schoolAreaIdArg);
 
-  const { isLoading, categories, categoryFeatures } = useRegisterData(categoryIdFromQuery);
+  const { isLoading, categories, categoryFeatures } = useRegisterData(categoryIdFromQuery());
 
   const { formData, setField, setImages, setFeature, resetForm } =
-    useRegisterState(validSchoolAreaId);
+    useRegisterState(validSchoolAreaId());
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
@@ -31,7 +31,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   // 페이지 새로고침 시 URL 쿼리 파라미터를 이용해 selectedCategory 상태 복원
   useEffect(() => {
     if (categoryIdFromQuery && categories.length > 0) {
-      const categoryFromUrl = categories.find((c) => c.id === categoryIdFromQuery);
+      const categoryFromUrl = categories.find((c) => c.id === categoryIdFromQuery());
       if (categoryFromUrl) {
         setSelectedCategory(categoryFromUrl);
       }
