@@ -36,6 +36,24 @@ describe('RegisterCategory', () => {
       categories: mockCategories,
       selectedCategory: null,
       setSelectedCategory: vi.fn(),
+      // 다른 속성들도 타입에 맞게 추가
+      isLoading: false,
+      formData: {
+        foundAreaId: 1,
+        foundAreaDetail: '',
+        depositArea: '',
+        images: [],
+        imageOrder: [],
+        featureOptions: [],
+        description: '',
+      },
+      dispatch: vi.fn(),
+      categoryFeatures: [],
+      schoolAreas: [],
+      isStep2Valid: false,
+      resultModalContent: null,
+      handleRegister: vi.fn(),
+      resetForm: vi.fn(),
     });
 
     render(<RegisterCategory />);

@@ -29,14 +29,14 @@ const RegisterCategory = () => {
               onChange={() => setSelectedCategory(category)}
               className="hidden"
             />
-            <div className="mb-2 h-13 w-13 rounded sm:h-11 sm:w-11">
+            <div className="mb-2 h-10 w-10 rounded sm:h-13 sm:w-13">
               <img
                 src={category.iconUrl}
                 alt={category.name}
                 className="h-full w-full object-contain"
               />
             </div>
-            <span className="text-sm font-medium text-gray-800 lg:text-sm">{category.name}</span>
+            <span className="text-xs font-medium text-gray-800 sm:text-sm">{category.name}</span>
           </label>
         ))}
       </div>
