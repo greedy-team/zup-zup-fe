@@ -93,7 +93,7 @@ const Map = () => {
 
   return (
     <div className="relative h-full min-w-0">
-      <div className="absolute top-0 right-0 left-[calc(1rem+env(safe-area-inset-right))] z-30 flex justify-center pt-4">
+      <div className="absolute top-0 right-0 left-0 z-30 flex justify-center pt-4">
         <CategoryRadio />
       </div>
 
