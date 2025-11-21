@@ -4,6 +4,7 @@ import { useRegisterRouter } from './useRegisterRouter';
 import { useRegisterData } from './useRegisterData';
 import { useRegisterState } from './useRegisterState';
 import { SelectedModeContext } from '../../contexts/AppContexts';
+import toast from 'react-hot-toast';
 import type {
   Category,
   LostItemRegisterRequest,
@@ -44,13 +45,13 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     fetchSchoolAreas()
       .then((areas) => {
         setSchoolAreas(areas);
-        if (validSchoolAreaId && !areas.some((area) => area.id === validSchoolAreaId)) {
-          alert(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`); // toast로 수정 필요
+        if (validSchoolAreaId && !areas.some((area) => area.id === validSchoolAreaId())) {
+          toast.error(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
           navigate('/');
         }
       })
       .catch((err) => {
-        console.error('학교 지역 검증 실패', err); // toast로 수정 필요
+        toast.error('학교 지역 검증 실패', err);
         navigate('/');
       });
   }, [validSchoolAreaId, navigate]);

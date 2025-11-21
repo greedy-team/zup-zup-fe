@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import toast from 'react-hot-toast';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRegisterProcess } from './useRegisterProcess';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
@@ -42,7 +43,7 @@ export const useRegisterLayout = () => {
   const goToNextStep = () => {
     if (currentStep === 1) {
       if (!registerProcess.selectedCategory) {
-        alert('카테고리를 선택해주세요.'); // toast로 수정 필요
+        toast.error('카테고리를 선택해주세요.');
         return;
       }
 
@@ -56,7 +57,7 @@ export const useRegisterLayout = () => {
     }
     if (currentStep === 2) {
       if (!registerProcess.isStep2Valid) {
-        alert('모든 필수 정보를 입력해주세요.'); // toast로 수정 필요
+        toast.error('모든 필수 정보를 입력해주세요.');
         return;
       }
 

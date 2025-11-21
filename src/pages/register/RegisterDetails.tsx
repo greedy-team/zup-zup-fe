@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { toast } from 'react-hot-toast';
 import { useOutletContext } from 'react-router-dom';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
 import FormSection from '../../component/register/FormSection';
@@ -26,7 +27,7 @@ const RegisterDetails = () => {
     const files = Array.from(e.target.files);
 
     if (formData.images.length + files.length > 3) {
-      alert('사진은 최대 3장까지 업로드할 수 있습니다.'); // toast로 수정 필요
+      toast.error('사진은 최대 3장까지 업로드할 수 있습니다.');
       return;
     }
 
