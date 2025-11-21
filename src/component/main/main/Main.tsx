@@ -23,7 +23,7 @@ const Main = () => {
 
           {selectedMode === 'find' && (
             <button
-              className="z-30 mb-2 w-20 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 md:hidden"
+              className="absolute bottom-0 left-1/2 z-30 mb-2 w-20 -translate-x-1/2 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 md:hidden"
               onClick={() => setIsMobileListOpen(true)}
             >
               분실물
