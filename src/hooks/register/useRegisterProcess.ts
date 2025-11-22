@@ -131,7 +131,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         onConfirm: () => {
           setResultModalContent(null);
           navigate('/', { replace: true });
-          setSelectedMode('append');
+          setSelectedMode('register');
         },
       });
     } catch (error) {
@@ -143,7 +143,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         onConfirm: () => {
           setResultModalContent(null);
           navigate('/', { replace: true });
-          setSelectedMode('append');
+          setSelectedMode('register');
         },
       });
     } finally {
