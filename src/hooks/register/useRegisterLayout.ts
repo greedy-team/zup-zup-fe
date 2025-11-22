@@ -30,7 +30,7 @@ export const useRegisterLayout = () => {
 
   const goToPrevStep = () => {
     if (currentStep === 1) {
-      setSelectedMode('append');
+      setSelectedMode('register');
       navigate('/', { replace: true });
     }
     if (currentStep === 2) navigate('category');
