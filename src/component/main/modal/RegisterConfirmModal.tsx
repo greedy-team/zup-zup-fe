@@ -4,7 +4,6 @@ import {
   RegisterConfirmModalContext,
   SchoolAreasContext,
   SelectedAreaIdContext,
-  SelectedModeContext,
 } from '../../../contexts/AppContexts';
 
 const RegisterConfirmModal = () => {
@@ -14,7 +13,6 @@ const RegisterConfirmModal = () => {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setSelectedMode } = useContext(SelectedModeContext)!;
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
   const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
   const { schoolAreas } = useContext(SchoolAreasContext)!;
