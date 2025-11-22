@@ -92,10 +92,12 @@ const Map = () => {
   const hoverArea = schoolAreas.find((area) => area.id === hoverAreaId);
 
   return (
-    <div className="min-w-0">
-      <CategoryRadio />
+    <div className="relative h-full min-w-0">
+      <div className="absolute top-0 right-0 left-0 z-30 flex justify-center pt-4">
+        <CategoryRadio />
+      </div>
 
-      {selectedMode === 'append' && selectedArea && (
+      {selectedMode === 'find' && selectedArea && (
         <div className="absolute top-30 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
           {selectedArea?.areaName}
         </div>
@@ -115,7 +117,7 @@ const Map = () => {
       )}
 
       {hoverArea && (
-        <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-100 z-10 hidden rounded-md bg-white/90 px-6 py-2 text-base shadow md:block">
+        <div className="absolute bottom-[calc(3rem+env(safe-area-inset-bottom))] left-10 z-10 hidden rounded-md bg-white/90 px-6 py-2 text-base shadow md:block">
           {hoverArea?.areaName}
         </div>
       )}

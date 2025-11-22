@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 
-import userEvent from '@testing-library/user-event';
 import Main from '../../component/main/main/Main';
 import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
@@ -21,15 +20,9 @@ const renderMain = () =>
     </MemoryRouter>,
   );
 
-describe('메인 하단 버튼', () => {
-  it('처음엔 "분실물 추가"가 보이고, 클릭 시 "분실물 조회"로 바뀐다', async () => {
+describe('메인 컴포넌트', () => {
+  it('지도가 렌더링된다', () => {
     renderMain();
-
-    const user = userEvent.setup();
-    const button = screen.getByRole('button', { name: '분실물 추가' });
-    expect(button).toBeInTheDocument();
-
-    await user.click(button);
-    expect(await screen.findByRole('button', { name: '분실물 조회' })).toBeInTheDocument();
+    expect(screen.getByTestId('map')).toBeInTheDocument();
   });
 });

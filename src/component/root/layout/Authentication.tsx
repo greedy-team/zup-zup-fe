@@ -1,17 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
+import LoginIcon from '../../../../assets/login.svg?react';
+import LogoutIcon from '../../../../assets/logout.svg?react';
 import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
 import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 
 export default function Authentication() {
   const isAuthenticated = useAuthFlag();
   const logoutMutation = useLogoutMutation();
-
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
   const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
-
-  if (pathname.startsWith('/login')) return null;
+  const navigate = useNavigate();
 
   const goLoginPage = () => {
     redirectToLoginKeepPath();
@@ -26,22 +24,28 @@ export default function Authentication() {
   };
 
   return (
-    <div>
+    <div className="flex aspect-square flex-shrink-0 flex-col items-center justify-center">
       {!isAuthenticated ? (
         <button
           type="button"
-          className="h-9 rounded-md bg-teal-600 px-4 text-base font-medium text-white transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none sm:h-auto sm:px-2.5 sm:py-1.5 sm:text-sm md:px-3 md:py-1.5 lg:px-3.5 lg:py-2"
           onClick={goLoginPage}
+          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          로그인
+          <LoginIcon className="h-6 w-6 cursor-pointer sm:h-15 sm:w-15 md:h-8 md:w-8" />
+          <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
+            로그인
+          </span>
         </button>
       ) : (
         <button
           type="button"
-          className="h-9 rounded-md bg-teal-600 px-4 text-base font-medium text-white transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none sm:h-auto sm:px-2.5 sm:py-1.5 sm:text-sm md:px-3 md:py-1.5 lg:px-3.5 lg:py-2"
           onClick={handleLogout}
+          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          로그아웃
+          <LogoutIcon className="h-6 w-6 cursor-pointer sm:h-15 sm:w-15 md:h-8 md:w-8" />
+          <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
+            로그아웃
+          </span>
         </button>
       )}
     </div>
