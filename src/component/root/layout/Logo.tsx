@@ -33,13 +33,13 @@ const Logo = () => {
         <img
           src={ZupzupDetailJpg}
           alt="줍줍"
-          className="h-12 w-auto object-contain sm:h-14 md:h-16 lg:h-20"
+          className="h-auto object-cover"
           loading="eager"
           decoding="async"
           fetchPriority="high"
           // 가능하면 실제 원본 가로/세로 px을 넣어 CLS 줄이기:
-          // width={880}
-          // height={320}
+          // width={72px}
+          // height={72px}
         />
       </picture>
 
