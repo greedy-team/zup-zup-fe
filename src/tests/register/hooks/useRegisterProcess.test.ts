@@ -33,7 +33,6 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
 
   // Mock 함수
   const mockNavigate = vi.fn();
-  const mockDispatch = vi.fn();
   const mockResetForm = vi.fn();
 
   // 기본 Mock 반환 값
@@ -58,7 +57,6 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
       imageOrder: [],
       description: '',
     },
-    dispatch: mockDispatch,
     resetForm: mockResetForm,
   };
 
