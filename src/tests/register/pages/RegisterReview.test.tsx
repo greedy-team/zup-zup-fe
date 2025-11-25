@@ -45,7 +45,6 @@ const defaultMockContext: RegisterContextType = {
     featureOptions: [{ featureId: 1, optionId: 2 }],
     description: '검은색 케이스',
   },
-  dispatch: vi.fn(),
   schoolAreas: [
     {
       id: 1,
@@ -54,10 +53,13 @@ const defaultMockContext: RegisterContextType = {
       marker: { lat: 0, lng: 0 },
     },
   ],
+  setField: vi.fn() as RegisterContextType['setField'],
+  setImages: vi.fn() as RegisterContextType['setImages'],
+  setFeature: vi.fn() as RegisterContextType['setFeature'],
+  resetForm: vi.fn() as RegisterContextType['resetForm'],
+  handleRegister: vi.fn() as RegisterContextType['handleRegister'],
   isStep2Valid: true,
   resultModalContent: null,
-  handleRegister: vi.fn(),
-  resetForm: vi.fn(),
 };
 
 const renderComponent = (context: Partial<RegisterContextType> = {}) => {
