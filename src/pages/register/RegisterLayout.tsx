@@ -20,7 +20,7 @@ const RegisterLayout = () => {
   } = registerLayoutProps;
 
   return (
-    <div className="inset-0 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+    <div className="flex h-full w-full items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {resultModalContent && <ResultModal {...resultModalContent} />}
 
       <div className="relative flex h-[87dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
@@ -36,7 +36,7 @@ const RegisterLayout = () => {
         <div className="mt-auto flex flex-shrink-0 items-center justify-between border-t pt-4 md:pt-6">
           <button
             onClick={goToPrevStep}
-            className="rounded-lg bg-gray-200 px-8 py-4 text-base font-normal text-gray-700 hover:bg-gray-300 md:text-xl"
+            className="rounded-lg bg-gray-200 px-8 py-4 text-base font-normal text-gray-700 hover:cursor-pointer hover:bg-gray-300 md:text-xl"
           >
             {currentStep === 1 ? '취소' : '이전'}
           </button>
@@ -48,7 +48,7 @@ const RegisterLayout = () => {
                 disabled={
                   (currentStep === 1 && !selectedCategory) || (currentStep === 2 && !isStep2Valid)
                 }
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-gray-300 md:text-xl"
+                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:cursor-pointer hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-gray-300 md:text-xl"
               >
                 다음
               </button>
@@ -56,7 +56,7 @@ const RegisterLayout = () => {
               <button
                 onClick={handleRegister}
                 disabled={isLoading}
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:bg-teal-600 disabled:bg-gray-300 md:text-xl"
+                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:cursor-pointer hover:bg-teal-600 disabled:bg-gray-300 md:text-xl"
               >
                 {isLoading ? <SpinnerIcon /> : '등록하기'}
               </button>

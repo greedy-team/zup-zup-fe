@@ -1,69 +1,47 @@
+import { useRef } from 'react';
+import { toast } from 'react-hot-toast';
 import { useOutletContext } from 'react-router-dom';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
+import FormSection from '../../component/register/FormSection';
 import type { RegisterContextType } from '../../types/register';
-import { useRef } from 'react';
-
-// 재사용 섹션 컴포넌트
-const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({
-  title,
-  children,
-}) => (
-  <div className="mb-6">
-    <h3 className="mb-3 text-xl font-medium text-gray-800">{title}</h3>
-    <div className="rounded-lg bg-gray-100 p-6">{children}</div>
-  </div>
-);
 
 const RegisterDetails = () => {
-  const { isLoading, formData, setFormData, categoryFeatures, schoolAreas, handleFeatureChange } =
+  const { isLoading, formData, setField, setFeature, setImages, categoryFeatures, schoolAreas } =
     useOutletContext<RegisterContextType>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 텍스트 입력 필드 변경 핸들러
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        name === 'foundAreaDetail' || name === 'depositArea'
-          ? value.replace(/^\s+/, '') // 앞 공백 제거
-          : value,
-    }));
+    const processedValue =
+      name === 'foundAreaDetail' || name === 'depositArea' ? value.replace(/^\s+/, '') : value;
+    setField(name, processedValue);
   };
 
-  // 이미지 업로드 핸들러
+  const handleFeatureChange = (featureId: number, optionId: number) => {
+    setFeature({ featureId, optionId });
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
 
     if (formData.images.length + files.length > 3) {
-      alert('사진은 최대 3장까지 업로드할 수 있습니다.');
+      toast.error('사진은 최대 3장까지 업로드할 수 있습니다.');
       return;
     }
 
     const newImages = [...formData.images, ...files];
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    setFormData((prev) => ({
-      ...prev,
-      images: newImages,
-      imageOrder: newOrder,
-    }));
+    setImages(newImages, newOrder);
   };
 
-  // 이미지 삭제 핸들러
   const handleRemoveImage = (indexToRemove: number) => {
     const newImages = formData.images.filter((_, index) => index !== indexToRemove);
     const newOrder = Array.from({ length: newImages.length }, (_, i) => i);
 
-    setFormData((prev) => ({
-      ...prev,
-      images: newImages,
-      imageOrder: newOrder,
-    }));
+    setImages(newImages, newOrder);
   };
 
   if (isLoading) {

@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
+import toast from 'react-hot-toast';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { fetchSchoolAreas } from '../../api/register';
 import { useRegisterProcess } from './useRegisterProcess';
-import type { SchoolArea } from '../../types/register';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
 import { SelectedModeContext } from '../../contexts/AppContexts';
 
@@ -15,11 +14,6 @@ export const useRegisterLayout = () => {
   const { setSelectedMode } = useContext(SelectedModeContext)!;
 
   const steps = REGISTER_PROCESS_STEPS.INDEXS;
-  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
-
-  useEffect(() => {
-    fetchSchoolAreas().then(setSchoolAreas).catch(console.error);
-  }, []);
 
   const currentStep = (() => {
     if (location.pathname.includes('category')) return 1;
@@ -30,17 +24,26 @@ export const useRegisterLayout = () => {
 
   const goToPrevStep = () => {
     if (currentStep === 1) {
+      registerProcess.resetForm();
       setSelectedMode('register');
       navigate('/', { replace: true });
     }
-    if (currentStep === 2) navigate('category');
-    if (currentStep === 3) navigate('details');
+    if (currentStep === 2) {
+      registerProcess.resetForm();
+      navigate('category');
+    }
+    if (currentStep === 3) {
+      navigate({
+        pathname: 'details',
+        search: `?categoryId=${registerProcess.selectedCategory?.id}`,
+      });
+    }
   };
 
   const goToNextStep = () => {
     if (currentStep === 1) {
       if (!registerProcess.selectedCategory) {
-        alert('카테고리를 선택해주세요.');
+        toast.error('카테고리를 선택해주세요.');
         return;
       }
 
@@ -53,15 +56,15 @@ export const useRegisterLayout = () => {
       );
     }
     if (currentStep === 2) {
-      if (!registerProcess.selectedCategory) {
-        alert('카테고리를 선택해주세요.');
+      if (!registerProcess.isStep2Valid) {
+        toast.error('모든 필수 정보를 입력해주세요.');
         return;
       }
 
       navigate(
         {
           pathname: 'review',
-          search: `?categoryId=${registerProcess.selectedCategory.id}`,
+          search: `?categoryId=${registerProcess.selectedCategory?.id}`,
         },
         { replace: true },
       );
@@ -71,7 +74,6 @@ export const useRegisterLayout = () => {
   return {
     steps,
     currentStep,
-    schoolAreas,
     goToPrevStep,
     goToNextStep,
     ...registerProcess,
