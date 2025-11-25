@@ -35,7 +35,6 @@ const Sidebar = () => {
   const goHome = () => {
     clearFormData();
     setSelectedMode('find');
-    navigate('/');
   };
   const iconBtn = 'flex w-full h-full flex-col items-center justify-center cursor-pointer';
 
