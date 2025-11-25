@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PlusIcon from '../../../../assets/plus.svg?react';
 import FindIcon from '../../../../assets/find.svg?react';
 import ProfileIcon from '../../../../assets/profile.svg?react';
+import { clearFormData } from '../../../utils/register/registerStorage';
 
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
@@ -31,7 +32,11 @@ const Sidebar = () => {
     navigate({ pathname: '/', search: `${url.toString()}` }, { replace: true });
   };
 
-  const goHome = () => navigate('/');
+  const goHome = () => {
+    clearFormData();
+    setSelectedMode('find');
+    navigate('/');
+  };
   const iconBtn = 'flex w-full h-full flex-col items-center justify-center cursor-pointer';
 
   const activeFind = selectedMode === 'find';
@@ -100,9 +105,11 @@ const Sidebar = () => {
 
       {/* ---------- 데스크탑(md+): 기존 세로 레이아웃 ---------- */}
       <div className="hidden h-full flex-col md:flex">
-        <div className="mb-4 px-2 pt-2">
-          <Logo />
-        </div>
+        <button onClick={goHome} aria-label="홈으로">
+          <div className="mb-4 px-2 pt-2">
+            <Logo />
+          </div>
+        </button>
 
         <div className="flex flex-shrink-0 flex-col items-center justify-center gap-0">
           {/* 찾기 */}

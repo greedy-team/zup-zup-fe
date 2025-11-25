@@ -1,26 +1,12 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ZupzupLiteJpg from '../../../../assets/zupzupLiteLogo1.jpg';
 import ZupzupDetailJpg from '../../../../assets/zupzupDetailLogo1.jpg';
 import ZupzupLiteWebp from '../../../../assets/lite.webp';
 import ZupzupDetailWebp from '../../../../assets/detail.webp';
-import { clearFormData } from '../../../utils/register/registerStorage';
-import { SelectedModeContext } from '../../../contexts/AppContexts';
 
 const Logo = () => {
-  const handleClickLogo = () => {
-    const { setSelectedMode } = useContext(SelectedModeContext)!;
-    clearFormData();
-    setSelectedMode('append');
-  };
-
   return (
-    <Link
-      to="/"
-      className="flex flex-shrink-0 items-center gap-3"
-      aria-label="메인 페이지로 이동"
-      onClick={handleClickLogo}
-    >
+    <Link to="/" className="flex flex-shrink-0 items-center gap-3" aria-label="메인 페이지로 이동">
       <picture>
         {/* 작은 화면: WebP → JPG */}
         <source media="(max-width: 480px)" type="image/webp" srcSet={ZupzupLiteWebp} />
