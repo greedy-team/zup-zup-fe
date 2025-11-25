@@ -14,8 +14,8 @@
     "check": "npm run lint && npm run typecheck && npm run test"
   },
   "dependencies": {
-    "idb": "^8.0.3",
     "@tanstack/react-query": "^5.90.6",
+    "idb": "^8.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.6.0",
