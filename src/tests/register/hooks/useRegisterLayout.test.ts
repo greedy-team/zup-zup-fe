@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import { toast } from 'react-hot-toast';
 import { useRegisterLayout } from '../../../hooks/register/useRegisterLayout';
 import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
 
@@ -22,6 +23,20 @@ vi.mock('react-router-dom', () => ({
 
 vi.mock('../../../hooks/register/useRegisterProcess');
 
+vi.mock('react-hot-toast', () => {
+  const mockToast = {
+    error: vi.fn(),
+    success: vi.fn(),
+  };
+
+  return {
+    __esModule: true,
+    default: mockToast,
+    toast: mockToast,
+    Toaster: () => null,
+  };
+});
+
 // --- Tests ---
 describe('useRegisterLayout 훅 테스트', () => {
   const mockResetForm = vi.fn();
@@ -39,7 +54,6 @@ describe('useRegisterLayout 훅 테스트', () => {
       resetForm: mockResetForm,
     };
     (useRegisterProcess as Mock).mockReturnValue(mockRegisterProcess);
-    window.alert = vi.fn();
   });
 
   afterEach(() => {
@@ -78,13 +92,13 @@ describe('useRegisterLayout 훅 테스트', () => {
       );
     });
 
-    it('1단계: 카테고리가 선택되지 않았으면 alert를 띄우고 이동하지 않아야 한다', () => {
+    it('1단계: 카테고리가 선택되지 않았으면 에러 토스트를 띄우고 이동하지 않아야 한다', () => {
       mockUseLocation.mockReturnValue({ pathname: '/register/1/category' });
       const { result } = renderHook(() => useRegisterLayout());
 
       act(() => result.current.goToNextStep());
 
-      expect(window.alert).toHaveBeenCalledWith('카테고리를 선택해주세요.');
+      expect(toast.error).toHaveBeenCalledWith('카테고리를 선택해주세요.');
       expect(mockNavigate).not.toHaveBeenCalled();
     });
 
@@ -108,7 +122,7 @@ describe('useRegisterLayout 훅 테스트', () => {
 
       act(() => result.current.goToNextStep());
 
-      expect(window.alert).toHaveBeenCalledWith('모든 필수 정보를 입력해주세요.');
+      expect(toast.error).toHaveBeenCalledWith('모든 필수 정보를 입력해주세요.');
       expect(mockNavigate).not.toHaveBeenCalled();
     });
   });

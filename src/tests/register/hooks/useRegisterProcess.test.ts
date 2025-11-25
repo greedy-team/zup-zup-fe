@@ -27,21 +27,22 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
   // Mock 데이터
   const mockCategories: Category[] = [{ id: 1, name: '휴대폰', iconUrl: 'url' }];
   const mockFeatures: Feature[] = [{ id: 1, name: '색상', quizQuestion: '색?', options: [] }];
+  const mockCategoryIdFromQuery = vi.fn<() => number | null>(() => null);
+  const mockValidSchoolAreaId = vi.fn<() => number | null>(() => 1);
   const mockSchoolAreas: SchoolArea[] = [
     { id: 1, areaName: '집현관', marker: { lat: 0, lng: 0 }, areaPolygon: { coordinates: [] } },
   ];
 
   // Mock 함수
   const mockNavigate = vi.fn();
-  const mockDispatch = vi.fn();
   const mockResetForm = vi.fn();
 
   // 기본 Mock 반환 값
   const defaultRouterMock = {
     navigate: mockNavigate,
     isDetailsRoute: false,
-    categoryIdFromQuery: null,
-    validSchoolAreaId: 1,
+    categoryIdFromQuery: mockCategoryIdFromQuery,
+    validSchoolAreaId: mockValidSchoolAreaId,
   };
   const defaultDataMock = {
     isLoading: false,
@@ -58,7 +59,6 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
       imageOrder: [],
       description: '',
     },
-    dispatch: mockDispatch,
     resetForm: mockResetForm,
   };
 
@@ -68,6 +68,9 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
     (useRegisterState as Mock).mockReturnValue(defaultStateMock);
     vi.spyOn(api, 'fetchSchoolAreas').mockResolvedValue(mockSchoolAreas);
     vi.spyOn(api, 'postLostItem').mockResolvedValue({ success: true });
+
+    mockCategoryIdFromQuery.mockClear();
+    mockValidSchoolAreaId.mockClear();
   });
 
   afterEach(() => {
@@ -84,7 +87,7 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
   it('categoryIdFromQuery와 categories가 있으면 selectedCategory를 설정해야 한다', async () => {
     (useRegisterRouter as Mock).mockReturnValue({
       ...defaultRouterMock,
-      categoryIdFromQuery: 1,
+      categoryIdFromQuery: vi.fn().mockReturnValue(1),
     });
 
     const { result } = renderHook(() => useRegisterProcess());
