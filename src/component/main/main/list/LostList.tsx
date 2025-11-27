@@ -20,8 +20,8 @@ export default function LostList() {
   return (
     <div className="flex min-h-0 flex-1 flex-col px-4 py-4 md:h-[100dvh] md:overflow-hidden">
       <div className="relative hidden md:block">
-        <h2 className="mb-2 text-sm font-semibold text-teal-700">분실물 목록</h2>
-        <div className="mb-3 text-xs text-gray-500">총 {totalCount}개</div>
+        <h2 className="mb-2 text-lg font-semibold text-teal-700">분실물 목록</h2>
+        <div className="text-md mb-3 text-gray-500">총 {totalCount}개</div>
       </div>
 
       <div
