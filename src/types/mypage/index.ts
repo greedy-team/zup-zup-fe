@@ -25,3 +25,15 @@ export type PledgedLostItemsResponse = {
   items: PledgedLostItem[];
   pageInfo: PageInfo;
 };
+
+export type CancelPledgeResponse = {
+  lostItemId: number;
+  status: string;
+  message: string;
+};
+
+export type FoundCompleteResponse = {
+  lostItemId: number;
+  status: string;
+  message: string;
+};
