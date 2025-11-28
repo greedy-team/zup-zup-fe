@@ -23,7 +23,7 @@ const RegisterLayout = () => {
     <div className="flex h-full w-full items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {resultModalContent && <ResultModal {...resultModalContent} />}
 
-      <div className="relative flex h-[87dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
+      <div className="relative flex h-[95dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
         <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">분실물 등록</h1>
         <ProgressBar steps={steps} currentStep={currentStep} />
 
