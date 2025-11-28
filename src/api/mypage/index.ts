@@ -1,4 +1,4 @@
-import type { PledgedLostItemsResponse } from '../../types/mypage';
+import type { PledgedLostItemsResponse, CancelPledgeResponse } from '../../types/mypage';
 import type { ApiError } from '../../types/common';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -22,4 +22,25 @@ export async function getPledgedLostItems(): Promise<PledgedLostItemsResponse> {
   }
 
   return data as PledgedLostItemsResponse;
+}
+
+export async function cancelPledge(lostItemId: number): Promise<CancelPledgeResponse> {
+  const res = await fetch(`${BASE_URL}/lost-items/${lostItemId}/pledge/cancel`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '서약 취소 오류',
+      detail: data?.detail ?? '서약 취소 중 오류가 발생했습니다.',
+      instance: data?.instance ?? `/api/lost-items/${lostItemId}/pledge/cancel`,
+    };
+    throw error;
+  }
+
+  return data as CancelPledgeResponse;
 }
