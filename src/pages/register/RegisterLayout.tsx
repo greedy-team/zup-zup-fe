@@ -25,15 +25,16 @@ const RegisterLayout = () => {
 
       <div className="relative flex h-[95dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
         <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">분실물 등록</h1>
-        <ProgressBar steps={steps} currentStep={currentStep} />
 
-        {/* Outlet 영역 */}
-        <div className="flex-grow overflow-y-auto pr-4">
+        <div className="mt-3">
+          <ProgressBar steps={steps} currentStep={currentStep} />
+        </div>
+
+        <div className="mt-4 flex-grow overflow-y-auto pr-2 pb-3 sm:pr-3 md:pb-4">
           <Outlet context={registerLayoutProps} />{' '}
         </div>
 
-        {/* 버튼 영역 */}
-        <div className="mt-auto flex flex-shrink-0 items-center justify-between border-t pt-4 md:pt-6">
+        <div className="mt-3 flex flex-shrink-0 items-center justify-between md:mt-5">
           <button
             onClick={goToPrevStep}
             className="rounded-lg bg-gray-200 px-8 py-4 text-base font-normal text-gray-700 hover:cursor-pointer hover:bg-gray-300 md:text-xl"
