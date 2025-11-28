@@ -6,9 +6,15 @@ import type {
 import type { ApiError } from '../../types/common';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const PLEDGED_LOST_ITEMS_LIMIT = 5;
 
-export async function getPledgedLostItems(): Promise<PledgedLostItemsResponse> {
-  const res = await fetch(`${BASE_URL}/lost-items/pledged`, {
+export async function getPledgedLostItems(page: number): Promise<PledgedLostItemsResponse> {
+  const queryParams = new URLSearchParams({
+    page: String(page),
+    limit: String(PLEDGED_LOST_ITEMS_LIMIT),
+  });
+
+  const res = await fetch(`${BASE_URL}/lost-items/pledged?${queryParams}`, {
     method: 'GET',
     credentials: 'include',
   });
