@@ -5,6 +5,7 @@ import type {
 } from '../../../../types/main/components';
 import { useNavigate } from 'react-router-dom';
 import { SelectedAreaIdContext } from '../../../../contexts/AppContexts';
+import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
 
 // 분실물 등록 시간 포맷팅
 function formatKST(iso: string) {
@@ -70,7 +71,7 @@ export default function LostListItem({ item, className }: ListItemComponentProps
           </div>
 
           <button
-            className="absolute right-3 bottom-3 rounded-lg border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50"
+            className={`${COMMON_BUTTON_CLASSNAME} absolute right-3 bottom-3 border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50`}
             onClick={() => {
               setSelectedAreaId(0);
               navigate(`/find/${item.lostItemId}`);

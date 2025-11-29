@@ -115,14 +115,16 @@ export default function FindLayout() {
           <Outlet context={{ setNextButtonValidator }} />
         </div>
 
-        <button
-          onClick={handleClickNext}
-          disabled={isClickingNext}
-          aria-busy={isClickingNext}
-          className="min-w-[240px] rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
-        >
-          {nextButtonLabel}
-        </button>
+        <div className="mt-3 md:mt-5">
+          <button
+            onClick={handleClickNext}
+            disabled={isClickingNext}
+            aria-busy={isClickingNext}
+            className="w-full min-w-[240px] cursor-pointer rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
+          >
+            {nextButtonLabel}
+          </button>
+        </div>
       </div>
     </main>
   );

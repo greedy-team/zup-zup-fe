@@ -3,6 +3,8 @@ import { useRegisterLayout } from '../../hooks/register/useRegisterLayout';
 import ProgressBar from '../../component/common/ProgressBar';
 import ResultModal from '../../component/common/ResultModal';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
+import { COMMON_BUTTON_CLASSNAME } from '../../constants/common';
+import { LAYOUT_BUTTON_CLASSNAME } from '../../constants/register';
 
 const RegisterLayout = () => {
   const registerLayoutProps = useRegisterLayout();
@@ -37,7 +39,7 @@ const RegisterLayout = () => {
         <div className="mt-3 flex flex-shrink-0 items-center justify-between md:mt-5">
           <button
             onClick={goToPrevStep}
-            className="rounded-lg bg-gray-200 px-8 py-4 text-base font-normal text-gray-700 hover:cursor-pointer hover:bg-gray-300 md:text-xl"
+            className={`${COMMON_BUTTON_CLASSNAME} ${LAYOUT_BUTTON_CLASSNAME} bg-gray-200 text-gray-700 hover:bg-gray-300 focus-visible:ring-gray-400`}
           >
             {currentStep === 1 ? '취소' : '이전'}
           </button>
@@ -49,7 +51,7 @@ const RegisterLayout = () => {
                 disabled={
                   (currentStep === 1 && !selectedCategory) || (currentStep === 2 && !isStep2Valid)
                 }
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:cursor-pointer hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-gray-300 md:text-xl"
+                className={`${COMMON_BUTTON_CLASSNAME} ${LAYOUT_BUTTON_CLASSNAME} bg-teal-500 text-white hover:bg-teal-600 focus-visible:ring-teal-300 disabled:cursor-not-allowed disabled:bg-gray-300`}
               >
                 다음
               </button>
@@ -57,7 +59,7 @@ const RegisterLayout = () => {
               <button
                 onClick={handleRegister}
                 disabled={isLoading}
-                className="rounded-lg bg-teal-500 px-8 py-4 text-base font-normal text-white hover:cursor-pointer hover:bg-teal-600 disabled:bg-gray-300 md:text-xl"
+                className={`${COMMON_BUTTON_CLASSNAME} ${LAYOUT_BUTTON_CLASSNAME} bg-teal-500 text-white hover:bg-teal-600 focus-visible:ring-teal-300 disabled:cursor-not-allowed disabled:bg-gray-300`}
               >
                 {isLoading ? <SpinnerIcon /> : '등록하기'}
               </button>

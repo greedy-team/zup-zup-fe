@@ -8,6 +8,7 @@ import { usePledgeMutation } from '../../api/find/hooks/useFind';
 import type { ApiError } from '../../types/common';
 import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 import { showApiErrorToast } from '../../api/common/apiErrorToast';
+import { COMMON_INPUT_CLASSNAME } from '../../constants/common';
 
 export default function FindPledge() {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ export default function FindPledge() {
       <input
         ref={inputRef}
         type="text"
-        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
+        className={`${COMMON_INPUT_CLASSNAME} mt-2 w-full border-2 border-gray-400 p-3 focus-visible:ring-gray-300`}
         placeholder="상단 문구를 똑같이 입력해주세요."
         disabled={pledgeMutation.isPending}
         onKeyDown={(e) => {

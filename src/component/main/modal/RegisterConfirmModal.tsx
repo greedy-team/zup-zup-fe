@@ -5,6 +5,7 @@ import {
   SchoolAreasContext,
   SelectedAreaIdContext,
 } from '../../../contexts/AppContexts';
+import { COMMON_BUTTON_CLASSNAME } from '../../../constants/common';
 
 const RegisterConfirmModal = () => {
   const { isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen } = useContext(
@@ -42,7 +43,7 @@ const RegisterConfirmModal = () => {
         </h2>
         <div className="flex justify-end gap-2">
           <button
-            className="rounded-lg bg-teal-600 px-4 py-2 text-white hover:bg-teal-700"
+            className={`${COMMON_BUTTON_CLASSNAME} bg-teal-600 px-4 py-2 text-white hover:bg-teal-700 focus-visible:ring-teal-500`}
             onClick={() => {
               setSelectedAreaId(0);
               setIsRegisterConfirmModalOpen(false);
@@ -52,7 +53,7 @@ const RegisterConfirmModal = () => {
             등록
           </button>
           <button
-            className="rounded-lg bg-gray-300 px-4 py-2 text-gray-600 hover:bg-gray-400"
+            className={`${COMMON_BUTTON_CLASSNAME} bg-gray-200 px-4 py-2 text-gray-600 hover:bg-gray-300 focus-visible:ring-gray-400`}
             onClick={handleCancel}
           >
             취소
