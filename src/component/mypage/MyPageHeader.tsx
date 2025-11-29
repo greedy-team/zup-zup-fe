@@ -14,21 +14,21 @@ export const MyPageHeader = ({ totalFoundCount }: MyPageHeaderProps) => {
 
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">마이페이지</h2>
-          <p className="text-xs text-slate-500 sm:text-sm">나의 분실물 관리</p>
+          <p className="text-xs text-slate-500 sm:text-sm">나의 분실물</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl bg-teal-50 px-4 py-3 text-sm text-slate-500 sm:w-auto sm:justify-center sm:px-6">
-        <dl className="flex items-center">
-          <dt className="text-xs whitespace-nowrap sm:text-sm">총 찾은 분실물</dt>
+      <div className="w-full rounded-xl bg-teal-50 px-4 py-3 text-sm text-slate-500 sm:w-auto sm:px-6">
+        <dl className="flex items-baseline justify-center sm:justify-center">
+          <dt className="text-xs whitespace-nowrap text-slate-500 sm:text-sm">총 찾은 분실물</dt>
 
-          <span className="mx-4 h-6 w-px bg-teal-200" aria-hidden="true" />
+          <span className="mx-4 h-5 w-px bg-teal-200" aria-hidden="true" />
 
-          <dd className="flex items-baseline">
+          <dd className="flex items-baseline gap-1">
             <span className="text-xl font-semibold text-teal-600 sm:text-2xl">
               {totalFoundCount}
             </span>
-            <span className="ml-1 text-xs text-slate-500 sm:text-sm">개</span>
+            <span className="text-xs text-slate-500 sm:text-sm">개</span>
           </dd>
         </dl>
       </div>
