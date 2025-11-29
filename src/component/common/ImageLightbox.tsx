@@ -8,22 +8,33 @@ export type ImageLightboxProps = {
 };
 
 const ImageLightbox = ({ open, images, onClose }: ImageLightboxProps) => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
   return (
     <Lightbox
       open={open}
       close={onClose}
       slides={images.map((src) => ({ src }))}
+      carousel={{ imageFit: 'contain' }}
       styles={{
         root: {
           backgroundColor: 'rgba(15, 23, 42, 0.45)',
         },
-        container: {
-          maxWidth: '60vw',
-          maxHeight: '70vh',
-          margin: 'auto',
-          borderRadius: '16px',
-          overflow: 'hidden',
-        },
+        container: isMobile
+          ? {
+              width: '90vw',
+              height: '50vh',
+              margin: 'auto',
+              borderRadius: '12px',
+              overflow: 'hidden',
+            }
+          : {
+              maxWidth: '60vw',
+              maxHeight: '70vh',
+              margin: 'auto',
+              borderRadius: '16px',
+              overflow: 'hidden',
+            },
       }}
     />
   );
