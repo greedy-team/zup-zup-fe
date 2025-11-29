@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { X, CheckCircle2, XCircle } from 'lucide-react';
 
 type ConfirmDialogVariant = 'safe' | 'danger';
@@ -38,7 +39,7 @@ export const ConfirmModal = ({
     ? 'bg-rose-500 hover:bg-rose-600 text-white'
     : 'bg-teal-500 hover:bg-teal-600 text-white';
 
-  return (
+  const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <button
@@ -84,4 +85,6 @@ export const ConfirmModal = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
