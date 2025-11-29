@@ -5,7 +5,10 @@ export default function RootLayout() {
   return (
     <div className="flex h-dvh min-h-dvh flex-col md:flex-row">
       {/* main이 먼저, 사이드바가 나중(모바일에서는 아래쪽) */}
-      <main className="order-1 flex min-h-0 min-w-0 flex-1 overflow-auto md:order-2">
+      <main
+        id="scroll-root"
+        className="order-1 flex min-h-0 min-w-0 flex-1 overflow-auto md:order-2"
+      >
         <Outlet />
       </main>
 
