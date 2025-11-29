@@ -89,7 +89,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       setResultModalContent({
         status: 'success',
         title: '등록 완료!',
-        message: '분실물이 성공적으로 등록되었습니다.',
+        message: '분실물이 성공적으로 등록되었습니다. 관리자의 승인 후 목록에 표시됩니다.',
         buttonText: '홈으로',
         onConfirm: () => {
           setResultModalContent(null);
