@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { PledgedLostItem } from '../../types/mypage';
 import { MapPin, Archive, CalendarDays, Clock4, XCircle, CheckCircle2 } from 'lucide-react';
+import type { PledgedLostItem } from '../../types/mypage';
 import ImageLightbox from '../common/ImageLightbox';
 
 type PledgedLostItemCardProps = {
@@ -44,7 +44,7 @@ export const PledgedLostItemCard = ({
     <>
       <article className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_4px_12px_rgba(15,23,42,0.03)] sm:flex-row">
         <div
-          className={`relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-slate-100 sm:w-56 ${
+          className={`relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-slate-100 sm:w-64 lg:w-72 ${
             hasImage ? 'cursor-pointer' : ''
           }`}
           onClick={hasImage ? handleClickImage : undefined}
@@ -61,7 +61,7 @@ export const PledgedLostItemCard = ({
             </div>
           )}
 
-          <span className="absolute top-2 left-2 inline-flex items-center rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-medium text-teal-700 shadow-sm">
+          <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-[10px] font-medium text-teal-700 shadow-sm">
             {item.categoryName}
           </span>
         </div>
@@ -104,25 +104,28 @@ export const PledgedLostItemCard = ({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 rounded-lg border border-rose-300 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={onCancelPledge}
-              disabled={disabled}
-            >
-              <XCircle className="h-3 w-3" aria-hidden="true" />
-              {isCancelLoading ? '취소 중...' : '서약 취소'}
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 rounded-lg bg-teal-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={onCompleteFound}
-              disabled={disabled}
-            >
-              <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
-              {isCompleteLoading ? '처리 중...' : '찾기 완료'}
-            </button>
+          <div className="mt-2 border-t border-slate-100 pt-4">
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-teal-500 px-4 py-3 text-sm font-medium text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={onCompleteFound}
+                disabled={disabled}
+              >
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                {isCompleteLoading ? '처리 중...' : '찾기 완료'}
+              </button>
+
+              <button
+                type="button"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={onCancelPledge}
+                disabled={disabled}
+              >
+                <XCircle className="h-4 w-4" aria-hidden="true" />
+                {isCancelLoading ? '취소 중...' : '서약 취소'}
+              </button>
+            </div>
           </div>
         </div>
       </article>
