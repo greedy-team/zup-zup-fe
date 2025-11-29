@@ -23,14 +23,14 @@ export default function Authentication() {
   };
 
   return (
-    <div className="flex aspect-square flex-shrink-0 flex-col items-center justify-center">
+    <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center md:aspect-square">
       {!isAuthenticated ? (
         <button
           type="button"
           onClick={goLoginPage}
           className="group flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          <LogIn className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-7 sm:w-7 md:h-8 md:w-8" />
+          <LogIn className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-15 sm:w-15 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그인
           </span>
@@ -41,7 +41,7 @@ export default function Authentication() {
           onClick={handleLogout}
           className="group flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          <LogOut className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-7 sm:w-7 md:h-8 md:w-8" />
+          <LogOut className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-15 sm:w-15 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그아웃
           </span>
