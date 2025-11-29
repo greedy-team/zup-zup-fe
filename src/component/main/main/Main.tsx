@@ -41,7 +41,6 @@ const Main = () => {
               isDesktopListOpen ? 'left-[380px]' : 'left-0'
             }`}
             onClick={() => setIsDesktopListOpen(!isDesktopListOpen)}
-            aria-label={isDesktopListOpen ? '목록 닫기' : '목록 열기'}
           >
             <svg
               className={`h-5 w-5 transition-transform duration-300 ${isDesktopListOpen ? '' : 'rotate-180'}`}
@@ -70,7 +69,7 @@ const Main = () => {
           )}
 
           <div
-            className={`fixed inset-0 z-40 flex transform flex-col bg-white transition-transform duration-300 ease-out md:hidden ${
+            className={`absolute inset-0 z-40 flex transform flex-col bg-white transition-transform duration-300 ease-out md:hidden ${
               isMobileListOpen ? 'translate-y-0' : 'pointer-events-none translate-y-full'
             }`}
           >
