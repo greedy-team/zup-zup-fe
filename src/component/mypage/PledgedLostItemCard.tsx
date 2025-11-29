@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MapPin, Archive, CalendarDays, Clock4, XCircle, CheckCircle2 } from 'lucide-react';
 import type { PledgedLostItem } from '../../types/mypage';
 import ImageLightbox from '../common/ImageLightbox';
+import { ConfirmModal } from '../common/ConfirmModal';
 
 type PledgedLostItemCardProps = {
   item: PledgedLostItem;
@@ -35,9 +36,32 @@ export const PledgedLostItemCard = ({
 
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
   const handleClickImage = () => {
     if (!hasImage) return;
     setIsLightboxOpen(true);
+  };
+
+  const handleClickCompleteButton = () => {
+    if (disabled) return;
+    setIsCompleteModalOpen(true);
+  };
+
+  const handleClickCancelButton = () => {
+    if (disabled) return;
+    setIsCancelModalOpen(true);
+  };
+
+  const handleConfirmComplete = () => {
+    onCompleteFound();
+    setIsCompleteModalOpen(false);
+  };
+
+  const handleConfirmCancel = () => {
+    onCancelPledge();
+    setIsCancelModalOpen(false);
   };
 
   return (
@@ -109,7 +133,7 @@ export const PledgedLostItemCard = ({
               <button
                 type="button"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-teal-500 px-4 py-3 text-sm font-medium text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={onCompleteFound}
+                onClick={handleClickCompleteButton}
                 disabled={disabled}
               >
                 <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
@@ -119,7 +143,7 @@ export const PledgedLostItemCard = ({
               <button
                 type="button"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={onCancelPledge}
+                onClick={handleClickCancelButton}
                 disabled={disabled}
               >
                 <XCircle className="h-4 w-4" aria-hidden="true" />
@@ -137,6 +161,32 @@ export const PledgedLostItemCard = ({
           images={[item.representativeImageUrl]}
         />
       )}
+
+      <ConfirmModal
+        isopen={isCompleteModalOpen}
+        onClose={() => setIsCompleteModalOpen(false)}
+        onConfirm={handleConfirmComplete}
+        title="찾기 완료 확인"
+        description="분실물을 되찾으셨나요?"
+        subDescription="찾기 완료 처리하시면 서약 목록에서 제거됩니다."
+        confirmLabel="확인"
+        cancelLabel="취소"
+        variant="safe"
+        disabled={isCompleteLoading}
+      />
+
+      <ConfirmModal
+        isopen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleConfirmCancel}
+        title="서약 취소 확인"
+        description="등록한 분실물 서약을 취소하시겠습니까?"
+        subDescription="취소된 내용은 복구할 수 없습니다."
+        confirmLabel="취소하기"
+        cancelLabel="닫기"
+        variant="danger"
+        disabled={isCancelLoading}
+      />
     </>
   );
 };
