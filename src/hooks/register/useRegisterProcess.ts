@@ -85,7 +85,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
     try {
       await postLostItem(requestData, formData.images);
-      await resetForm();
+      resetForm();
       setResultModalContent({
         status: 'success',
         title: '등록 완료!',
@@ -98,7 +98,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         },
       });
     } catch (error) {
-      await resetForm();
+      resetForm();
       setResultModalContent({
         status: 'error',
         title: '등록 실패',
