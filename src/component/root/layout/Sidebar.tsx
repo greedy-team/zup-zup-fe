@@ -1,4 +1,3 @@
-// src/component/root/layout/Sidebar.tsx
 import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext, useEffect } from 'react';
@@ -16,7 +15,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // URL에 따라 현재 모드 동기화
   useEffect(() => {
     if (pathname.startsWith('/register')) {
       setSelectedMode('register');
@@ -31,9 +29,8 @@ const Sidebar = () => {
     setSelectedMode(mode);
 
     if (mode === 'find' || mode === 'register') {
-      const url = new URLSearchParams();
       setSelectedAreaId(0);
-      navigate({ pathname: '/', search: url.toString() }, { replace: true });
+      navigate('/', { replace: true });
       return;
     }
 
@@ -53,8 +50,7 @@ const Sidebar = () => {
 
   const goHome = () => {
     clearFormData();
-    setSelectedMode('find');
-    // 필요하면 여기서 navigate('/')도 추가 가능
+    handleChangeMode('find');
   };
 
   const iconBtnBase = 'flex h-full w-full flex-col items-center justify-center cursor-pointer';
