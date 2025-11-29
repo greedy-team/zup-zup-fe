@@ -64,7 +64,7 @@ export default function FindPledge() {
     <div className="mx-auto max-w-2xl space-y-4">
       <h3 className="text-center text-lg font-bold">✨ Zupzup 성실 이용 서약 ✨</h3>
 
-      <div className="max-h-40 w-full space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-4 text-center text-gray-700">
+      <div className="max-h-70 w-full space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-4 text-center text-gray-700">
         <p>'줍줍'은 모두가 선한 마음으로 서로를 돕는 따뜻한 캠퍼스 문화를 만들어가고자 합니다.</p>
         <p>분실물 찾기 기능을 이용하기 전, 아래 내용을 확인하고 동의해주세요.</p>
         <p>
