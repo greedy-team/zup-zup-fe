@@ -36,7 +36,8 @@ const Sidebar = () => {
     clearFormData();
     setSelectedMode('find');
   };
-  const iconBtn = 'flex w-full h-full flex-col items-center justify-center cursor-pointer';
+  const iconBtn =
+    'flex w-full h-full flex-col items-center justify-center cursor-pointer transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300';
 
   const activeFind = selectedMode === 'find';
   const activeReg = selectedMode === 'register';
@@ -44,7 +45,7 @@ const Sidebar = () => {
   return (
     <aside className="w-full shrink-0 border-t border-gray-300 bg-teal-50 md:h-dvh md:w-18 md:border-t-0 md:border-r">
       {/* ---------- 모바일(<md): 가로 5칸 바 ---------- */}
-      <div className="grid grid-cols-5 place-items-center md:hidden">
+      <div className="grid min-h-18 grid-cols-5 items-stretch md:hidden">
         {/* 1) 찾기 */}
         <button
           onClick={() => handleChangeMode('find')}
@@ -52,7 +53,7 @@ const Sidebar = () => {
           aria-label="찾기"
         >
           <FindIcon
-            className={`h-6 w-6 sm:h-15 sm:w-15 ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            className={`h-6 w-6 sm:h-12 sm:w-12 ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
           />
           <span
             className={`text-xs sm:text-lg ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
@@ -68,7 +69,7 @@ const Sidebar = () => {
           aria-label="추가"
         >
           <PlusIcon
-            className={`h-6 w-6 sm:h-15 sm:w-15 ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            className={`h-6 w-6 sm:h-12 sm:w-12 ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
           />
           <span
             className={`text-xs sm:text-lg ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
@@ -94,7 +95,7 @@ const Sidebar = () => {
           className={`${iconBtn}`}
           aria-label="마이페이지"
         >
-          <ProfileIcon className="h-6 w-6 sm:h-15 sm:w-15" />
+          <ProfileIcon className="h-6 w-6 sm:h-12 sm:w-12" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg">마이</span>
         </button>
 
