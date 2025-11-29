@@ -63,11 +63,6 @@ export const MyPage = () => {
       <div className="flex min-h-full w-full max-w-[1104px] flex-col gap-6 px-4 py-8">
         <MyPageHeader totalFoundCount={data?.pageInfo?.totalElements ?? 0} />
 
-        <section className="mt-2">
-          <h2 className="text-sm font-semibold text-slate-900">분실물 목록</h2>
-          <p className="mt-1 text-xs text-slate-500">내가 서약한 분실물을 확인할 수 있습니다.</p>
-        </section>
-
         {isLoading && !data && (
           <div className="rounded-2xl bg-white px-6 py-10 text-center text-sm text-slate-500 shadow-sm">
             서약한 분실물을 불러오는 중입니다...
