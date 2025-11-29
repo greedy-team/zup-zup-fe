@@ -163,7 +163,7 @@ export const PledgedLostItemCard = ({
       )}
 
       <ConfirmModal
-        isopen={isCompleteModalOpen}
+        isOpen={isCompleteModalOpen}
         onClose={() => setIsCompleteModalOpen(false)}
         onConfirm={handleConfirmComplete}
         title="찾기 완료 확인"
@@ -176,7 +176,7 @@ export const PledgedLostItemCard = ({
       />
 
       <ConfirmModal
-        isopen={isCancelModalOpen}
+        isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
         onConfirm={handleConfirmCancel}
         title="서약 취소 확인"

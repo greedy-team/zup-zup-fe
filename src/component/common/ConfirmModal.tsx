@@ -4,7 +4,7 @@ import { X, CheckCircle2, XCircle } from 'lucide-react';
 type ConfirmDialogVariant = 'safe' | 'danger';
 
 type ConfirmModalProps = {
-  isopen: boolean;
+  isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   title: string;
@@ -17,7 +17,7 @@ type ConfirmModalProps = {
 };
 
 export const ConfirmModal = ({
-  isopen,
+  isOpen,
   onClose,
   onConfirm,
   title,
@@ -28,7 +28,7 @@ export const ConfirmModal = ({
   variant = 'safe',
   disabled,
 }: ConfirmModalProps) => {
-  if (!isopen) return null;
+  if (!isOpen) return null;
 
   const isDanger = variant === 'danger';
 
