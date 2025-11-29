@@ -18,7 +18,11 @@ import {
 } from '../../../contexts/AppContexts';
 import CategoryRadio from './CategoryRadio';
 
-const Map = () => {
+interface MapProps {
+  isDesktopListOpen?: boolean;
+}
+
+const Map = ({ isDesktopListOpen = false }: MapProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { setIsRegisterConfirmModalOpen } = useContext(RegisterConfirmModalContext)!;
@@ -92,8 +96,12 @@ const Map = () => {
   const hoverArea = schoolAreas.find((area) => area.id === hoverAreaId);
 
   return (
-    <div className="relative h-full min-w-0">
-      <div className="absolute top-0 right-0 left-0 z-30 flex justify-center pt-4">
+    <div className="relative h-full min-w-0 overflow-hidden">
+      <div
+        className={`absolute top-0 z-30 flex justify-center pt-4 transition-all duration-300 ease-out ${
+          isDesktopListOpen ? 'md:right-0 md:left-[380px]' : 'md:right-0 md:left-0'
+        } right-0 left-0`}
+      >
         <CategoryRadio />
       </div>
 
