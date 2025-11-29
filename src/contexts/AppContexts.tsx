@@ -2,7 +2,7 @@ import { createContext, useState, type ReactNode } from 'react';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../types/lost/lostApi';
 import type { SchoolArea } from '../types/map/map';
 
-export type Mode = 'register' | 'find';
+export type Mode = 'register' | 'find' | 'mypage';
 
 export type CategoriesCtx = {
   categories: Category[];
