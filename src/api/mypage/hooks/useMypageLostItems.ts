@@ -12,7 +12,7 @@ import { showApiErrorToast } from '../../common/apiErrorToast';
 
 export const usePledgedLostItems = (page: number = 1) =>
   useQuery<PledgedLostItemsResponse, ApiError>({
-    queryKey: ['lost-items', 'pledged'],
+    queryKey: ['lost-items', 'pledged', page],
     queryFn: () => getPledgedLostItems(page),
     placeholderData: (prev) => prev,
     retry: defaultQueryRetry,
