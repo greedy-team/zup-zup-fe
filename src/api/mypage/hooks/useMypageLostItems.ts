@@ -10,10 +10,11 @@ import { defaultQueryRetry } from '../../common/querySetting';
 import toast from 'react-hot-toast';
 import { showApiErrorToast } from '../../common/apiErrorToast';
 
-export const usePledgedLostItems = () =>
+export const usePledgedLostItems = (page: number = 1) =>
   useQuery<PledgedLostItemsResponse, ApiError>({
     queryKey: ['lost-items', 'pledged'],
-    queryFn: getPledgedLostItems,
+    queryFn: () => getPledgedLostItems(page),
+    placeholderData: (prev) => prev,
     retry: defaultQueryRetry,
   });
 
