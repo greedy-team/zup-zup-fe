@@ -71,7 +71,7 @@ export default function LostListItem({ item, className }: ListItemComponentProps
           </div>
 
           <button
-            className={`${COMMON_BUTTON_CLASSNAME} absolute right-3 bottom-3 border border-teal-200 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50`}
+            className={`${COMMON_BUTTON_CLASSNAME} absolute right-3 bottom-3 border border-teal-400 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50 focus-visible:ring-teal-300`}
             onClick={() => {
               setSelectedAreaId(0);
               navigate(`/find/${item.lostItemId}`);
