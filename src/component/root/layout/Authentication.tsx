@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { LogIn, LogOut } from 'lucide-react';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
-import LoginIcon from '../../../../assets/login.svg?react';
-import LogoutIcon from '../../../../assets/logout.svg?react';
 import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
 import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 
@@ -29,9 +28,9 @@ export default function Authentication() {
         <button
           type="button"
           onClick={goLoginPage}
-          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
+          className="group flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          <LoginIcon className="h-6 w-6 cursor-pointer sm:h-15 sm:w-15 md:h-8 md:w-8" />
+          <LogIn className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-7 sm:w-7 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그인
           </span>
@@ -40,9 +39,9 @@ export default function Authentication() {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
+          className="group flex h-full w-full cursor-pointer flex-col items-center justify-center"
         >
-          <LogoutIcon className="h-6 w-6 cursor-pointer sm:h-15 sm:w-15 md:h-8 md:w-8" />
+          <LogOut className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-7 sm:w-7 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그아웃
           </span>
