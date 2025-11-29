@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { Inbox } from 'lucide-react';
 import { MyPageHeader } from '../../component/mypage/MyPageHeader';
 import { PledgedLostItemCard } from '../../component/mypage/PledgedLostItemCard';
@@ -10,11 +11,13 @@ import {
 } from '../../api/mypage/hooks/useMypageLostItems';
 import { Pagination } from '../../component/common/Pagination';
 import { getPageFromSearchParams } from '../../utils/Page/getPageFromSearchParams';
+import { useRedirectToLoginKeepPath } from '../../utils/auth/loginRedirect';
 
 const DEFAULT_PAGE = 1;
 
 export const MyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
   const currentPage = getPageFromSearchParams(searchParams, DEFAULT_PAGE);
 
@@ -33,6 +36,13 @@ export const MyPage = () => {
       scrollContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    if (!isError || !error || error.status !== 401) return;
+
+    toast.error(error.detail);
+    redirectToLoginKeepPath();
+  }, [isError, error, redirectToLoginKeepPath]);
 
   const handlePageChange = (targetPage: number) => {
     if (isFetching || targetPage === currentPage) return;
