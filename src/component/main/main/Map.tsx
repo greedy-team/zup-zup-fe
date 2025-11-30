@@ -132,7 +132,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
           className={`absolute z-20 flex justify-center transition-all duration-300 ease-out ${
             isDesktopListOpen ? 'md:right-0 md:left-[380px]' : 'md:right-0 md:left-0'
           } right-0 left-0`}
-          style={{ top: 'calc(var(--cat-h) + 6.5rem)' }}
+          style={{ top: 'calc(var(--cat-h) + 3rem)' }}
         >
           <div className="-translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
             {selectedArea?.areaName}
