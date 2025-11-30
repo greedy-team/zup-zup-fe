@@ -29,6 +29,7 @@ const Main = () => {
     } else if (selectedMode === 'register') {
       setShouldRenderAside(true);
       setIsDesktopListOpen(false);
+      setIsMobileListOpen(false);
     }
   }, [selectedMode]);
 
