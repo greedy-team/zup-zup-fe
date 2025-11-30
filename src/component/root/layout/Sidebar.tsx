@@ -1,13 +1,12 @@
 import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Search, CirclePlus, CircleUser } from 'lucide-react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
-import { useLocation, useNavigate } from 'react-router-dom';
-import PlusIcon from '../../../../assets/plus.svg?react';
-import FindIcon from '../../../../assets/find.svg?react';
-import ProfileIcon from '../../../../assets/profile.svg?react';
 import { clearFormData } from '../../../utils/register/registerStorage';
+import type { Mode } from '../../../contexts/AppContexts';
 
 const Sidebar = () => {
   const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
@@ -19,28 +18,47 @@ const Sidebar = () => {
   useEffect(() => {
     if (pathname.startsWith('/register')) {
       setSelectedMode('register');
-    }
-    if (pathname.startsWith('/find')) {
+    } else if (pathname.startsWith('/find')) {
       setSelectedMode('find');
+    } else if (pathname.startsWith('/mypage')) {
+      setSelectedMode('mypage');
     }
   }, [pathname, setSelectedMode]);
 
-  const handleChangeMode = (mode: 'register' | 'find') => {
+  const handleChangeMode = (mode: Mode) => {
     setSelectedMode(mode);
-    const url = new URLSearchParams();
-    setSelectedAreaId(0);
-    navigate({ pathname: '/', search: `${url.toString()}` }, { replace: true });
+
+    if (mode === 'find' || mode === 'register') {
+      setSelectedAreaId(0);
+      navigate('/', { replace: true });
+      return;
+    }
+
+    if (mode === 'mypage') {
+      navigate('/mypage');
+    }
+  };
+
+  const handleClickMyPage = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    handleChangeMode('mypage');
   };
 
   const goHome = () => {
     clearFormData();
-    setSelectedMode('find');
+    handleChangeMode('find');
   };
-  const iconBtn =
-    'flex w-full h-full flex-col items-center justify-center cursor-pointer transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300';
+
+  const iconBtnBase =
+    'flex h-full w-full flex-col items-center justify-center cursor-pointer transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300';
 
   const activeFind = selectedMode === 'find';
   const activeReg = selectedMode === 'register';
+  const activeMy = selectedMode === 'mypage';
 
   return (
     <aside className="w-full shrink-0 border-t border-gray-300 bg-teal-50 md:h-dvh md:w-18 md:border-t-0 md:border-r">
@@ -49,14 +67,18 @@ const Sidebar = () => {
         {/* 1) 찾기 */}
         <button
           onClick={() => handleChangeMode('find')}
-          className={`${iconBtn} ${activeFind ? 'bg-teal-700 text-white' : ''}`}
+          className={`${iconBtnBase} ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="찾기"
         >
-          <FindIcon
-            className={`h-6 w-6 sm:h-12 sm:w-12 ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+          <Search
+            className={`h-6 w-6 sm:h-15 sm:w-15 ${
+              activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
           />
           <span
-            className={`text-xs sm:text-lg ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            className={`text-xs sm:text-lg ${
+              activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
           >
             찾기
           </span>
@@ -65,14 +87,18 @@ const Sidebar = () => {
         {/* 2) 추가 */}
         <button
           onClick={() => handleChangeMode('register')}
-          className={`${iconBtn} ${activeReg ? 'bg-teal-700 text-white' : ''}`}
+          className={`${iconBtnBase} ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="추가"
         >
-          <PlusIcon
-            className={`h-6 w-6 sm:h-12 sm:w-12 ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+          <CirclePlus
+            className={`h-6 w-6 sm:h-15 sm:w-15 ${
+              activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
           />
           <span
-            className={`text-xs sm:text-lg ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            className={`text-xs sm:text-lg ${
+              activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
           >
             추가
           </span>
@@ -89,21 +115,31 @@ const Sidebar = () => {
           </div>
         </button>
 
-        {/* 4) 마이페이지(추후 구현 예정, 현재는 로그인 페이지로 redirect) */}
+        {/* 4) 마이페이지 */}
         <button
-          onClick={() => (isAuthenticated ? navigate('') : navigate('/login'))}
-          className={`${iconBtn}`}
+          onClick={handleClickMyPage}
+          className={`${iconBtnBase} ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="마이페이지"
         >
-          <ProfileIcon className="h-6 w-6 sm:h-12 sm:w-12" />
-          <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg">마이</span>
+          <CircleUser
+            className={`h-6 w-6 sm:h-15 sm:w-15 ${
+              activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
+          />
+          <span
+            className={`text-xs sm:text-lg ${
+              activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
+          >
+            마이
+          </span>
         </button>
 
-        {/* 5) 로그인 */}
+        {/* 5) 로그인 / 로그아웃 */}
         <Authentication />
       </div>
 
-      {/* ---------- 데스크탑(md+): 기존 세로 레이아웃 ---------- */}
+      {/* ---------- 데스크탑(md+): 세로 레이아웃 ---------- */}
       <div className="hidden h-full flex-col md:flex">
         <button onClick={goHome} aria-label="홈으로">
           <div className="mb-4 px-2 pt-2">
@@ -115,13 +151,17 @@ const Sidebar = () => {
           {/* 찾기 */}
           <button
             onClick={() => handleChangeMode('find')}
-            className={`${iconBtn} aspect-square ${activeFind ? 'bg-teal-700 text-white' : ''}`}
+            className={`${iconBtnBase} aspect-square ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           >
-            <FindIcon
-              className={`h-8 w-8 ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            <Search
+              className={`h-8 w-8 ${
+                activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
             />
             <span
-              className={`text-sm ${activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+              className={`text-sm ${
+                activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
             >
               찾기
             </span>
@@ -130,13 +170,17 @@ const Sidebar = () => {
           {/* 추가 */}
           <button
             onClick={() => handleChangeMode('register')}
-            className={`${iconBtn} aspect-square ${activeReg ? 'bg-teal-700 text-white' : ''}`}
+            className={`${iconBtnBase} aspect-square ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           >
-            <PlusIcon
-              className={`h-8 w-8 ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+            <CirclePlus
+              className={`h-8 w-8 ${
+                activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
             />
             <span
-              className={`text-sm ${activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'}`}
+              className={`text-sm ${
+                activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
             >
               추가
             </span>
@@ -145,12 +189,22 @@ const Sidebar = () => {
 
         <div className="mt-auto mb-4">
           <button
-            onClick={() => (isAuthenticated ? navigate('') : navigate('/login'))}
-            className={`${iconBtn} aspect-square`}
+            onClick={handleClickMyPage}
+            className={`${iconBtnBase} aspect-square ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
             aria-label="마이페이지"
           >
-            <ProfileIcon className="h-8 w-8" />
-            <span className="text-sm text-gray-600 group-hover:text-teal-500">마이</span>
+            <CircleUser
+              className={`h-8 w-8 ${
+                activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
+            />
+            <span
+              className={`text-sm ${
+                activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
+            >
+              마이
+            </span>
           </button>
         </div>
 
