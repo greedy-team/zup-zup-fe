@@ -13,41 +13,60 @@ const Main = () => {
   const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);
   const [isDesktopListOpen, setIsDesktopListOpen] = useState(true);
+  const [shouldRenderAside, setShouldRenderAside] = useState(selectedMode !== 'register');
   const { totalCount } = useContext(TotalCountContext)!;
 
   useEffect(() => {
-    if (selectedAreaId !== 0) {
+    if (selectedMode !== 'register' && selectedAreaId !== 0) {
       setIsDesktopListOpen(true);
     }
-  }, [selectedAreaId]);
+  }, [selectedAreaId, selectedMode]);
+
+  useEffect(() => {
+    if (selectedMode === 'find') {
+      setShouldRenderAside(true);
+      setIsDesktopListOpen(true);
+    } else if (selectedMode === 'register') {
+      setShouldRenderAside(true);
+      setIsDesktopListOpen(false);
+    }
+  }, [selectedMode]);
 
   return (
     <main className="min-h-0 flex-1">
       <div className="grid h-full min-h-0 min-w-0 grid-cols-1 md:grid-cols-1">
         <section className="relative flex h-full min-h-0 min-w-0 flex-col overflow-x-hidden">
-          {selectedMode !== 'register' && (
+          {shouldRenderAside && (
             <aside
               className={`absolute top-0 left-0 z-30 hidden h-full w-[380px] border-r border-gray-300 bg-white transition-transform duration-300 ease-out md:block ${
                 isDesktopListOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
+              onTransitionEnd={(e) => {
+                if (e.propertyName !== 'transform') return;
+                if (selectedMode === 'register' && !isDesktopListOpen) {
+                  setShouldRenderAside(false);
+                }
+              }}
             >
               <LostList />
 
-              <button
-                className="absolute top-1/2 right-0 z-80 hidden h-12 w-6 translate-x-full -translate-y-1/2 cursor-pointer items-center justify-center rounded-r-md bg-teal-600 text-white shadow-lg transition-all duration-300 hover:bg-teal-700 md:flex"
-                onClick={() => setIsDesktopListOpen(!isDesktopListOpen)}
-                aria-label={isDesktopListOpen ? '목록 닫기' : '목록 열기'}
-              >
-                <svg
-                  className={`h-5 w-5 transition-transform duration-300 ${isDesktopListOpen ? '' : 'rotate-180'}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
+              {selectedMode !== 'register' && (
+                <button
+                  className="absolute top-1/2 right-0 z-80 hidden h-12 w-6 translate-x-full -translate-y-1/2 cursor-pointer items-center justify-center rounded-r-md bg-teal-600 text-white shadow-lg transition-all duration-300 hover:bg-teal-700 md:flex"
+                  onClick={() => setIsDesktopListOpen(!isDesktopListOpen)}
+                  aria-label={isDesktopListOpen ? '목록 닫기' : '목록 열기'}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+                  <svg
+                    className={`h-5 w-5 transition-transform duration-300 ${isDesktopListOpen ? '' : 'rotate-180'}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
             </aside>
           )}
 
