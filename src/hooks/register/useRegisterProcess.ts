@@ -18,10 +18,10 @@ import type {
 export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const { navigate, categoryIdFromQuery, validSchoolAreaId } = useRegisterRouter(schoolAreaIdArg);
 
-  const { isLoading, categories, categoryFeatures } = useRegisterData(categoryIdFromQuery());
+  const { isLoading, categories, categoryFeatures } = useRegisterData(categoryIdFromQuery);
 
   const { formData, setField, setImages, setFeature, resetForm } =
-    useRegisterState(validSchoolAreaId());
+    useRegisterState(validSchoolAreaId);
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
@@ -30,11 +30,9 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
   // 페이지 새로고침 시 URL 쿼리 파라미터를 이용해 selectedCategory 상태 복원
   useEffect(() => {
-    if (categoryIdFromQuery && categories.length > 0) {
-      const categoryFromUrl = categories.find((c) => c.id === categoryIdFromQuery());
-      if (categoryFromUrl) {
-        setSelectedCategory(categoryFromUrl);
-      }
+    if (categoryIdFromQuery != null && categories.length > 0) {
+      const categoryFromUrl = categories.find((c) => c.id === categoryIdFromQuery) || null;
+      setSelectedCategory(categoryFromUrl);
     } else {
       setSelectedCategory(null);
     }
@@ -45,7 +43,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
     fetchSchoolAreas()
       .then((areas) => {
         setSchoolAreas(areas);
-        if (validSchoolAreaId && !areas.some((area) => area.id === validSchoolAreaId())) {
+        if (validSchoolAreaId != null && !areas.some((area) => area.id === validSchoolAreaId)) {
           toast.error(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
           navigate('/');
         }
@@ -85,11 +83,11 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
 
     try {
       await postLostItem(requestData, formData.images);
-      await resetForm();
+      resetForm();
       setResultModalContent({
         status: 'success',
         title: '등록 완료!',
-        message: '분실물이 성공적으로 등록되었습니다.',
+        message: '분실물이 성공적으로 등록되었습니다. 관리자의 승인 후 목록에 추가됩니다.',
         buttonText: '홈으로',
         onConfirm: () => {
           setResultModalContent(null);
@@ -98,7 +96,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
         },
       });
     } catch (error) {
-      await resetForm();
+      resetForm();
       setResultModalContent({
         status: 'error',
         title: '등록 실패',
