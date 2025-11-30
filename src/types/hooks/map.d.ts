@@ -6,6 +6,7 @@ export type UsePolygonsHookOptions = {
   schoolAreas: SchoolArea[];
   selectedAreaId: number;
   selectedMode: 'find' | 'register';
+  isDesktopListOpen?: boolean;
   onOpenRegisterConfirm: () => void;
   onSelectArea: (areaId: number) => void;
   setHoverAreaId: (areaId: number) => void;
