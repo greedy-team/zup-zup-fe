@@ -87,7 +87,8 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
   }, [selectedMode, reset]);
 
   // 지도 클릭 시 핀 생성 및 모달 열기
-  useRegisterMapClick(map, selectedMode === 'register', createRegisterPin, () =>
+  const isRegisterClickEnabled = selectedMode === 'register' && selectedAreaId !== 0;
+  useRegisterMapClick(map, isRegisterClickEnabled, createRegisterPin, () =>
     setIsRegisterConfirmModalOpen(true),
   );
 
