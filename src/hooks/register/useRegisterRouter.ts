@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export const useRegisterRouter = (schoolAreaIdArg?: number | null) => {
@@ -7,16 +6,16 @@ export const useRegisterRouter = (schoolAreaIdArg?: number | null) => {
   const location = useLocation();
   const { schoolAreaId: schoolAreaIdParam } = useParams<{ schoolAreaId: string }>();
 
-  const categoryIdFromQuery = useCallback((): number | null => {
+  const categoryIdFromQuery = (() => {
     const v = Number(searchParams.get('categoryId'));
     return Number.isFinite(v) ? v : null;
-  }, [searchParams]);
+  })();
 
-  const validSchoolAreaId = useCallback((): number | null => {
+  const validSchoolAreaId = (() => {
     if (typeof schoolAreaIdArg === 'number') return schoolAreaIdArg;
     const n = Number(schoolAreaIdParam);
     return Number.isFinite(n) ? n : null;
-  }, [schoolAreaIdArg, schoolAreaIdParam]);
+  })();
 
   return {
     navigate,
