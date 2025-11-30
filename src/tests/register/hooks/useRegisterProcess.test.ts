@@ -87,7 +87,7 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
   it('categoryIdFromQuery와 categories가 있으면 selectedCategory를 설정해야 한다', async () => {
     (useRegisterRouter as Mock).mockReturnValue({
       ...defaultRouterMock,
-      categoryIdFromQuery: vi.fn().mockReturnValue(1),
+      categoryIdFromQuery: 1,
     });
 
     const { result } = renderHook(() => useRegisterProcess());
