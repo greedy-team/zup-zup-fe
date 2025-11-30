@@ -7,6 +7,7 @@ export function usePolygons({
   schoolAreas,
   selectedAreaId,
   selectedMode,
+  isDesktopListOpen,
   onOpenRegisterConfirm,
   onSelectArea,
   setHoverAreaId,
@@ -29,6 +30,24 @@ export function usePolygons({
   useEffect(() => {
     modeRef.current = selectedMode;
   }, [selectedMode]);
+
+  const computeOffsetCenter = useCallback(
+    (center: kakao.maps.LatLng) => {
+      if (!map) return center;
+      // 데스크톱에서 리스트가 열려 있고, 찾기 모드일 때만 보정 (등록 모드에서는 전체 맵 기준 중앙)
+      const isDesktop =
+        typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+      const shouldOffset = isDesktop && isDesktopListOpen && modeRef.current === 'find';
+      const offsetX = shouldOffset ? 190 : 0; // 380px 패널의 절반
+      if (offsetX === 0) return center;
+
+      const proj = map.getProjection();
+      const pt = proj.containerPointFromCoords(center);
+      const moved = new kakao.maps.Point(pt.x - offsetX, pt.y);
+      return proj.coordsFromContainerPoint(moved);
+    },
+    [map, isDesktopListOpen],
+  );
   useEffect(() => {
     openRef.current = onOpenRegisterConfirm;
   }, [onOpenRegisterConfirm]);
@@ -128,7 +147,7 @@ export function usePolygons({
           openRef.current?.();
 
           const center = getPolygonCenter(polygon);
-          map?.panTo(center);
+          map?.panTo(computeOffsetCenter(center));
 
           return;
         }
@@ -138,7 +157,7 @@ export function usePolygons({
         selectedPolygonRef.current = polygon;
 
         const center = getPolygonCenter(polygon);
-        map?.panTo(center);
+        map?.panTo(computeOffsetCenter(center));
       };
       const onOver = () => {
         if (selectedPolygonRef.current === polygon) return;
@@ -174,6 +193,10 @@ export function usePolygons({
         polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
         poly.setOptions(SELECTED_STYLE);
         selectedPolygonRef.current = poly;
+
+        // URL로 선택된 상태에서도 보정된 중심으로 이동
+        const center = getPolygonCenter(poly);
+        map?.setCenter(computeOffsetCenter(center));
       }
     }
 

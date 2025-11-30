@@ -32,7 +32,7 @@ export function createNumberedMarker(
     position: new window.kakao.maps.LatLng(pos.lat, pos.lng),
     content,
     xAnchor: 0.5,
-    yAnchor: 1,
+    yAnchor: 0.5,
     clickable: false,
     zIndex: 1000,
   });
