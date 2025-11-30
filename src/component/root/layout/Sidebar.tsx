@@ -53,7 +53,8 @@ const Sidebar = () => {
     handleChangeMode('find');
   };
 
-  const iconBtnBase = 'flex h-full w-full flex-col items-center justify-center cursor-pointer';
+  const iconBtnBase =
+    'flex h-full w-full flex-col items-center justify-center cursor-pointer transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300';
 
   const activeFind = selectedMode === 'find';
   const activeReg = selectedMode === 'register';
@@ -62,7 +63,7 @@ const Sidebar = () => {
   return (
     <aside className="w-full shrink-0 border-t border-gray-300 bg-teal-50 md:h-dvh md:w-18 md:border-t-0 md:border-r">
       {/* ---------- 모바일(<md): 가로 5칸 바 ---------- */}
-      <div className="grid grid-cols-5 place-items-center md:hidden">
+      <div className="grid min-h-18 grid-cols-5 items-stretch md:hidden">
         {/* 1) 찾기 */}
         <button
           onClick={() => handleChangeMode('find')}

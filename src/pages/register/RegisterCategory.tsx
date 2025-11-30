@@ -1,4 +1,5 @@
 import { useOutletContext } from 'react-router-dom';
+import { COMMON_BUTTON_CLASSNAME } from '../../constants/common';
 import type { RegisterContextType } from '../../types/register';
 
 const RegisterCategory = () => {
@@ -15,10 +16,10 @@ const RegisterCategory = () => {
         {categories.map((category) => (
           <label
             key={category.id}
-            className={`flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 p-4 transition-all ${
+            className={`flex aspect-square flex-col items-center justify-center border-2 p-4 ${COMMON_BUTTON_CLASSNAME} ${
               selectedCategory?.id === category.id
-                ? 'border-teal-500 bg-emerald-50'
-                : 'border-gray-200 bg-white hover:border-gray-400'
+                ? 'border-teal-500 bg-emerald-50 focus-visible:ring-teal-300'
+                : 'border-gray-200 bg-white hover:border-gray-400 focus-visible:ring-gray-300'
             }`}
           >
             <input

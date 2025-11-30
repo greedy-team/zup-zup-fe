@@ -104,7 +104,7 @@ export default function FindLayout() {
 
   return (
     <main className="flex h-full w-full items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 pb-10 lg:p-8 lg:pb-12">
+      <div className="relative flex h-[95dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
         <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">{pageTitle}</h1>
 
         <div className="mt-3">
@@ -115,14 +115,16 @@ export default function FindLayout() {
           <Outlet context={{ setNextButtonValidator }} />
         </div>
 
-        <button
-          onClick={handleClickNext}
-          disabled={isClickingNext}
-          aria-busy={isClickingNext}
-          className="min-w-[240px] rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
-        >
-          {nextButtonLabel}
-        </button>
+        <div className="mt-3 md:mt-5">
+          <button
+            onClick={handleClickNext}
+            disabled={isClickingNext}
+            aria-busy={isClickingNext}
+            className="w-full min-w-[240px] cursor-pointer rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
+          >
+            {nextButtonLabel}
+          </button>
+        </div>
       </div>
     </main>
   );

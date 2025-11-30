@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import SpinnerIcon from '../../component/common/Icons/SpinnerIcon';
 import FormSection from '../../component/register/FormSection';
 import type { RegisterContextType } from '../../types/register';
+import { COMMON_BUTTON_CLASSNAME, COMMON_INPUT_CLASSNAME } from '../../constants/common';
 
 const RegisterDetails = () => {
   const { isLoading, formData, setField, setFeature, setImages, categoryFeatures, schoolAreas } =
@@ -75,7 +76,7 @@ const RegisterDetails = () => {
                     formData.featureOptions.find((f) => f.featureId === feature.id)?.optionId || ''
                   }
                   onChange={(e) => handleFeatureChange(feature.id, Number(e.target.value))}
-                  className="w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                  className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
                 >
                   <option value="" disabled>
                     선택해주세요
@@ -110,7 +111,7 @@ const RegisterDetails = () => {
               name="foundAreaDetail"
               value={formData.foundAreaDetail}
               onChange={handleChange}
-              className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+              className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
             />
           </div>
         </div>
@@ -124,7 +125,7 @@ const RegisterDetails = () => {
           value={formData.depositArea}
           onChange={handleChange}
           placeholder="분실물을 보관하고 있는 장소를 입력해주세요"
-          className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
         />
       </FormSection>
 
@@ -143,7 +144,7 @@ const RegisterDetails = () => {
           {formData.images.length < 3 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-lg bg-teal-500 px-6 py-2 font-normal text-white transition hover:cursor-pointer hover:bg-teal-600"
+              className={`${COMMON_BUTTON_CLASSNAME} bg-teal-500 px-6 py-2 font-normal text-white hover:bg-teal-600 focus-visible:ring-teal-300`}
             >
               업로드
             </button>
@@ -159,7 +160,7 @@ const RegisterDetails = () => {
                   />
                   <button
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-normal text-white transition hover:bg-red-600"
+                    className="absolute -top-2 -right-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-500 text-xs font-normal text-white transition hover:bg-red-600 focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:outline-none active:translate-y-[1px]"
                   >
                     X
                   </button>
@@ -179,7 +180,7 @@ const RegisterDetails = () => {
           maxLength={500}
           rows={4}
           placeholder="분실물에 대한 추가 정보를 입력해주세요. (최대 500자)"
-          className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
         />
       </FormSection>
     </div>

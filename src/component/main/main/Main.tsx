@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import Map from './Map';
 import LostList from './list/LostList';
 import { SelectedModeContext, TotalCountContext } from '../../../contexts/AppContexts';
+import { COMMON_BUTTON_CLASSNAME } from '../../../constants/common';
 
 const Main = () => {
   const { selectedMode } = useContext(SelectedModeContext)!;
@@ -23,7 +24,7 @@ const Main = () => {
 
           {selectedMode === 'find' && (
             <button
-              className="absolute bottom-0 left-1/2 z-30 mb-2 w-20 -translate-x-1/2 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 md:hidden"
+              className="absolute bottom-0 left-1/2 z-30 mb-2 w-20 -translate-x-1/2 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 focus-visible:ring-1 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] md:hidden"
               onClick={() => setIsMobileListOpen(true)}
             >
               분실물
@@ -41,7 +42,7 @@ const Main = () => {
               <h3 className="text-lg font-semibold">분실물 목록</h3>
               <p className="text-lg text-gray-500">총 {totalCount}건</p>
               <button
-                className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                className={`${COMMON_BUTTON_CLASSNAME} border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50`}
                 onClick={() => setIsMobileListOpen(false)}
               >
                 닫기

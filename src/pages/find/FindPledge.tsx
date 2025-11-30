@@ -8,6 +8,7 @@ import { usePledgeMutation } from '../../api/find/hooks/useFind';
 import type { ApiError } from '../../types/common';
 import { useFindOutlet } from '../../hooks/find/useFindOutlet';
 import { showApiErrorToast } from '../../api/common/apiErrorToast';
+import { COMMON_INPUT_CLASSNAME } from '../../constants/common';
 
 export default function FindPledge() {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ export default function FindPledge() {
     <div className="mx-auto max-w-2xl space-y-4">
       <h3 className="text-center text-lg font-bold">✨ Zupzup 성실 이용 서약 ✨</h3>
 
-      <div className="max-h-40 w-full space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-4 text-center text-gray-700">
+      <div className="max-h-70 w-full space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-4 text-center text-gray-700">
         <p>'줍줍'은 모두가 선한 마음으로 서로를 돕는 따뜻한 캠퍼스 문화를 만들어가고자 합니다.</p>
         <p>분실물 찾기 기능을 이용하기 전, 아래 내용을 확인하고 동의해주세요.</p>
         <p>
@@ -89,7 +90,7 @@ export default function FindPledge() {
       <input
         ref={inputRef}
         type="text"
-        className="mt-2 w-full rounded-lg border-2 p-3 transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
+        className={`${COMMON_INPUT_CLASSNAME} mt-2 w-full border-2 border-gray-400 p-3 focus-visible:ring-gray-300`}
         placeholder="상단 문구를 똑같이 입력해주세요."
         disabled={pledgeMutation.isPending}
         onKeyDown={(e) => {

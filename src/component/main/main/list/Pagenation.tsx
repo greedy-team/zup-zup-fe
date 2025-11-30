@@ -2,6 +2,8 @@ import { useContext, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { TotalCountContext } from '../../../../contexts/AppContexts';
 import { getTotalPages, isValidPage } from '../../../../utils/Page/pagenationUtils';
+import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
+
 const Pagenation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -43,7 +45,7 @@ const Pagenation = () => {
   return (
     <div className="fixed bottom-[calc(env(safe-area-inset-bottom))] left-1/2 z-40 flex w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center justify-center gap-2 bg-white px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+1rem)] md:static md:mx-auto md:w-auto md:max-w-none md:translate-x-0 md:pt-0 md:pb-4">
       <button
-        className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
+        className={`${COMMON_BUTTON_CLASSNAME} border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50`}
         disabled={page <= 1}
         onClick={() => setPage(page - 1)}
       >
@@ -53,7 +55,7 @@ const Pagenation = () => {
         {page} / {getTotalPages(totalCount)}
       </span>
       <button
-        className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50"
+        className={`${COMMON_BUTTON_CLASSNAME} border px-3 py-1.5 text-sm hover:bg-gray-100 disabled:opacity-50`}
         disabled={page >= getTotalPages(totalCount)}
         onClick={() => setPage(page + 1)}
       >
