@@ -29,7 +29,7 @@ export default function Authentication() {
         <button
           type="button"
           onClick={goLoginPage}
-          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
+          className="flex h-full w-full cursor-pointer flex-col items-center justify-center transition focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none"
         >
           <LoginIcon className="h-6 w-8 cursor-pointer sm:h-12 sm:w-12 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
@@ -40,7 +40,7 @@ export default function Authentication() {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
+          className="flex h-full w-full cursor-pointer flex-col items-center justify-center transition focus-visible:ring-2 focus-visible:outline-none"
         >
           <LogoutIcon className="h-6 w-8 cursor-pointer sm:h-12 sm:w-12 md:h-8 md:w-8" />
           <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
