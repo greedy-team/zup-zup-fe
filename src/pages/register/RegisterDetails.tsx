@@ -76,7 +76,7 @@ const RegisterDetails = () => {
                     formData.featureOptions.find((f) => f.featureId === feature.id)?.optionId || ''
                   }
                   onChange={(e) => handleFeatureChange(feature.id, Number(e.target.value))}
-                  className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 focus-visible:border-gray-500 focus-visible:ring-gray-500`}
+                  className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
                 >
                   <option value="" disabled>
                     선택해주세요
@@ -111,7 +111,7 @@ const RegisterDetails = () => {
               name="foundAreaDetail"
               value={formData.foundAreaDetail}
               onChange={handleChange}
-              className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 focus-visible:border-gray-500 focus-visible:ring-gray-500`}
+              className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
             />
           </div>
         </div>
@@ -125,7 +125,7 @@ const RegisterDetails = () => {
           value={formData.depositArea}
           onChange={handleChange}
           placeholder="분실물을 보관하고 있는 장소를 입력해주세요"
-          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 focus-visible:border-gray-500 focus-visible:ring-gray-500`}
+          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
         />
       </FormSection>
 
@@ -180,7 +180,7 @@ const RegisterDetails = () => {
           maxLength={500}
           rows={4}
           placeholder="분실물에 대한 추가 정보를 입력해주세요. (최대 500자)"
-          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 focus-visible:border-gray-500 focus-visible:ring-gray-500`}
+          className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
         />
       </FormSection>
     </div>
