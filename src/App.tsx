@@ -22,6 +22,7 @@ import RegisterDetails from './pages/register/RegisterDetails'; // 2) 상세 정
 import RegisterReview from './pages/register/RegisterReview'; // 3) 최종 확인 등록 버튼 누르고 등록 완료 모달이 뜨고 해당 모달의 확인을 눌러 메인으로 리다이렉트
 // 관리자(Admin)  페이지
 import AdminPage from './pages/admin/AdminPage';
+import { MyPage } from './pages/mypage/MyPage';
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ export default function App() {
                 <Route path="details" element={<RegisterDetails />} />
                 <Route path="review" element={<RegisterReview />} />
               </Route>
+              <Route path="mypage" element={<MyPage />} />
               <Route path="*" element={<MainPage />} />
             </Route>
             <Route path="admin" element={<AdminPage />} />

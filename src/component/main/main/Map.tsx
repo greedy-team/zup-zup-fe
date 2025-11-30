@@ -73,7 +73,7 @@ const Map = () => {
     map,
     schoolAreas,
     summary: lostItemSummary,
-    enabled: selectedMode !== 'register',
+    enabled: selectedMode === 'find',
     selectedCategoryId,
   });
 
