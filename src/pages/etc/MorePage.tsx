@@ -35,13 +35,13 @@ const MorePage = () => {
                   </li>
                   <li>
                     <a
-                      href="https://lucide.dev"
-                      title="lucide icons"
+                      href="https://lucide.dev/license#lucide-license"
+                      title="lucide icons license"
                       className="text-teal-600 hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Sidebar icons by Lucide
+                      Sidebar icons by Lucide-react
                     </a>
                   </li>
                 </ul>
