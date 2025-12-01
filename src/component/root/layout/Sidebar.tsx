@@ -77,7 +77,7 @@ const Sidebar = () => {
             }`}
           />
           <span
-            className={`text-xs sm:text-lg ${
+            className={`mt-1 text-xs sm:text-lg ${
               activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
             }`}
           >
@@ -97,7 +97,7 @@ const Sidebar = () => {
             }`}
           />
           <span
-            className={`text-xs sm:text-lg ${
+            className={`mt-1 text-xs sm:text-lg ${
               activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
             }`}
           >
@@ -128,7 +128,7 @@ const Sidebar = () => {
             }`}
           />
           <span
-            className={`text-xs sm:text-lg ${
+            className={`mt-1 text-xs sm:text-lg ${
               activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
             }`}
           >
@@ -148,7 +148,7 @@ const Sidebar = () => {
           </div>
         </button>
 
-        <div className="flex flex-shrink-0 flex-col items-center justify-center gap-0">
+        <div className="flex shrink-0 flex-col items-center justify-center gap-0">
           {/* 찾기 */}
           <button
             onClick={() => handleChangeMode('find')}
@@ -160,7 +160,7 @@ const Sidebar = () => {
               }`}
             />
             <span
-              className={`text-sm ${
+              className={`mt-1 text-sm ${
                 activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
               }`}
             >
@@ -179,7 +179,7 @@ const Sidebar = () => {
               }`}
             />
             <span
-              className={`text-sm ${
+              className={`mt-1 text-sm ${
                 activeReg ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
               }`}
             >
@@ -224,7 +224,7 @@ const Sidebar = () => {
               }`}
             />
             <span
-              className={`text-sm ${
+              className={`mt-1 text-sm ${
                 activeMy ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
               }`}
             >
