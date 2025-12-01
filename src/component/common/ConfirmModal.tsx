@@ -14,6 +14,7 @@ type ConfirmModalProps = {
   cancelLabel?: string;
   variant?: ConfirmDialogVariant;
   disabled?: boolean;
+  icon?: React.ReactNode;
 };
 
 export const ConfirmModal = ({
@@ -27,17 +28,15 @@ export const ConfirmModal = ({
   cancelLabel = '취소',
   variant = 'safe',
   disabled,
+  icon,
 }: ConfirmModalProps) => {
   if (!isOpen) return null;
 
   const isDanger = variant === 'danger';
 
-  const Icon = isDanger ? XCircle : CheckCircle2;
+  const DefaultIcon = isDanger ? XCircle : CheckCircle2;
   const circleBg = isDanger ? 'bg-rose-50' : 'bg-teal-50';
   const iconColor = isDanger ? 'text-rose-500' : 'text-teal-500';
-  const confirmBtn = isDanger
-    ? 'bg-rose-500 hover:bg-rose-600 text-white'
-    : 'bg-teal-500 hover:bg-teal-600 text-white';
 
   const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
@@ -56,7 +55,7 @@ export const ConfirmModal = ({
           <div
             className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full ${circleBg}`}
           >
-            <Icon className={`h-8 w-8 ${iconColor}`} aria-hidden="true" />
+            {icon || <DefaultIcon className={`h-8 w-8 ${iconColor}`} aria-hidden="true" />}
           </div>
 
           <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
@@ -68,7 +67,7 @@ export const ConfirmModal = ({
               type="button"
               onClick={onConfirm}
               disabled={disabled}
-              className={`inline-flex h-11 items-center justify-center rounded-xl text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60 ${confirmBtn}`}
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-teal-500 text-sm font-medium text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {confirmLabel}
             </button>
