@@ -71,8 +71,17 @@ describe('등록 확인 모달', () => {
     // 등록 버튼 클릭 시 등록 페이지로 이동한다
     expect(screen.getByTestId('location-display')).toHaveTextContent('/register/1');
 
-    // 취소 버튼도 클릭 가능
+    // 모달이 사라진 상태인지 확인
+    expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
+  });
+  it('취소 버튼 클릭 시 모달이 닫힌다', async () => {
+    const user = userEvent.setup();
+    renderWithContexts(true);
+
     await user.click(screen.getByRole('button', { name: '취소' }));
-    expect(document.body).toBeTruthy();
+
+    // 모달이 닫힌 상태인지 확인
+    expect(screen.queryByRole('button', { name: '등록' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
   });
 });
