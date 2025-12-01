@@ -2,7 +2,7 @@ import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Map, CirclePlus, CircleUser } from 'lucide-react';
+import { Map, CirclePlus, CircleUser, Ellipsis } from 'lucide-react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { clearFormData } from '../../../utils/register/registerStorage';
@@ -59,6 +59,7 @@ const Sidebar = () => {
   const activeFind = selectedMode === 'find';
   const activeReg = selectedMode === 'register';
   const activeMy = selectedMode === 'mypage';
+  const activeMore = selectedMode === 'more';
 
   return (
     <aside className="w-full shrink-0 border-t border-gray-300 bg-teal-50 md:h-dvh md:w-18 md:border-t-0 md:border-r">
@@ -187,7 +188,31 @@ const Sidebar = () => {
           </button>
         </div>
 
-        <div className="mt-auto mb-4">
+        <div className="mt-auto">
+          <button
+            onClick={() => {
+              navigate('/more');
+              setSelectedMode('more');
+            }}
+            className={`${iconBtnBase} aspect-square ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
+            aria-label="더보기"
+          >
+            <Ellipsis
+              className={`h-8 w-8 ${
+                activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
+            />
+            <span
+              className={`mt-1 text-sm ${
+                activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+              }`}
+            >
+              더보기
+            </span>
+          </button>
+        </div>
+
+        <div>
           <button
             onClick={handleClickMyPage}
             className={`${iconBtnBase} aspect-square ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
