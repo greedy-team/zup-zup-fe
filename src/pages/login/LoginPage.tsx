@@ -50,10 +50,8 @@ export default function LoginPage() {
               <h2 className="mt-6 text-3xl font-extrabold tracking-tight">로그인 안내</h2>
               <ol className="mt-6 list-decimal space-y-4 pl-6 text-base leading-relaxed text-gray-700">
                 <li>로그인을 위해선 세종대학교 포털에서 개인정보수집 동의가 되어있어야 합니다.</li>
-                <li>
-                  로그인 시 대양휴머니티칼리지를 통해 학생 기본 정보를 불러옵니다. (학번, 이름)
-                </li>
-                <li>사용자의 포털 비밀번호는 절대 저장되지 않습니다.</li>
+                <li>로그인 시 대양휴머니티칼리지를 통해 세종대학교 구성원임을 인증합니다.</li>
+                <li>사용자의 학번 외의 정보는 절대 저장되지 않습니다.</li>
               </ol>
             </div>
           </aside>
@@ -84,7 +82,7 @@ export default function LoginPage() {
                     onChange={(e) => setPortalId(e.target.value)}
                     inputMode="text"
                     autoComplete="username"
-                    placeholder="예: 2001111"
+                    placeholder="예: 230XXXXX"
                   />
                 </div>
 
