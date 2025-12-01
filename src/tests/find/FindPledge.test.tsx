@@ -24,24 +24,28 @@ describe('FindPledge', () => {
     mockRedirectToLoginKeepPath.mockClear();
   });
 
+  const waitForPledgePage = async () => {
+    await screen.findByRole('heading', { name: '약관 동의', level: 1 });
+  };
+
   it('FindPledge > 문구 불일치 시 진행 막음 (페이지 그대로)', async () => {
     renderFind('/find/10/pledge');
 
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, '틀린 문구');
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
-    expect(screen.getByRole('heading', { name: /약관 동의|서약 동의/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '약관 동의', level: 1 })).toBeInTheDocument();
   });
 
   it('FindPledge > 문구 일치 시 deposit으로 이동', async () => {
     renderFind('/find/10/pledge');
 
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
@@ -52,9 +56,9 @@ describe('FindPledge', () => {
     server.use(http.post('*/lost-items/:id/pledge', () => new HttpResponse(null, { status: 400 })));
 
     renderFind('/find/10/pledge');
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
@@ -69,9 +73,9 @@ describe('FindPledge', () => {
     server.use(http.post('*/lost-items/:id/pledge', () => new HttpResponse(null, { status: 401 })));
 
     renderFind('/find/10/pledge');
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
@@ -87,9 +91,9 @@ describe('FindPledge', () => {
     server.use(http.post('*/lost-items/:id/pledge', () => new HttpResponse(null, { status: 404 })));
 
     renderFind('/find/404/pledge');
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
@@ -104,9 +108,9 @@ describe('FindPledge', () => {
     server.use(http.post('*/lost-items/:id/pledge', () => new HttpResponse(null, { status: 409 })));
 
     renderFind('/find/10/pledge');
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 
@@ -121,9 +125,9 @@ describe('FindPledge', () => {
     server.use(http.post('*/lost-items/:id/pledge', () => new HttpResponse(null, { status: 500 })));
 
     renderFind('/find/10/pledge');
-    await screen.findByRole('heading', { name: /약관 동의|서약 동의/ });
+    await waitForPledgePage();
 
-    const input = await screen.findByPlaceholderText('상단 문구를 똑같이 입력해주세요.');
+    const input = await screen.findByPlaceholderText('상단 서약 문구를 똑같이 입력해주세요.');
     await userEvent.type(input, PLEDGE_TEXT);
     await userEvent.click(screen.getByRole('button', { name: '서약 제출' }));
 

@@ -5,7 +5,8 @@ import {
   SchoolAreasContext,
   SelectedAreaIdContext,
 } from '../../../contexts/AppContexts';
-import { COMMON_BUTTON_CLASSNAME } from '../../../constants/common';
+import { ConfirmModal } from '../../common/ConfirmModal';
+import { MapPinCheckInside } from 'lucide-react';
 
 const RegisterConfirmModal = () => {
   const { isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen } = useContext(
@@ -15,52 +16,38 @@ const RegisterConfirmModal = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
-  const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
   const { schoolAreas } = useContext(SchoolAreasContext)!;
 
-  const handleCancel = () => {
+  const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
+  const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
+
+  const handleClose = () => {
     setSelectedAreaId(0);
-    navigate({ search: `?schoolAreaId=${0}` }, { replace: true });
+    navigate({ search: '?schoolAreaId=0' }, { replace: true });
     setIsRegisterConfirmModalOpen(false);
   };
 
-  if (!isRegisterConfirmModalOpen) return null;
-
-  const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
+  const handleConfirm = () => {
+    const areaId = selectedAreaId || 0;
+    setSelectedAreaId(0);
+    setIsRegisterConfirmModalOpen(false);
+    navigate(`/register/${areaId}`);
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      onClick={handleCancel}
-    >
-      <div
-        className="max-h-[80vh] w-[90vw] max-w-2xl overflow-y-auto rounded-2xl bg-white/70 p-6 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2 className="text-2xl font-bold">
-          분실물을 <span className="font-bold text-teal-600">{selectedArea?.areaName}</span>에
-          등록하시겠습니까?
-        </h2>
-        <div className="flex justify-end gap-2">
-          <button
-            className={`${COMMON_BUTTON_CLASSNAME} bg-teal-600 px-4 py-2 text-white hover:bg-teal-700 focus-visible:ring-teal-500`}
-            onClick={() => {
-              setSelectedAreaId(0);
-              setIsRegisterConfirmModalOpen(false);
-              navigate(`/register/${selectedAreaId}`);
-            }}
-          >
-            등록
-          </button>
-          <button
-            className={`${COMMON_BUTTON_CLASSNAME} bg-gray-200 px-4 py-2 text-gray-600 hover:bg-gray-300 focus-visible:ring-gray-400`}
-            onClick={handleCancel}
-          >
-            취소
-          </button>
-        </div>
-      </div>
-    </div>
+    <ConfirmModal
+      isOpen={isRegisterConfirmModalOpen && !!selectedArea}
+      onClose={handleClose}
+      onConfirm={handleConfirm}
+      title={selectedArea ? `${selectedArea.areaName}` : '분실물 등록'}
+      description={
+        selectedArea ? '해당 위치에 분실물을 등록하시겠습니까?' : '선택된 구역이 없습니다.'
+      }
+      confirmLabel="등록"
+      cancelLabel="취소"
+      variant="safe"
+      icon={<MapPinCheckInside className="h-8 w-8 text-teal-500" />}
+    />
   );
 };
 
