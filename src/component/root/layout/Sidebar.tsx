@@ -2,7 +2,7 @@ import Authentication from './Authentication';
 import Logo from './Logo';
 import { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Search, CirclePlus, CircleUser } from 'lucide-react';
+import { MapPinned, CirclePlus, CircleUser } from 'lucide-react';
 import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { clearFormData } from '../../../utils/register/registerStorage';
@@ -70,7 +70,7 @@ const Sidebar = () => {
           className={`${iconBtnBase} ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="찾기"
         >
-          <Search
+          <MapPinned
             className={`h-6 w-6 sm:h-15 sm:w-15 ${
               activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
             }`}
@@ -153,7 +153,7 @@ const Sidebar = () => {
             onClick={() => handleChangeMode('find')}
             className={`${iconBtnBase} aspect-square ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           >
-            <Search
+            <MapPinned
               className={`h-8 w-8 ${
                 activeFind ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
               }`}
