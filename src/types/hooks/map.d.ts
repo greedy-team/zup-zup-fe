@@ -8,7 +8,7 @@ export type UsePolygonsHookOptions = {
 
   isDesktopListOpen?: boolean;
 
-  selectedMode: 'find' | 'register' | 'mypage';
+  selectedMode: 'find' | 'register' | 'mypage' | 'more';
 
   onOpenRegisterConfirm: () => void;
   onSelectArea: (areaId: number) => void;
