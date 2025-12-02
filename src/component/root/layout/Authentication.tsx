@@ -30,14 +30,14 @@ export default function Authentication() {
       {!isAuthenticated ? (
         <button type="button" onClick={goLoginPage} className={buttonBaseClass}>
           <LogIn className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-15 sm:w-15 md:h-8 md:w-8" />
-          <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
+          <span className="mt-1 text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그인
           </span>
         </button>
       ) : (
         <button type="button" onClick={handleLogout} className={buttonBaseClass}>
           <LogOut className="h-6 w-6 text-gray-600 group-hover:text-teal-500 sm:h-15 sm:w-15 md:h-8 md:w-8" />
-          <span className="text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
+          <span className="mt-1 text-xs text-gray-600 group-hover:text-teal-500 sm:text-lg md:text-sm">
             로그아웃
           </span>
         </button>

@@ -23,6 +23,8 @@ import RegisterReview from './pages/register/RegisterReview'; // 3) 최종 확�
 // 관리자(Admin)  페이지
 import AdminPage from './pages/admin/AdminPage';
 import { MyPage } from './pages/mypage/MyPage';
+// 더보기 페이지
+import MorePage from './pages/etc/MorePage';
 
 const queryClient = new QueryClient();
 
@@ -57,6 +59,7 @@ export default function App() {
                 <Route path="review" element={<RegisterReview />} />
               </Route>
               <Route path="mypage" element={<MyPage />} />
+              <Route path="more" element={<MorePage />} />
               <Route path="*" element={<MainPage />} />
             </Route>
             <Route path="admin" element={<AdminPage />} />
