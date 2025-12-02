@@ -109,18 +109,18 @@
 
 # 👥 멤버 소개
 
-
-## 🍃 Backend
-
-| [이창희](https://github.com/chxghee) | [전서희](https://github.com/jeonseohee9) | [황혜림](https://github.com/HyerimH) |
-| ------- | ------- | ------- |
-| <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/af2d2625-7796-41c9-ace4-3be1c25a0f96" />| <img width="130px" height="1330px" alt="image" src="https://github.com/user-attachments/assets/ee0188c0-066c-4d78-99cc-0179ff132ce7" />| <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/4f8e5135-47aa-4940-8f5b-8fec3a13adc0" /> |
-| Backend     | Backend     | Backend     |
-| 컴퓨터공학과  | 소프트웨어학과 | 컴퓨터공학과  |
-
 ## 🐣  Frontend
 | [강동현](https://github.com/mintcoke123) | [박찬빈](https://github.com/INSANE-P) | [임규영](https://github.com/gxuoo) |
 | ------- | ------- | ------- |
 | <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/aeaa52ac-34b1-4b86-ba97-1ae58324cb5f" />  | <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/529ef3f2-600a-47e2-8cb8-34f922fb10c5" /> | <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/b8c8a4cf-ee63-4cc3-8e4d-680d0116a0a3" /> |
 | Frontend     | Frontend     | Frontend     |
 | 컴퓨터공학과  | 컴퓨터공학과 | 소프트웨어학과  |
+
+## 🍃 Backend
+| [이창희](https://github.com/chxghee) | [전서희](https://github.com/jeonseohee9) | [황혜림](https://github.com/HyerimH) |
+| ------- | ------- | ------- |
+| <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/af2d2625-7796-41c9-ace4-3be1c25a0f96" />| <img width="130px" height="1330px" alt="image" src="https://github.com/user-attachments/assets/ee0188c0-066c-4d78-99cc-0179ff132ce7" />| <img width="130px" height="130px" alt="image" src="https://github.com/user-attachments/assets/4f8e5135-47aa-4940-8f5b-8fec3a13adc0" /> |
+| Backend     | Backend     | Backend     |
+| 컴퓨터공학과  | 소프트웨어학과 | 컴퓨터공학과  |
+
+
