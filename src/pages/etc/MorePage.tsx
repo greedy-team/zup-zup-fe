@@ -12,7 +12,7 @@ const MorePage = () => {
             <InfoSection
               title="팀 소개"
               type="link"
-              href="https://quiet-pyroraptor-d30.notion.site/ZupZup-2a443457829580908f4af5f4122459de?pvs=73"
+              href="/more/team"
               icon={<Users className="h-5 w-5" />}
             />
             <InfoSection
