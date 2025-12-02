@@ -10,7 +10,7 @@ const MorePage = () => {
         <main className="rounded-2xl bg-white p-6 shadow-sm">
           <ul className="divide-y divide-gray-200">
             <InfoSection
-              title="팀 소개"
+              title="줍줍 소개"
               type="link"
               href="/more/team"
               icon={<Users className="h-5 w-5" />}
