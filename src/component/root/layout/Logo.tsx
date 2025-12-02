@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ZupzupLogoWebp from '../../../../assets/Logo.svg';
+import ZupzupLogoWebp from '../../../../assets/Logo1.svg';
 
 const Logo = () => {
   return (
