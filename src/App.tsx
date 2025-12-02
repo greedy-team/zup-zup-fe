@@ -25,6 +25,8 @@ import AdminPage from './pages/admin/AdminPage';
 import { MyPage } from './pages/mypage/MyPage';
 // 더보기 페이지
 import MorePage from './pages/etc/MorePage';
+// 팀소개 페이지
+import { AboutTeamPage } from './pages/etc/AboutTeamPage';
 
 const queryClient = new QueryClient();
 
@@ -60,6 +62,7 @@ export default function App() {
               </Route>
               <Route path="mypage" element={<MyPage />} />
               <Route path="more" element={<MorePage />} />
+              <Route path="more/team" element={<AboutTeamPage />} />
               <Route path="*" element={<MainPage />} />
             </Route>
             <Route path="admin" element={<AdminPage />} />
