@@ -1,5 +1,6 @@
 import { MorePageHeader } from '../../component/etc/MorePageHeader';
 import { InfoSection } from '../../component/etc/InfoSection';
+import { Users, MessageCircleMore, Info } from 'lucide-react';
 
 const MorePage = () => {
   return (
@@ -12,13 +13,15 @@ const MorePage = () => {
               title="팀 소개"
               type="link"
               href="https://quiet-pyroraptor-d30.notion.site/ZupZup-2a443457829580908f4af5f4122459de?pvs=73"
+              icon={<Users className="h-5 w-5" />}
             />
             <InfoSection
               title="피드백 남기기"
               type="link"
               href="https://forms.gle/xzvHjcbKh3vumBXQA"
+              icon={<MessageCircleMore className="h-5 w-5" />}
             />
-            <InfoSection title="아이콘 저작권" type="component">
+            <InfoSection title="아이콘 저작권" type="component" icon={<Info className="h-5 w-5" />}>
               <div className="space-y-2 text-gray-700">
                 <p>이 서비스에 사용된 아이콘 중 일부는 icons8, Lucide에서 제공받았습니다.</p>
                 <ul className="list-disc pl-5 text-sm">
