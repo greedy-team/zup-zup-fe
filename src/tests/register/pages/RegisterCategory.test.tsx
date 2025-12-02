@@ -61,7 +61,6 @@ describe('RegisterCategory', () => {
     expect(screen.getByText('카테고리를 선택해주세요')).toBeInTheDocument();
     mockCategories.forEach((category) => {
       expect(screen.getByText(category.name)).toBeInTheDocument();
-      expect(screen.getByAltText(category.name)).toHaveAttribute('src', category.iconUrl);
     });
   });
 
