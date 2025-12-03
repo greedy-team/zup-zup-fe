@@ -6,8 +6,20 @@ import type {
 import { useNavigate } from 'react-router-dom';
 import { SelectedAreaIdContext } from '../../../../contexts/AppContexts';
 import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
+import {
+  Smartphone,
+  Briefcase,
+  CreditCard,
+  IdCard,
+  IdCardLanyard,
+  Wallet,
+  Gem,
+  Tablet,
+  Laptop,
+  Headphones,
+  Ellipsis,
+} from 'lucide-react';
 
-// 분실물 등록 시간 포맷팅
 function formatKST(iso: string) {
   try {
     return new Date(iso).toLocaleDateString('ko-KR', {
@@ -20,7 +32,48 @@ function formatKST(iso: string) {
   }
 }
 
-// 분실물 상태 배지
+const getCategoryIcon = (categoryName: string) => {
+  const trimmedCategoryName = categoryName.trim();
+
+  switch (trimmedCategoryName) {
+    case '핸드폰':
+      return Smartphone;
+
+    case '가방':
+      return Briefcase;
+
+    case '결제 카드':
+      return CreditCard;
+
+    case 'ID 카드':
+      return IdCard;
+
+    case '기숙사 카드':
+      return IdCardLanyard;
+
+    case '지갑':
+      return Wallet;
+
+    case '액세서리':
+      return Gem;
+
+    case '패드':
+      return Tablet;
+
+    case '노트북':
+      return Laptop;
+
+    case '전자 음향기기':
+      return Headphones;
+
+    case '기타':
+    default:
+      return Ellipsis;
+  }
+};
+
+const isEtcCategory = (name: string) => name.trim() === '기타';
+
 function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
   const badgeClass = isFound
@@ -34,26 +87,30 @@ function StatusBadge({ status }: StatusBadgeComponentProps) {
 }
 
 export default function LostListItem({ item, className }: ListItemComponentProps) {
-  // 이미지 로딩 에러 처리
   const [imgError, setImgError] = useState(false);
 
   const navigate = useNavigate();
   const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
 
+  const etcCategory = isEtcCategory(item.categoryName);
+  const CategoryIcon = getCategoryIcon(item.categoryName);
+
   return (
     <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
       <div className="flex gap-2">
-        {item.imageUrl && !imgError ? (
-          <img
-            src={item.imageUrl}
-            alt={item.categoryName}
-            className="h-16 w-16 shrink-0 rounded-xl bg-teal-50 object-cover"
-            onError={() => setImgError(true)}
-            loading="lazy"
-          />
-        ) : (
-          <div className="h-16 w-16 shrink-0 rounded-xl bg-teal-50" />
-        )}
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-teal-50">
+          {etcCategory && item.imageUrl && !imgError ? (
+            <img
+              src={item.imageUrl}
+              alt={item.categoryName}
+              className="h-full w-full object-cover"
+              onError={() => setImgError(true)}
+              loading="lazy"
+            />
+          ) : (
+            <CategoryIcon className="h-11 w-11 text-teal-700" aria-hidden="true" />
+          )}
+        </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
