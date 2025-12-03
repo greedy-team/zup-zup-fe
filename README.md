@@ -4,6 +4,12 @@
 
 
 <br>
+
+## 🔗 서비스 바로가기  
+👉 **[https://www.sejong-zupzup.kr](https://www.sejong-zupzup.kr)**
+
+
+<br>
 <br>
 
 # ✨ 프로젝트 소개 
@@ -20,7 +26,8 @@
 
 
 ### 1. 직관적인 분실물 찾기
-<img width="1900" height="850" alt="image" src="https://github.com/user-attachments/assets/3d893403-963e-463f-b3dd-6df729917289" />
+
+![메인 화면](https://github.com/user-attachments/assets/288a1173-70f4-4640-9b08-2dfe90b5e1bc)
 
 
 - 지도를 통해 분실물 현황을 시각적으로 확인할 수 있어요.
@@ -32,11 +39,12 @@
 
 ### 3. 간편한 분실물 등록
 
+![줍줍 등록](https://github.com/user-attachments/assets/503eecb2-ac48-4b2f-8bf7-fcb2354b79aa)
+![등록 프로세스](https://github.com/user-attachments/assets/f9aec34c-045a-48c8-8f2a-785a3488804c)
+![등록 완료](https://github.com/user-attachments/assets/77ed0b2a-f9c4-49f2-a73b-7d7f078ebf39)
 
- <img width="1900" height="850" alt="image" src="https://github.com/user-attachments/assets/15e58fa2-d468-4932-a17b-109172d1c2e1" />
- <img width="1900" height="850" alt="image" src="https://github.com/user-attachments/assets/cd832894-c381-4135-8cdc-3d04fc774ff4" />
  
--  로그인 없이도 분실물을 손쉽게 등록할 수 있어요.
+-  로그인 없이 빠르고 간단하게 분실물을 손쉽게 등록할 수 있어요.
 
 <br>
 <br>
@@ -44,12 +52,18 @@
 
 ### 4. 보안 강화
 
-<img width="1900" height="850" alt="image" src="https://github.com/user-attachments/assets/8c231040-f2fe-4387-bdfd-17cde422005a" />
+![찾기 프로세스 2](https://github.com/user-attachments/assets/7d0e6caa-c23b-4dbc-aeee-b83a912d0f2f)
 
 - 분실물 인증 퀴즈를 통해 본인 확인 절차를 거쳐, 타인의 악용을 방지해요.
 
 <br>
 <br>
+
+### 5. 마이페이지
+
+![마이페이지](https://github.com/user-attachments/assets/e7b93cbd-5def-4cf2-a31d-78750b2f4584)
+
+- 내가 서약한 분실물을 마이페이지에서 한눈에 확인 할 수 있어요.
 
 
 ### 6. 학교 이벤트 공지(개발 중)
@@ -59,7 +73,7 @@
 
 <br>
 
-### 5. 분실물 등록 알림 (개발 중)
+### 7. 분실물 등록 알림 (개발 중)
 
 - 원하는 카테고리, 분실 장소 등을 등록하면, 해당 분실물이 올라올 때 이메일로 알림을 받을 수 있어요.
 
