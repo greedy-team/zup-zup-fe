@@ -47,6 +47,7 @@ const getCategoryIcon = (name: string) => {
       return Laptop;
 
     case '전자 음향기기':
+    case '음향기기':
       return Headphones;
 
     case '기타':
