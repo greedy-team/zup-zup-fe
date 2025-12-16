@@ -14,6 +14,7 @@ const RegisterLayout = () => {
     currentStep,
     resultModalContent,
     isLoading,
+    isPending,
     selectedCategory,
     isStep2Valid,
     goToPrevStep,
@@ -58,7 +59,7 @@ const RegisterLayout = () => {
             ) : (
               <button
                 onClick={handleRegister}
-                disabled={isLoading}
+                disabled={isLoading || isPending}
                 className={`${COMMON_BUTTON_CLASSNAME} ${LAYOUT_BUTTON_CLASSNAME} bg-teal-500 text-white hover:bg-teal-600 focus-visible:ring-teal-300 disabled:cursor-not-allowed disabled:bg-gray-300`}
               >
                 {isLoading ? <SpinnerIcon /> : '등록하기'}
