@@ -23,6 +23,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const { formData, setField, setImages, setFeature, resetForm } =
     useRegisterState(validSchoolAreaId);
 
+  const [isPending, setIsPending] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
@@ -81,6 +82,8 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       description: formData.description || undefined,
     };
 
+    setIsPending(true);
+
     try {
       await postLostItem(requestData, formData.images);
       resetForm();
@@ -108,11 +111,14 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
           setSelectedMode('register');
         },
       });
+    } finally {
+      setIsPending(false);
     }
   };
 
   return {
     isLoading,
+    isPending,
     schoolAreas,
     categories,
     selectedCategory,
