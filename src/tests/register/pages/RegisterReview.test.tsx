@@ -22,6 +22,7 @@ const mockFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 
 const defaultMockContext: RegisterContextType = {
   isLoading: false,
+  isPending: false,
   categories: [],
   selectedCategory: { id: 1, name: '전자기기', iconUrl: '' },
   setSelectedCategory: vi.fn(),
