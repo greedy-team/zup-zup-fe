@@ -32,7 +32,7 @@ export default function WizardLayout({
           <ProgressBar steps={steps} currentStep={currentStep} />
         </div>
 
-        <div className="mt-4 min-h-0 flex-grow overflow-y-auto pr-2 pb-3 sm:pr-3 md:pb-4">
+        <div className="mt-4 min-h-0 grow overflow-y-auto pr-2 pb-3 sm:pr-3 md:pb-4">
           {children}
         </div>
 
