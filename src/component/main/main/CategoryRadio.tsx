@@ -1,31 +1,27 @@
-import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import {
-  CategoriesContext,
-  SelectedAreaIdContext,
-  SelectedModeContext,
-} from '../../../contexts/AppContexts';
+import { useSelectedMode } from '../../../store/hooks/useMainStore';
+import { useCategoriesQuery } from '../../../api/main/hooks/useMain';
 import { isValidId } from '../../../utils/isValidId';
+import normalizeCategories from '../../../utils/Map/normalizeCategories';
+import type { Category } from '../../../types/lost/lostApi';
 
 const CategoryRadio = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { selectedMode } = useContext(SelectedModeContext)!;
-  const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
-  const { categories } = useContext(CategoriesContext)!;
+  const selectedMode = useSelectedMode();
+
+  const { data } = useCategoriesQuery();
+  const categories = normalizeCategories(data);
+
+  const allCategory: Category = { categoryId: 0, categoryName: '전체' };
+  const categoryList = [allCategory, ...categories];
+
   const rawCategoryId = searchParams.get('categoryId');
   const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
-  const allCategory = { categoryId: 0, categoryName: '전체' };
-  const categoryList = [allCategory, ...(Array.isArray(categories) ? categories : [])];
 
   // 카테고리 선택 시 페이지 1로 이동시키는 핸들러
   const handleSelectCategory = (id: number) => {
-    const next = new URLSearchParams();
-    if (selectedAreaId === 0) {
-      next.delete('schoolAreaId');
-    } else {
-      next.set('schoolAreaId', String(selectedAreaId));
-    }
+    const next = new URLSearchParams(searchParams);
     if (id === 0) {
       next.delete('categoryId');
     } else {
@@ -49,11 +45,12 @@ const CategoryRadio = () => {
             {categoryList.map((category) => {
               const id = category.categoryId;
               const name = category.categoryName;
+              const inputId = `category-${id}`;
               return (
-                <div key={id}>
+                <div key={inputId}>
                   <input
                     type="radio"
-                    id={name}
+                    id={inputId}
                     name="category"
                     value={id}
                     checked={id === selectedCategoryId}
@@ -61,7 +58,7 @@ const CategoryRadio = () => {
                     className="peer hidden"
                   />
                   <label
-                    htmlFor={name}
+                    htmlFor={inputId}
                     className="cursor-pointer rounded-full border border-gray-400/20 bg-white px-6 py-3 text-base peer-checked:border-gray-400/20 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-teal-50 peer-checked:hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 focus:outline-none"
                   >
                     {name}

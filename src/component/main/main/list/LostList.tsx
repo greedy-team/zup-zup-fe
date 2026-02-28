@@ -1,11 +1,21 @@
-import { useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import LostListItem from './LostListItem';
 import Pagenation from './Pagenation';
-import { ItemsContext, TotalCountContext } from '../../../../contexts/AppContexts';
+import { useLostItemsQuery } from '../../../../api/main/hooks/useMain';
+import { isValidId } from '../../../../utils/isValidId';
 
 export default function LostList() {
-  const { items } = useContext(ItemsContext)!;
-  const { totalCount } = useContext(TotalCountContext)!;
+  const [searchParams] = useSearchParams();
+  const rawPage = searchParams.get('page');
+  const rawCategoryId = searchParams.get('categoryId');
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const page = isValidId(rawPage) ? Number(rawPage) : 1;
+  const categoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+  const schoolAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+
+  const { data } = useLostItemsQuery(page, categoryId, schoolAreaId);
+  const items = data?.items ?? [];
+  const totalCount = data?.totalCount ?? 0;
 
   if (totalCount === 0) {
     return (

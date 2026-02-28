@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useLoader } from '../../../hooks/map/useLoader';
@@ -9,13 +9,8 @@ import { useHardLock } from '../../../hooks/map/useHardLock';
 import { useOutsideMask } from '../../../hooks/map/useOutsideMask';
 import { useRegisterMapClick } from '../../../hooks/map/useRegisterMapClick';
 import { isValidId } from '../../../utils/isValidId';
-import {
-  RegisterConfirmModalContext,
-  SchoolAreasContext,
-  LostItemSummaryContext,
-  SelectedModeContext,
-  SelectedAreaIdContext,
-} from '../../../contexts/AppContexts';
+import { useSelectedMode, useSetRegisterConfirmModal } from '../../../store/hooks/useMainStore';
+import { useSchoolAreasQuery, useLostItemSummaryQuery } from '../../../api/main/hooks/useMain';
 import CategoryRadio from './CategoryRadio';
 
 interface MapProps {
@@ -25,16 +20,18 @@ interface MapProps {
 const Map = ({ isDesktopListOpen = false }: MapProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { setIsRegisterConfirmModalOpen } = useContext(RegisterConfirmModalContext)!;
-  const { schoolAreas } = useContext(SchoolAreasContext)!;
-  const { lostItemSummary } = useContext(LostItemSummaryContext)!;
-  const { selectedMode } = useContext(SelectedModeContext)!;
-  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
-  const [hoverAreaId, setHoverAreaId] = useState(0); // 마우스 올리면 구역 아이디 업데이트
+  const selectedMode = useSelectedMode();
+  const setIsRegisterConfirmModalOpen = useSetRegisterConfirmModal();
+  const { data: schoolAreas = [] } = useSchoolAreasQuery();
+
   const rawAreaId = searchParams.get('schoolAreaId');
   const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
   const rawCategoryId = searchParams.get('categoryId');
   const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+
+  const { data: lostItemSummary = [] } = useLostItemSummaryQuery(selectedCategoryId);
+
+  const [hoverAreaId, setHoverAreaId] = useState(0); // 마우스 올리면 구역 아이디 업데이트
 
   const mapRef = useRef<HTMLDivElement>(null);
   const categoryBarRef = useRef<HTMLDivElement>(null);
@@ -51,15 +48,12 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
 
   // 구역 선택 시 페이지 1로 이동시키는 핸들러
   const updateAreaIdInUrl = (areaId: number) => {
-    const next = new URLSearchParams();
+    const next = new URLSearchParams(searchParams);
     if (areaId === 0) {
       next.delete('schoolAreaId');
-      setSelectedAreaId(0);
     } else {
       next.set('schoolAreaId', String(areaId));
-      setSelectedAreaId(areaId);
     }
-    next.set('categoryId', String(selectedCategoryId) || '0');
     next.set('page', '1');
     setSearchParams(next, { replace: true });
   };

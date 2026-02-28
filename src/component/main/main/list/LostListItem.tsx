@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import type {
   ListItemComponentProps,
   StatusBadgeComponentProps,
 } from '../../../../types/main/components';
 import { useNavigate } from 'react-router-dom';
-import { SelectedAreaIdContext } from '../../../../contexts/AppContexts';
 import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
 import {
   Smartphone,
@@ -90,7 +89,6 @@ export default function LostListItem({ item, className }: ListItemComponentProps
   const [imgError, setImgError] = useState(false);
 
   const navigate = useNavigate();
-  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
 
   const etcCategory = isEtcCategory(item.categoryName);
   const CategoryIcon = getCategoryIcon(item.categoryName);
@@ -129,10 +127,7 @@ export default function LostListItem({ item, className }: ListItemComponentProps
 
           <button
             className={`${COMMON_BUTTON_CLASSNAME} absolute right-3 bottom-3 border border-teal-400 px-2.5 py-1 text-xs text-teal-700 hover:bg-teal-50 focus-visible:ring-teal-300`}
-            onClick={() => {
-              setSelectedAreaId(0);
-              navigate(`/find/${item.lostItemId}`);
-            }}
+            onClick={() => navigate(`/find/${item.lostItemId}`)}
           >
             분실물 찾기
           </button>

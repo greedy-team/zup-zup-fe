@@ -1,16 +1,23 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { TotalCountContext } from '../../../../contexts/AppContexts';
+import { useLostItemsQuery } from '../../../../api/main/hooks/useMain';
 import { getTotalPages, isValidPage } from '../../../../utils/Page/pagenationUtils';
 import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
+import { isValidId } from '../../../../utils/isValidId';
 
 const Pagenation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { totalCount } = useContext(TotalCountContext)!;
-
-  const totalPages = getTotalPages(totalCount);
   const rawPage = searchParams.get('page');
+  const rawCategoryId = searchParams.get('categoryId');
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const pageNum = isValidId(rawPage) ? Number(rawPage) : 1;
+  const categoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+  const schoolAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+
+  const { data } = useLostItemsQuery(pageNum, categoryId, schoolAreaId);
+  const totalCount = data?.totalCount ?? 0;
+  const totalPages = getTotalPages(totalCount);
 
   useEffect(() => {
     if (!isValidPage(rawPage, totalPages)) {

@@ -1,37 +1,30 @@
-import { useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  RegisterConfirmModalContext,
-  SchoolAreasContext,
-  SelectedAreaIdContext,
-} from '../../../contexts/AppContexts';
+import { useRegisterConfirmModal, useSetRegisterConfirmModal } from '../../../store/hooks/useMainStore';
+import { useSchoolAreasQuery } from '../../../api/main/hooks/useMain';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { MapPinCheckInside } from 'lucide-react';
 
 const RegisterConfirmModal = () => {
-  const { isRegisterConfirmModalOpen, setIsRegisterConfirmModalOpen } = useContext(
-    RegisterConfirmModalContext,
-  )!;
+  const isRegisterConfirmModalOpen = useRegisterConfirmModal();
+  const setIsRegisterConfirmModalOpen = useSetRegisterConfirmModal();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
-  const { schoolAreas } = useContext(SchoolAreasContext)!;
+  const { data: schoolAreas = [] } = useSchoolAreasQuery();
 
   const selectedAreaId = Number(searchParams.get('schoolAreaId')) || 0;
   const selectedArea = schoolAreas.find((area) => area.id === selectedAreaId);
 
   const handleClose = () => {
-    setSelectedAreaId(0);
-    navigate({ search: '?schoolAreaId=0' }, { replace: true });
+    const next = new URLSearchParams(searchParams);
+    next.delete('schoolAreaId');
+    navigate({ search: next.toString() }, { replace: true });
     setIsRegisterConfirmModalOpen(false);
   };
 
   const handleConfirm = () => {
-    const areaId = selectedAreaId || 0;
-    setSelectedAreaId(0);
     setIsRegisterConfirmModalOpen(false);
-    navigate(`/register/${areaId}`);
+    navigate(`/register/${selectedAreaId}`);
   };
 
   return (

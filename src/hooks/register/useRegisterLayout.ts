@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRegisterProcess } from './useRegisterProcess';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
-import { SelectedModeContext } from '../../contexts/AppContexts';
+import { useSetSelectedMode } from '../../store/hooks/useMainStore';
 
 export const useRegisterLayout = () => {
   const { schoolAreaId } = useParams<{ schoolAreaId: string }>();
@@ -11,7 +10,7 @@ export const useRegisterLayout = () => {
   const location = useLocation();
 
   const registerProcess = useRegisterProcess(Number(schoolAreaId) || null);
-  const { setSelectedMode } = useContext(SelectedModeContext)!;
+  const setSelectedMode = useSetSelectedMode();
 
   const steps = REGISTER_PROCESS_STEPS.INDEXS;
 
