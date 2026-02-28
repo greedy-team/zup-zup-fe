@@ -4,20 +4,23 @@ import Main from '../../component/main/main/Main';
 import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { AppProvider } from '../../contexts/AppContexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('../../component/main/main/Map', () => ({
   default: () => <div data-testid="map" />, // 맵 컴포넌트 모킹데이터
 }));
 
+const createTestQueryClient = () =>
+  new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+
 const renderMain = () =>
   // 메인 컴포넌트 렌더링
   render(
-    <MemoryRouter>
-      <AppProvider>
+    <QueryClientProvider client={createTestQueryClient()}>
+      <MemoryRouter>
         <Main />
-      </AppProvider>
-    </MemoryRouter>,
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 
 describe('메인 컴포넌트', () => {
