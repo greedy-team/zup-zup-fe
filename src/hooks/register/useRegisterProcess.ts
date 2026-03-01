@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
-import { postLostItem, fetchSchoolAreas } from '../../api/register';
+import { useEffect } from 'react';
+import { postLostItem } from '../../api/register';
+import { useRegisterSchoolAreasQuery } from '../../api/register/hooks/useRegister';
 import { useRegisterRouter } from './useRegisterRouter';
 import { useRegisterData } from './useRegisterData';
 import { useRegisterState } from './useRegisterState';
 import { useSetSelectedMode } from '../../store/hooks/useMainStore';
+import { useRegisterStore } from '../../store/registerStore';
 import toast from 'react-hot-toast';
-import type {
-  Category,
-  LostItemRegisterRequest,
-  ResultModalContent,
-  SchoolArea,
-} from '../../types/register';
+import type { LostItemRegisterRequest } from '../../types/register';
 
 /**
  * 라우팅 기반 등록 프로세스를 위한 모든 하위 훅을 조합하는 컨테이너 훅
@@ -23,11 +20,35 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const { formData, setField, setImages, setFeature, resetForm } =
     useRegisterState(validSchoolAreaId);
 
-  const [isPending, setIsPending] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
-  const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
+  const { data: schoolAreas = [], isError: isSchoolAreasError } = useRegisterSchoolAreasQuery();
+
   const setSelectedMode = useSetSelectedMode();
+
+  const selectedCategory = useRegisterStore((s) => s.selectedCategory);
+  const setSelectedCategory = useRegisterStore((s) => s.actions.setSelectedCategory);
+  const isPending = useRegisterStore((s) => s.isPending);
+  const setIsPending = useRegisterStore((s) => s.actions.setIsPending);
+  const resultModalContent = useRegisterStore((s) => s.resultModalContent);
+  const setResultModalContent = useRegisterStore((s) => s.actions.setResultModalContent);
+
+  // schoolAreaId 유효성 검증
+  useEffect(() => {
+    if (
+      validSchoolAreaId != null &&
+      schoolAreas.length > 0 &&
+      !schoolAreas.some((area) => area.id === validSchoolAreaId)
+    ) {
+      toast.error(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
+      navigate('/');
+    }
+  }, [validSchoolAreaId, schoolAreas, navigate]);
+
+  useEffect(() => {
+    if (isSchoolAreasError) {
+      toast.error('학교 지역 검증 실패');
+      navigate('/');
+    }
+  }, [isSchoolAreasError, navigate]);
 
   // 페이지 새로고침 시 URL 쿼리 파라미터를 이용해 selectedCategory 상태 복원
   useEffect(() => {
@@ -38,22 +59,6 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       setSelectedCategory(null);
     }
   }, [categories, categoryIdFromQuery]);
-
-  // schoolAreaId 유효성 검증 및 schoolAreas 데이터 fetch
-  useEffect(() => {
-    fetchSchoolAreas()
-      .then((areas) => {
-        setSchoolAreas(areas);
-        if (validSchoolAreaId != null && !areas.some((area) => area.id === validSchoolAreaId)) {
-          toast.error(`유효하지 않은 schoolAreaId: ${validSchoolAreaId}`);
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        toast.error('학교 지역 검증 실패', err);
-        navigate('/');
-      });
-  }, [validSchoolAreaId, navigate]);
 
   // 2단계로 넘어가기 위한 검증 변수
   const isStep2Valid =
@@ -100,10 +105,13 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
       });
     } catch (error) {
       resetForm();
+      const message =
+        (error as any)?.data?.error ||
+        (error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.');
       setResultModalContent({
         status: 'error',
         title: '등록 실패',
-        message: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.',
+        message,
         buttonText: '확인',
         onConfirm: () => {
           setResultModalContent(null);
