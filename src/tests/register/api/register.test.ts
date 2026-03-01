@@ -27,19 +27,27 @@ describe('register API functions', () => {
       ];
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: true,
+        status: 200,
         json: () => Promise.resolve({ categories: mockCategories }),
       });
 
       const categories = await fetchCategories();
 
-      expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories`);
+      expect(fetch).toHaveBeenCalledWith(
+        `${BASE_URL}/categories`,
+        expect.objectContaining({ credentials: 'include' }),
+      );
       expect(categories).toEqual(mockCategories);
     });
 
     it('카테고리 목록 가져오기에 실패하면 에러를 던져야 한다', async () => {
-      globalThis.fetch = vi.fn().mockResolvedValue({ ok: false });
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({}),
+      });
 
-      await expect(fetchCategories()).rejects.toThrow('카테고리 목록을 가져오는 데 실패했습니다.');
+      await expect(fetchCategories()).rejects.toMatchObject({ status: 500 });
     });
   });
 
@@ -68,22 +76,28 @@ describe('register API functions', () => {
       ];
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: true,
+        status: 200,
         json: () => Promise.resolve({ features: mockFeatures }),
       });
 
       const features = await fetchCategoryFeatures(categoryId);
 
-      expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/categories/${categoryId}/features`);
+      expect(fetch).toHaveBeenCalledWith(
+        `${BASE_URL}/categories/${categoryId}/features`,
+        expect.objectContaining({ credentials: 'include' }),
+      );
       expect(features).toEqual(mockFeatures);
     });
 
     it('특징 목록 가져오기에 실패하면 에러를 던져야 한다', async () => {
       const categoryId = 1;
-      globalThis.fetch = vi.fn().mockResolvedValue({ ok: false });
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({}),
+      });
 
-      await expect(fetchCategoryFeatures(categoryId)).rejects.toThrow(
-        `categoryId: ${categoryId}에 대한 특징 목록을 가져오는 데 실패했습니다.`,
-      );
+      await expect(fetchCategoryFeatures(categoryId)).rejects.toMatchObject({ status: 500 });
     });
   });
 
@@ -126,21 +140,27 @@ describe('register API functions', () => {
       ];
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: true,
+        status: 200,
         json: () => Promise.resolve({ schoolAreas: mockSchoolAreas }),
       });
 
       const schoolAreas = await fetchSchoolAreas();
 
-      expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/school-areas`);
+      expect(fetch).toHaveBeenCalledWith(
+        `${BASE_URL}/school-areas`,
+        expect.objectContaining({ credentials: 'include' }),
+      );
       expect(schoolAreas).toEqual(mockSchoolAreas);
     });
 
     it('학교 지역 목록 가져오기에 실패하면 에러를 던져야 한다', async () => {
-      globalThis.fetch = vi.fn().mockResolvedValue({ ok: false });
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({}),
+      });
 
-      await expect(fetchSchoolAreas()).rejects.toThrow(
-        '학교 지역 목록을 가져오는 데 실패했습니다.',
-      );
+      await expect(fetchSchoolAreas()).rejects.toMatchObject({ status: 500 });
     });
   });
 
@@ -162,16 +182,20 @@ describe('register API functions', () => {
 
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: true,
+        status: 200,
         json: () => Promise.resolve({ success: true }),
       });
 
       const result = await postLostItem(request, images);
 
-      expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/lost-items`, {
-        method: 'POST',
-        body: expect.any(FormData),
-        credentials: 'include',
-      });
+      expect(fetch).toHaveBeenCalledWith(
+        `${BASE_URL}/lost-items`,
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.any(FormData),
+          credentials: 'include',
+        }),
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -193,10 +217,11 @@ describe('register API functions', () => {
 
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: false,
+        status: 400,
         json: () => Promise.resolve(errorResponse),
       });
 
-      await expect(postLostItem(request, images)).rejects.toThrow(errorResponse.error);
+      await expect(postLostItem(request, images)).rejects.toMatchObject({ status: 400 });
     });
   });
 });
