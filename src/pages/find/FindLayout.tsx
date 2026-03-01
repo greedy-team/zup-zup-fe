@@ -10,7 +10,8 @@ import {
   ETC_CATEGORY_ID,
   NEXT_BUTTON_LABEL,
 } from '../../constants/find';
-import ProgressBar from '../../component/common/ProgressBar';
+import { WIZARD_PRIMARY_BTN } from '../../constants/common';
+import WizardLayout from '../../layouts/WizardLayout';
 import type { NextButtonValidator, FindOutletContext } from '../../types/find';
 import { showApiErrorToast } from '../../api/common/apiErrorToast';
 
@@ -87,45 +88,44 @@ export default function FindLayout() {
     }
   };
 
+  const footer = (
+    <button
+      onClick={handleClickNext}
+      disabled={isClickingNext}
+      aria-busy={isClickingNext}
+      className={`w-full ${WIZARD_PRIMARY_BTN}`}
+    >
+      {nextButtonLabel}
+    </button>
+  );
+
   if (isLoading) {
     return (
-      <div className="flex h-full w-full items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-        <div className="relative flex h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
-          <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">
-            분실물 찾기
-          </h1>
-          <div className="mt-6 rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
-            로딩 중…
-          </div>
+      <WizardLayout
+        title="분실물 찾기"
+        steps={FIND_STEPS.VALUABLE as string[]}
+        currentStep={1}
+        footer={
+          <button disabled className={`w-full ${WIZARD_PRIMARY_BTN}`}>
+            다음
+          </button>
+        }
+      >
+        <div className="rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
+          로딩 중…
         </div>
-      </div>
+      </WizardLayout>
     );
   }
 
   return (
-    <main className="flex h-full w-full items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      <div className="relative flex h-[95dvh] w-full max-w-4xl flex-col rounded-2xl bg-white p-6 lg:p-8">
-        <h1 className="text-center text-2xl font-normal text-gray-800 md:text-3xl">{pageTitle}</h1>
-
-        <div className="mt-3">
-          <ProgressBar steps={stepLabels} currentStep={currentStepNumber} />
-        </div>
-
-        <div className="mt-4 flex-grow overflow-y-auto pr-2 pb-3 sm:pr-3 md:pb-4">
-          <Outlet context={{ setNextButtonValidator }} />
-        </div>
-
-        <div className="mt-3 md:mt-5">
-          <button
-            onClick={handleClickNext}
-            disabled={isClickingNext}
-            aria-busy={isClickingNext}
-            className="w-full min-w-[240px] cursor-pointer rounded-lg bg-teal-500 px-8 py-3 text-base font-bold whitespace-nowrap text-white shadow-md transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-60 md:min-w-[320px] md:text-lg"
-          >
-            {nextButtonLabel}
-          </button>
-        </div>
-      </div>
-    </main>
+    <WizardLayout
+      title={pageTitle}
+      steps={stepLabels}
+      currentStep={currentStepNumber}
+      footer={footer}
+    >
+      <Outlet context={{ setNextButtonValidator }} />
+    </WizardLayout>
   );
 }
