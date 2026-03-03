@@ -2,7 +2,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useSelectedMode } from '../../../store/hooks/useMainStore';
 import { useCategoriesQuery } from '../../../api/main/hooks/useMain';
 import { isValidId } from '../../../utils/isValidId';
-import normalizeCategories from '../../../utils/Map/normalizeCategories';
 import type { Category } from '../../../types/lost/lostApi';
 
 const CategoryRadio = () => {
@@ -11,9 +10,9 @@ const CategoryRadio = () => {
   const selectedMode = useSelectedMode();
 
   const { data } = useCategoriesQuery();
-  const categories = normalizeCategories(data);
+  const categories = data ?? [];
 
-  const allCategory: Category = { categoryId: 0, categoryName: '전체' };
+  const allCategory: Category = { categoryId: 0, categoryName: '전체', categoryIconUrl: '' };
   const categoryList = [allCategory, ...categories];
 
   const rawCategoryId = searchParams.get('categoryId');
