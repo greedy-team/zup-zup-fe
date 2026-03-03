@@ -22,6 +22,8 @@ const Sidebar = () => {
       setSelectedMode('find');
     } else if (pathname.startsWith('/mypage')) {
       setSelectedMode('mypage');
+    } else if (pathname.startsWith('/more')) {
+      setSelectedMode('more');
     }
   }, [pathname, setSelectedMode]);
 

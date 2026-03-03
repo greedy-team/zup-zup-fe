@@ -215,14 +215,14 @@ export function usePolygons({
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
 
-    if (!currentSelectedIdRef.current) {
+    if (!selectedAreaId) {
       selectedPolygonRef.current = null;
       return;
     }
-    const poly = polyByIdRef.current.get(currentSelectedIdRef.current) || null;
+    const poly = polyByIdRef.current.get(selectedAreaId) || null;
     if (poly) poly.setOptions(SELECTED_STYLE);
     selectedPolygonRef.current = poly;
-  }, []);
+  }, [selectedAreaId]);
 
   useEffect(() => {
     polysRef.current.forEach((p) => p.setOptions(BASE_STYLE));
