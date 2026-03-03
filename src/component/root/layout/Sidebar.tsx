@@ -88,6 +88,7 @@ const Sidebar = () => {
 
         {/* 2) 추가 */}
         <button
+          data-tour="mobile-sidebar-register"
           onClick={() => handleChangeMode('register')}
           className={`${iconBtnBase} ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="추가"
@@ -119,6 +120,7 @@ const Sidebar = () => {
 
         {/* 4) 마이페이지 */}
         <button
+          data-tour="mobile-sidebar-mypage"
           onClick={handleClickMyPage}
           className={`${iconBtnBase} ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="마이페이지"
@@ -171,6 +173,7 @@ const Sidebar = () => {
 
           {/* 추가 */}
           <button
+            data-tour="sidebar-register"
             onClick={() => handleChangeMode('register')}
             className={`${iconBtnBase} aspect-square ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           >
@@ -215,6 +218,7 @@ const Sidebar = () => {
 
         <div>
           <button
+            data-tour="sidebar-mypage"
             onClick={handleClickMyPage}
             className={`${iconBtnBase} aspect-square ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
             aria-label="마이페이지"
