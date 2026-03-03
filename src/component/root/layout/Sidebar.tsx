@@ -1,16 +1,16 @@
 import Authentication from './Authentication';
 import Logo from './Logo';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Map, CirclePlus, CircleUser, Ellipsis } from 'lucide-react';
-import { SelectedAreaIdContext, SelectedModeContext } from '../../../contexts/AppContexts';
+import { useSelectedMode, useSetSelectedMode } from '../../../store/hooks/useMainStore';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { clearFormData } from '../../../utils/register/registerStorage';
-import type { Mode } from '../../../contexts/AppContexts';
+import type { Mode } from '../../../store/slices/mainSlice';
 
 const Sidebar = () => {
-  const { selectedMode, setSelectedMode } = useContext(SelectedModeContext)!;
-  const { setSelectedAreaId } = useContext(SelectedAreaIdContext)!;
+  const selectedMode = useSelectedMode();
+  const setSelectedMode = useSetSelectedMode();
   const isAuthenticated = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -29,7 +29,6 @@ const Sidebar = () => {
     setSelectedMode(mode);
 
     if (mode === 'find' || mode === 'register') {
-      setSelectedAreaId(0);
       navigate('/', { replace: true });
       return;
     }

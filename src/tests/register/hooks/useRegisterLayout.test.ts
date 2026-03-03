@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { toast } from 'react-hot-toast';
@@ -6,11 +5,8 @@ import { useRegisterLayout } from '../../../hooks/register/useRegisterLayout';
 import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
 
 // --- Mocks ---
-vi.mock('../../../contexts/AppContexts', () => ({
-  SelectedModeContext: React.createContext({
-    selectedMode: 'append',
-    setSelectedMode: vi.fn(),
-  }),
+vi.mock('../../../store/hooks/useMainStore', () => ({
+  useSetSelectedMode: () => vi.fn(),
 }));
 
 const mockNavigate = vi.fn();

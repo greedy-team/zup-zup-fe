@@ -4,22 +4,25 @@ import { describe, test, expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MainPage from '../../pages/main/MainPage';
-import { AppProvider } from '../../contexts/AppContexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 {
   /* 리스트 렌더링 */
 }
 
+const createTestQueryClient = () =>
+  new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+
 const renderMain = (initialPath: string) => {
   return render(
-    <MemoryRouter initialEntries={[initialPath]}>
-      <AppProvider>
+    <QueryClientProvider client={createTestQueryClient()}>
+      <MemoryRouter initialEntries={[initialPath]}>
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/find/:lostItemId" element={<div data-testid="find-page" />} />
         </Routes>
-      </AppProvider>
-    </MemoryRouter>,
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 };
 

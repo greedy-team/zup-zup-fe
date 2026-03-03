@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useRegisterProcess } from '../../../hooks/register/useRegisterProcess';
@@ -15,12 +14,9 @@ import { useRegisterData } from '../../../hooks/register/useRegisterData';
 import { useRegisterState } from '../../../hooks/register/useRegisterState';
 import type { Category, Feature, SchoolArea } from '../../../types/register';
 
-// Context 모의 처리
-vi.mock('../../../contexts/AppContexts', () => ({
-  SelectedModeContext: React.createContext({
-    selectedMode: 'append',
-    setSelectedMode: vi.fn(),
-  }),
+// Zustand 스토어 훅 모의 처리
+vi.mock('../../../store/hooks/useMainStore', () => ({
+  useSetSelectedMode: () => vi.fn(),
 }));
 
 describe('useRegisterProcess 훅 조합 테스트', () => {

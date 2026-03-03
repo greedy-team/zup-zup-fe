@@ -1,20 +1,29 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Map from './Map';
 import LostList from './list/LostList';
-import {
-  SelectedModeContext,
-  TotalCountContext,
-  SelectedAreaIdContext,
-} from '../../../contexts/AppContexts';
+import { useSelectedMode } from '../../../store/hooks/useMainStore';
+import { useLostItemsQuery } from '../../../api/main/hooks/useMain';
+import { isValidId } from '../../../utils/isValidId';
 import { COMMON_BUTTON_CLASSNAME } from '../../../constants/common';
 
 const Main = () => {
-  const { selectedMode } = useContext(SelectedModeContext)!;
-  const { selectedAreaId } = useContext(SelectedAreaIdContext)!;
+  const selectedMode = useSelectedMode();
+
+  const [searchParams] = useSearchParams();
+  const rawAreaId = searchParams.get('schoolAreaId');
+  const selectedAreaId = isValidId(rawAreaId) ? Number(rawAreaId) : 0;
+  const rawCategoryId = searchParams.get('categoryId');
+  const selectedCategoryId = isValidId(rawCategoryId) ? Number(rawCategoryId) : 0;
+  const rawPage = searchParams.get('page');
+  const page = isValidId(rawPage) ? Number(rawPage) : 1;
+
+  const { data } = useLostItemsQuery(page, selectedCategoryId, selectedAreaId);
+  const totalCount = data?.totalCount ?? 0;
+
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);
   const [isDesktopListOpen, setIsDesktopListOpen] = useState(true);
   const [shouldRenderAside, setShouldRenderAside] = useState(selectedMode !== 'register');
-  const { totalCount } = useContext(TotalCountContext)!;
 
   useEffect(() => {
     if (selectedMode !== 'register' && selectedAreaId !== 0) {

@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { postLostItem, fetchSchoolAreas } from '../../api/register';
 import { useRegisterRouter } from './useRegisterRouter';
 import { useRegisterData } from './useRegisterData';
 import { useRegisterState } from './useRegisterState';
-import { SelectedModeContext } from '../../contexts/AppContexts';
+import { useSetSelectedMode } from '../../store/hooks/useMainStore';
 import toast from 'react-hot-toast';
 import type {
   Category,
@@ -27,7 +27,7 @@ export const useRegisterProcess = (schoolAreaIdArg?: number | null) => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [resultModalContent, setResultModalContent] = useState<ResultModalContent | null>(null);
   const [schoolAreas, setSchoolAreas] = useState<SchoolArea[]>([]);
-  const { setSelectedMode } = useContext(SelectedModeContext)!;
+  const setSelectedMode = useSetSelectedMode();
 
   // 페이지 새로고침 시 URL 쿼리 파라미터를 이용해 selectedCategory 상태 복원
   useEffect(() => {
