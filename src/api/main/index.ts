@@ -1,11 +1,13 @@
 import { apiFetch } from '../common/apiClient';
 import type { Category, LostItemListItem, LostItemSummaryRow } from '../../types/lost/lostApi';
 import type { SchoolArea } from '../../types/map/map';
+import type { CategoriesResponse } from './normalizeCategories';
 import { PAGE_SIZE } from '../../constants/main/pagenation';
+import normalizeCategories from './normalizeCategories';
 
 export const getCategories = async (): Promise<Category[]> => {
-  const data = await apiFetch<Category[]>('/categories');
-  return data ?? [];
+  const data = await apiFetch<CategoriesResponse>('/categories');
+  return normalizeCategories(data);
 };
 
 export const getSchoolAreas = async (): Promise<SchoolArea[]> => {

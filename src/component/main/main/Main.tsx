@@ -18,7 +18,9 @@ const Main = () => {
   const rawPage = searchParams.get('page');
   const page = isValidId(rawPage) ? Number(rawPage) : 1;
 
-  const { data } = useLostItemsQuery(page, selectedCategoryId, selectedAreaId);
+  const { data } = useLostItemsQuery(page, selectedCategoryId, selectedAreaId, {
+    enabled: selectedMode !== 'register',
+  });
   const totalCount = data?.totalCount ?? 0;
 
   const [isMobileListOpen, setIsMobileListOpen] = useState(false);

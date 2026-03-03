@@ -40,8 +40,8 @@ const server = setupServer(
   http.get('*/categories', () =>
     HttpResponse.json({
       categories: [
-        { categoryId: 1, categoryName: '가방' },
-        { categoryId: 2, categoryName: '지갑' },
+        { id: 1, name: '가방', iconUrl: '' },
+        { id: 2, name: '지갑', iconUrl: '' },
       ],
     }),
   ),

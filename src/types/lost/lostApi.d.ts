@@ -12,6 +12,7 @@ export type LostItemListItem = {
 export type Category = {
   categoryId: number;
   categoryName: string;
+  categoryIconUrl: string;
 };
 
 export type LostItemDetailResponse = {

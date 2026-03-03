@@ -22,11 +22,17 @@ export const useSchoolAreasQuery = () =>
     retry: defaultQueryRetry,
   });
 
-export const useLostItemsQuery = (page: number, categoryId: number, schoolAreaId: number) =>
+export const useLostItemsQuery = (
+  page: number,
+  categoryId: number,
+  schoolAreaId: number,
+  options?: { enabled?: boolean },
+) =>
   useQuery<GetLostItemsResult, ApiError>({
     queryKey: ['lost-items', { page, categoryId, schoolAreaId }],
     queryFn: () => getLostItems(page, categoryId || undefined, schoolAreaId || undefined),
     retry: defaultQueryRetry,
+    enabled: options?.enabled ?? true,
   });
 
 export const useLostItemSummaryQuery = (categoryId: number) =>

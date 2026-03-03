@@ -13,10 +13,21 @@ import { useRegisterRouter } from '../../../hooks/register/useRegisterRouter';
 import { useRegisterData } from '../../../hooks/register/useRegisterData';
 import { useRegisterState } from '../../../hooks/register/useRegisterState';
 import type { Category, Feature, SchoolArea } from '../../../types/register';
+import { useRegisterStore } from '../../../store/registerStore';
 
 // Zustand 스토어 훅 모의 처리
 vi.mock('../../../store/hooks/useMainStore', () => ({
   useSetSelectedMode: () => vi.fn(),
+}));
+
+// useRegisterSchoolAreasQuery 모의 처리
+const mockSchoolAreas: SchoolArea[] = [
+  { id: 1, areaName: '집현관', marker: { lat: 0, lng: 0 }, areaPolygon: { coordinates: [] } },
+];
+vi.mock('../../../api/register/hooks/useRegister', () => ({
+  useRegisterSchoolAreasQuery: () => ({ data: mockSchoolAreas, isError: false }),
+  useRegisterCategoriesQuery: () => ({ data: [], isFetching: false }),
+  useRegisterCategoryFeaturesQuery: () => ({ data: [], isFetching: false }),
 }));
 
 describe('useRegisterProcess 훅 조합 테스트', () => {
@@ -25,9 +36,6 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
   const mockFeatures: Feature[] = [{ id: 1, name: '색상', quizQuestion: '색?', options: [] }];
   const mockCategoryIdFromQuery = vi.fn<() => number | null>(() => null);
   const mockValidSchoolAreaId = vi.fn<() => number | null>(() => 1);
-  const mockSchoolAreas: SchoolArea[] = [
-    { id: 1, areaName: '집현관', marker: { lat: 0, lng: 0 }, areaPolygon: { coordinates: [] } },
-  ];
 
   // Mock 함수
   const mockNavigate = vi.fn();
@@ -62,8 +70,15 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
     (useRegisterRouter as Mock).mockReturnValue(defaultRouterMock);
     (useRegisterData as Mock).mockReturnValue(defaultDataMock);
     (useRegisterState as Mock).mockReturnValue(defaultStateMock);
-    vi.spyOn(api, 'fetchSchoolAreas').mockResolvedValue(mockSchoolAreas);
     vi.spyOn(api, 'postLostItem').mockResolvedValue({ success: true });
+
+    // Zustand store 초기화
+    useRegisterStore.setState({
+      selectedCategory: null,
+      formData: defaultStateMock.formData,
+      isPending: false,
+      resultModalContent: null,
+    });
 
     mockCategoryIdFromQuery.mockClear();
     mockValidSchoolAreaId.mockClear();
@@ -73,10 +88,10 @@ describe('useRegisterProcess 훅 조합 테스트', () => {
     vi.clearAllMocks();
   });
 
-  it('초기 렌더링 시 schoolAreas를 fetch하고 유효성을 검증해야 한다', async () => {
-    renderHook(() => useRegisterProcess());
+  it('초기 렌더링 시 useRegisterSchoolAreasQuery를 통해 schoolAreas를 가져와야 한다', async () => {
+    const { result } = renderHook(() => useRegisterProcess());
     await waitFor(() => {
-      expect(api.fetchSchoolAreas).toHaveBeenCalled();
+      expect(result.current.schoolAreas).toEqual(mockSchoolAreas);
     });
   });
 
