@@ -1,15 +1,12 @@
 import type { Category } from '../../types/lost/lostApi';
 
-type CategoryRow = {
+export type CategoryDto = {
   id?: number | string;
   name?: string;
   iconUrl?: string;
-  categoryId?: number | string;
-  categoryName?: string;
-  categoryIconUrl?: string;
 };
 
-type CategoriesResponse = { categories?: CategoryRow[] } | undefined;
+export type CategoriesResponse = { categories?: CategoryDto[] } | undefined;
 
 const normalizeCategories = (data: CategoriesResponse): Category[] => {
   const rows = data?.categories ?? [];
@@ -18,7 +15,7 @@ const normalizeCategories = (data: CategoriesResponse): Category[] => {
     .map((row) => {
       const categoryId = row.id;
       const categoryName = row.name;
-      const categoryIconUrl = row.iconUrl;
+      const categoryIconUrl = row.iconUrl ?? '';
 
       if (
         (typeof categoryId === 'number' || typeof categoryId === 'string') &&
