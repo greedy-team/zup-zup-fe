@@ -68,6 +68,7 @@ const Sidebar = () => {
       <div className="grid min-h-18 grid-cols-5 items-stretch md:hidden">
         {/* 1) 찾기 */}
         <button
+          data-tour="mobile-sidebar-find"
           onClick={() => handleChangeMode('find')}
           className={`${iconBtnBase} ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="찾기"
@@ -154,6 +155,7 @@ const Sidebar = () => {
         <div className="flex shrink-0 flex-col items-center justify-center gap-0">
           {/* 찾기 */}
           <button
+            data-tour="sidebar-find"
             onClick={() => handleChangeMode('find')}
             className={`${iconBtnBase} aspect-square ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           >
