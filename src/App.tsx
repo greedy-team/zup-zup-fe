@@ -26,6 +26,22 @@ import { MyPage } from './pages/mypage/MyPage';
 import MorePage from './pages/etc/MorePage';
 // 팀소개 페이지
 import { AboutTeamPage } from './pages/etc/AboutTeamPage';
+// 온보딩 페이지
+import OnboardingPage from './pages/onboarding/OnboardingPage';
+// 온보딩 투어: 찾기 흐름 모의 페이지
+import FindTourLayout from './pages/onboarding/tour/FindTourLayout';
+import FindTourInfo from './pages/onboarding/tour/FindTourInfo';
+import FindTourQuiz from './pages/onboarding/tour/FindTourQuiz';
+import FindTourDetail from './pages/onboarding/tour/FindTourDetail';
+import FindTourPledge from './pages/onboarding/tour/FindTourPledge';
+import FindTourDeposit from './pages/onboarding/tour/FindTourDeposit';
+// 온보딩 투어: 등록 흐름 모의 페이지
+import RegisterTourLayout from './pages/onboarding/tour/RegisterTourLayout';
+import RegisterTourCategory from './pages/onboarding/tour/RegisterTourCategory';
+import RegisterTourDetails from './pages/onboarding/tour/RegisterTourDetails';
+import RegisterTourReview from './pages/onboarding/tour/RegisterTourReview';
+// 온보딩 투어: 마이페이지 모의 페이지
+import MyPageTour from './pages/onboarding/tour/MyPageTour';
 
 const queryClient = new QueryClient();
 
@@ -61,6 +77,29 @@ export default function App() {
             <Route path="mypage" element={<MyPage />} />
             <Route path="more" element={<MorePage />} />
             <Route path="more/team" element={<AboutTeamPage />} />
+            <Route path="onboarding" element={<OnboardingPage />} />
+
+            {/* 온보딩 투어: 찾기 흐름 (/onboarding/find-tour/*) */}
+            <Route path="onboarding/find-tour" element={<FindTourLayout />}>
+              <Route index element={<Navigate to="info" replace />} />
+              <Route path="info" element={<FindTourInfo />} />
+              <Route path="quiz" element={<FindTourQuiz />} />
+              <Route path="detail" element={<FindTourDetail />} />
+              <Route path="pledge" element={<FindTourPledge />} />
+              <Route path="deposit" element={<FindTourDeposit />} />
+            </Route>
+
+            {/* 온보딩 투어: 등록 흐름 (/onboarding/register-tour/*) */}
+            <Route path="onboarding/register-tour" element={<RegisterTourLayout />}>
+              <Route index element={<Navigate to="category" replace />} />
+              <Route path="category" element={<RegisterTourCategory />} />
+              <Route path="details" element={<RegisterTourDetails />} />
+              <Route path="review" element={<RegisterTourReview />} />
+            </Route>
+
+            {/* 온보딩 투어: 마이페이지 (/onboarding/mypage-tour) */}
+            <Route path="onboarding/mypage-tour" element={<MyPageTour />} />
+
             <Route path="*" element={<MainPage />} />
           </Route>
           <Route path="admin" element={<AdminPage />} />
