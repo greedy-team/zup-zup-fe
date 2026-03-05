@@ -14,7 +14,9 @@ export function getTargetRect(selector: string): DOMRect | null {
 
 /**
  * 툴팁 위치와 화살표 오프셋을 계산한다.
- * arrowOffset: top/bottom 배치에서 화살표를 타겟 중심에 정렬하기 위한 툴팁 중앙 기준 오프셋(px)
+ * arrowOffset: 툴팁이 뷰포트 경계에 clamp될 때 화살표를 타겟 중심에 정렬하기 위한 오프셋(px)
+ *   - top/bottom 배치: 수평 오프셋 (left 기준)
+ *   - right/left 배치: 수직 오프셋 (top 기준)
  */
 export function computeTooltipLayout(
   rect: DOMRect,
@@ -33,8 +35,12 @@ export function computeTooltipLayout(
 
   switch (placement) {
     case 'right': {
-      top = Math.max(16, Math.min(vh - H - 16, rect.top + rect.height / 2 - H / 2));
+      const rawTop = rect.top + rect.height / 2 - H / 2;
+      top = Math.max(16, Math.min(vh - H - 16, rawTop));
       left = Math.min(vw - tooltipWidth - 16, rect.right + G);
+      // 화살표를 타겟 수직 중앙에 정렬
+      arrowOffset = rect.top + rect.height / 2 - (top + H / 2);
+      arrowOffset = Math.max(-(H / 2) + 16, Math.min(H / 2 - 16, arrowOffset));
       break;
     }
     case 'bottom': {
@@ -47,8 +53,12 @@ export function computeTooltipLayout(
       break;
     }
     case 'left': {
-      top = Math.max(16, Math.min(vh - H - 16, rect.top + rect.height / 2 - H / 2));
+      const rawTop = rect.top + rect.height / 2 - H / 2;
+      top = Math.max(16, Math.min(vh - H - 16, rawTop));
       left = Math.max(16, rect.left - G - tooltipWidth);
+      // 화살표를 타겟 수직 중앙에 정렬
+      arrowOffset = rect.top + rect.height / 2 - (top + H / 2);
+      arrowOffset = Math.max(-(H / 2) + 16, Math.min(H / 2 - 16, arrowOffset));
       break;
     }
     case 'top': {
