@@ -196,6 +196,7 @@ const Sidebar = () => {
 
         <div className="mt-auto">
           <button
+            data-tour="sidebar-more"
             onClick={() => {
               navigate('/more');
               setSelectedMode('more');

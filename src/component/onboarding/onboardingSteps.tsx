@@ -58,6 +58,15 @@ export const STEPS: Step[] = [
     mobileSelector: '[data-tour="mobile-sidebar-mypage"]',
     mobilePlacement: 'top',
   },
+  {
+    icon: <Ellipsis className="h-10 w-10 text-teal-500" />,
+    title: '더 자세한 내용이 궁금하다면?',
+    description:
+      '사이드바의 더보기 메뉴에서 서비스 소개, 팀 소개, 피드백 전송 및 서비스 가이드를 다시 확인할 수 있어요.',
+    selector: '[data-tour="sidebar-more"]',
+    placement: 'right',
+    mobileSelector: null,
+  },
 ];
 
 // ── 섹션 투어용 (6-section) ────────────────────────────────────────────────────
