@@ -68,6 +68,7 @@ const Sidebar = () => {
       <div className="grid min-h-18 grid-cols-5 items-stretch md:hidden">
         {/* 1) 찾기 */}
         <button
+          data-tour="mobile-sidebar-find"
           onClick={() => handleChangeMode('find')}
           className={`${iconBtnBase} ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="찾기"
@@ -88,6 +89,7 @@ const Sidebar = () => {
 
         {/* 2) 추가 */}
         <button
+          data-tour="mobile-sidebar-register"
           onClick={() => handleChangeMode('register')}
           className={`${iconBtnBase} ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="추가"
@@ -119,6 +121,7 @@ const Sidebar = () => {
 
         {/* 4) 마이페이지 */}
         <button
+          data-tour="mobile-sidebar-mypage"
           onClick={handleClickMyPage}
           className={`${iconBtnBase} ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="마이페이지"
@@ -152,6 +155,7 @@ const Sidebar = () => {
         <div className="flex shrink-0 flex-col items-center justify-center gap-0">
           {/* 찾기 */}
           <button
+            data-tour="sidebar-find"
             onClick={() => handleChangeMode('find')}
             className={`${iconBtnBase} aspect-square ${activeFind ? 'bg-teal-700 text-white' : ''} group`}
           >
@@ -171,6 +175,7 @@ const Sidebar = () => {
 
           {/* 추가 */}
           <button
+            data-tour="sidebar-register"
             onClick={() => handleChangeMode('register')}
             className={`${iconBtnBase} aspect-square ${activeReg ? 'bg-teal-700 text-white' : ''} group`}
           >
@@ -191,6 +196,7 @@ const Sidebar = () => {
 
         <div className="mt-auto">
           <button
+            data-tour="sidebar-more"
             onClick={() => {
               navigate('/more');
               setSelectedMode('more');
@@ -215,6 +221,7 @@ const Sidebar = () => {
 
         <div>
           <button
+            data-tour="sidebar-mypage"
             onClick={handleClickMyPage}
             className={`${iconBtnBase} aspect-square ${activeMy ? 'bg-teal-700 text-white' : ''} group`}
             aria-label="마이페이지"

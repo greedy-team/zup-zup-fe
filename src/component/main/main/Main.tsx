@@ -50,6 +50,7 @@ const Main = () => {
         <section className="relative flex h-full min-h-0 min-w-0 flex-col overflow-x-hidden">
           {shouldRenderAside && (
             <aside
+              data-tour="lost-list"
               className={`absolute top-0 left-0 z-30 hidden h-full w-[380px] border-r border-gray-300 bg-white transition-transform duration-300 ease-out md:block ${
                 isDesktopListOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
@@ -88,6 +89,7 @@ const Main = () => {
 
           {selectedMode === 'find' && (
             <button
+              data-tour="mobile-list-btn"
               className="absolute bottom-0 left-1/2 z-30 mb-2 w-20 -translate-x-1/2 cursor-pointer self-center rounded-full bg-teal-600 px-3 py-3 text-sm text-white hover:bg-teal-700 focus-visible:ring-1 focus-visible:ring-teal-300 focus-visible:outline-none active:translate-y-[1px] md:hidden"
               onClick={() => setIsMobileListOpen(true)}
             >
