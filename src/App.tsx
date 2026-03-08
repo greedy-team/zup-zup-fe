@@ -77,29 +77,24 @@ export default function App() {
             <Route path="mypage" element={<MyPage />} />
             <Route path="more" element={<MorePage />} />
             <Route path="more/team" element={<AboutTeamPage />} />
-            <Route path="onboarding" element={<OnboardingPage />} />
-
-            {/* 온보딩 투어: 찾기 흐름 (/onboarding/find-tour/*) */}
-            <Route path="onboarding/find-tour" element={<FindTourLayout />}>
-              <Route index element={<Navigate to="info" replace />} />
-              <Route path="info" element={<FindTourInfo />} />
-              <Route path="quiz" element={<FindTourQuiz />} />
-              <Route path="detail" element={<FindTourDetail />} />
-              <Route path="pledge" element={<FindTourPledge />} />
-              <Route path="deposit" element={<FindTourDeposit />} />
-            </Route>
-
-            {/* 온보딩 투어: 등록 흐름 (/onboarding/register-tour/*) */}
-            <Route path="onboarding/register-tour" element={<RegisterTourLayout />}>
-              <Route index element={<Navigate to="category" replace />} />
-              <Route path="category" element={<RegisterTourCategory />} />
-              <Route path="details" element={<RegisterTourDetails />} />
-              <Route path="review" element={<RegisterTourReview />} />
-            </Route>
-
-            {/* 온보딩 투어: 마이페이지 (/onboarding/mypage-tour) */}
-            <Route path="onboarding/mypage-tour" element={<MyPageTour />} />
-
+<Route path="onboarding">
+  <Route index element={<OnboardingPage />} />
+  <Route path="find-tour" element={<FindTourLayout />}>
+    <Route index element={<Navigate to="info" replace />} />
+    <Route path="info" element={<FindTourInfo />} />
+    <Route path="quiz" element={<FindTourQuiz />} />
+    <Route path="detail" element={<FindTourDetail />} />
+    <Route path="pledge" element={<FindTourPledge />} />
+    <Route path="deposit" element={<FindTourDeposit />} />
+  </Route>
+  <Route path="register-tour" element={<RegisterTourLayout />}>
+    <Route index element={<Navigate to="category" replace />} />
+    <Route path="category" element={<RegisterTourCategory />} />
+    <Route path="details" element={<RegisterTourDetails />} />
+    <Route path="review" element={<RegisterTourReview />} />
+  </Route>
+  <Route path="mypage-tour" element={<MyPageTour />} />
+</Route>
             <Route path="*" element={<MainPage />} />
           </Route>
           <Route path="admin" element={<AdminPage />} />
