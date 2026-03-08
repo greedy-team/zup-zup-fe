@@ -87,6 +87,7 @@ export type OnboardingStep = {
 export type OnboardingSection = {
   id: string;
   label: string;
+  summary: string;
   icon: React.ReactNode;
   route: string;
   steps: OnboardingStep[];
@@ -96,6 +97,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'main',
     label: '메인화면',
+    summary: '지도에서 캠퍼스 분실물 현황을 한눈에 확인해요.',
     icon: <Map className="h-4 w-4" />,
     route: '/',
     steps: [
@@ -128,6 +130,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'find',
     label: '찾기',
+    summary: '지도에서 분실물을 검색하고 보관장소를 확인해요.',
     icon: <Search className="h-4 w-4" />,
     route: '/',
     steps: [
@@ -200,6 +203,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'register',
     label: '등록',
+    summary: '발견한 분실물을 지도에 직접 등록해요.',
     icon: <CirclePlus className="h-4 w-4" />,
     route: '/',
     steps: [
@@ -246,6 +250,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'mypage',
     label: '마이페이지',
+    summary: '내 찾기 신청 내역과 보관장소를 관리해요.',
     icon: <CircleUser className="h-4 w-4" />,
     route: '/mypage',
     steps: [
@@ -263,6 +268,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'more',
     label: '더보기',
+    summary: '서비스 소개, 팀 소개, 피드백을 확인해요.',
     icon: <Ellipsis className="h-4 w-4" />,
     route: '/more',
     steps: [
@@ -278,6 +284,7 @@ export const SECTIONS: OnboardingSection[] = [
   {
     id: 'login',
     label: '로그인',
+    summary: '학교 계정으로 간편하게 로그인해요.',
     icon: <LogIn className="h-4 w-4" />,
     route: '/login',
     steps: [

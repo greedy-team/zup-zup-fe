@@ -15,7 +15,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex min-h-full w-full self-start items-start justify-center bg-gray-50 px-4 py-8">
+    <div className="flex min-h-full w-full items-start justify-center self-start bg-gray-50 px-4 py-8">
       <div className="w-full max-w-2xl">
         {/* 헤더 */}
         <div className="mb-8 text-center">
@@ -45,9 +45,7 @@ export default function OnboardingPage() {
               {/* 텍스트 */}
               <div className="min-w-0 flex-1 text-left">
                 <p className="text-sm font-semibold text-slate-800">{section.label}</p>
-                <p className="mt-0.5 truncate text-xs text-slate-400">
-                  {section.steps[0].description.split('\n')[0]}
-                </p>
+                <p className="mt-0.5 truncate text-xs text-slate-400">{section.summary}</p>
               </div>
 
               {/* 스텝 수 + 화살표 */}
