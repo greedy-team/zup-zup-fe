@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Lightbulb, X } from 'lucide-react';
+import { useFocusTrap } from './useFocusTrap';
 import type { OnboardingSection, OnboardingStep } from './onboardingSteps';
 
 type Props = {
@@ -30,6 +32,9 @@ export default function TourBottomSheet({
   onNext,
   onGoToStep,
 }: Props) {
+  const sheetRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(sheetRef, isSheetOpen);
+
   if (!isSheetOpen) {
     return (
       <button
@@ -48,6 +53,7 @@ export default function TourBottomSheet({
 
   return (
     <div
+      ref={sheetRef}
       className="fixed right-0 bottom-0 left-0 z-[100] rounded-t-2xl bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.15)] md:left-18"
       role="dialog"
       aria-modal="false"

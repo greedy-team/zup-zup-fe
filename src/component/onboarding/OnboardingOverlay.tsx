@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useFocusTrap } from './useFocusTrap';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
@@ -19,6 +20,8 @@ export default function OnboardingOverlay({ onComplete }: Props) {
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(containerRef);
   const [measuredHeight, setMeasuredHeight] = useState(TOOLTIP_HEIGHT_ESTIMATE);
 
   const current = STEPS[step];
@@ -126,6 +129,7 @@ export default function OnboardingOverlay({ onComplete }: Props) {
       </div>
 
       {/* ── 툴팁 / 중앙 카드 레이어 (z-101) ── */}
+      <div ref={containerRef} className="contents">
       {tooltipPos ? (
         <div
           ref={tooltipRef}
@@ -224,6 +228,7 @@ export default function OnboardingOverlay({ onComplete }: Props) {
           </div>
         </div>
       )}
+      </div>
     </>
   );
 

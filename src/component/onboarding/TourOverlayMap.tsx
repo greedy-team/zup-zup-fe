@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { ChevronLeft, ChevronRight, Lightbulb, X } from 'lucide-react';
+import { useFocusTrap } from './useFocusTrap';
 import type { OnboardingSection, OnboardingStep } from './onboardingSteps';
 import { computeTooltipLayout } from './onboardingUtils';
 import type { Placement } from './onboardingUtils';
@@ -90,6 +92,9 @@ export default function TourOverlayMap({
   onNext,
   onGoToStep,
 }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(containerRef);
+
   const tooltipLayout =
     targetRect && activePlacement
       ? computeTooltipLayout(targetRect, activePlacement, tooltipWidth, measuredHeight)
@@ -114,6 +119,7 @@ export default function TourOverlayMap({
       </div>
 
       {/* 툴팁 레이어 (z-101) */}
+      <div ref={containerRef} className="contents">
       {tooltipPos ? (
         <div
           ref={tooltipRef}
@@ -265,6 +271,7 @@ export default function TourOverlayMap({
           </div>
         </div>
       )}
+      </div>
     </>
   );
 }
