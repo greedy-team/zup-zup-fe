@@ -1,11 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  TOOLTIP_MAX_WIDTH,
-  TOOLTIP_HEIGHT_ESTIMATE,
-  getTargetRect,
-} from './onboardingUtils';
+import { TOOLTIP_MAX_WIDTH, TOOLTIP_HEIGHT_ESTIMATE, getTargetRect } from './onboardingUtils';
 import type { Placement } from './onboardingUtils';
 import { SECTIONS } from './onboardingSteps';
 import type { OnboardingSection, OnboardingStep } from './onboardingSteps';
@@ -22,7 +18,7 @@ export type SectionTourControls = {
   isSheetOpen: boolean;
   setIsSheetOpen: (open: boolean) => void;
   targetRect: DOMRect | null;
-  tooltipRef: React.RefObject<HTMLDivElement>;
+  tooltipRef: React.RefObject<HTMLDivElement | null>;
   measuredHeight: number;
   activePlacement: Placement | undefined;
   tooltipWidth: number;
