@@ -114,6 +114,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
     >
       <div
         ref={categoryBarRef}
+        data-tour="category-bar"
         className={`absolute top-0 z-30 flex justify-center pt-4 transition-all duration-300 ease-out ${
           isDesktopListOpen ? 'md:right-0 md:left-[380px]' : 'md:right-0 md:left-0'
         } right-0 left-0`}

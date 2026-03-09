@@ -1,6 +1,6 @@
 import { MorePageHeader } from '../../component/etc/MorePageHeader';
 import { InfoSection } from '../../component/etc/InfoSection';
-import { Users, MessageCircleMore, Info } from 'lucide-react';
+import { Users, MessageCircleMore, Info, BookOpen } from 'lucide-react';
 
 const MorePage = () => {
   return (
@@ -9,6 +9,12 @@ const MorePage = () => {
         <MorePageHeader />
         <main className="rounded-2xl bg-white p-6 shadow-sm">
           <ul className="divide-y divide-gray-200">
+            <InfoSection
+              title="서비스 소개"
+              type="link"
+              href="/onboarding"
+              icon={<BookOpen className="h-5 w-5" />}
+            />
             <InfoSection
               title="줍줍 소개"
               type="link"
