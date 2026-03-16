@@ -2,6 +2,10 @@ import type {
   PledgedLostItemsResponse,
   CancelPledgeResponse,
   FoundCompleteResponse,
+  EmailAlertResponse,
+  EmailAlertRequest,
+  SubscriptionsResponse,
+  SubscriptionsRequest,
 } from '../../types/mypage';
 import type { ApiError } from '../../types/common';
 
@@ -74,4 +78,86 @@ export async function cancelPledge(lostItemId: number): Promise<CancelPledgeResp
   }
 
   return data as CancelPledgeResponse;
+}
+
+export async function getEmailAlert(): Promise<EmailAlertResponse> {
+  const res = await fetch(`${BASE_URL}/members/me/email`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '이메일 설정 조회 오류',
+      detail: data?.detail ?? '이메일 알림 설정을 조회하는 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/members/me/email',
+    };
+    throw error;
+  }
+
+  return data as EmailAlertResponse;
+}
+
+export async function getSubscriptions(): Promise<SubscriptionsResponse> {
+  const res = await fetch(`${BASE_URL}/alerts/subscriptions`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '구독 조회 오류',
+      detail: data?.detail ?? '구독 카테고리를 조회하는 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/alerts/subscriptions',
+    };
+    throw error;
+  }
+
+  return data as SubscriptionsResponse;
+}
+
+export async function updateSubscriptions(payload: SubscriptionsRequest): Promise<void> {
+  const res = await fetch(`${BASE_URL}/alerts/subscriptions`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '구독 수정 오류',
+      detail: data?.detail ?? '구독 카테고리를 수정하는 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/alerts/subscriptions',
+    };
+    throw error;
+  }
+}
+
+export async function updateEmailAlert(payload: EmailAlertRequest): Promise<void> {
+  const res = await fetch(`${BASE_URL}/members/me/email`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    const error: ApiError = {
+      status: res.status,
+      title: data?.title ?? '이메일 설정 오류',
+      detail: data?.detail ?? '이메일 알림 설정을 수정하는 중 오류가 발생했습니다.',
+      instance: data?.instance ?? '/api/members/me/email',
+    };
+    throw error;
+  }
 }
