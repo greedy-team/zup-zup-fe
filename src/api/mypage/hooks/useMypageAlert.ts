@@ -13,18 +13,20 @@ import { showApiErrorToast } from '../../common/apiErrorToast';
 
 type AlertSettingsPayload = EmailAlertRequest & SubscriptionsRequest;
 
-export const useEmailAlertQuery = () =>
+export const useEmailAlertQuery = (enabled: boolean) =>
   useQuery<EmailAlertResponse, ApiError>({
     queryKey: ['members', 'me', 'email'],
     queryFn: getEmailAlert,
     retry: defaultQueryRetry,
+    enabled,
   });
 
-export const useSubscriptionsQuery = () =>
+export const useSubscriptionsQuery = (enabled: boolean) =>
   useQuery<SubscriptionsResponse, ApiError>({
     queryKey: ['alerts', 'subscriptions'],
     queryFn: getSubscriptions,
     retry: defaultQueryRetry,
+    enabled,
   });
 
 export const useUpdateAlertSettingsMutation = () => {
