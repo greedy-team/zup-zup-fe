@@ -39,7 +39,7 @@ export type FoundCompleteResponse = {
 };
 
 export type EmailAlertResponse = {
-  email: string;
+  email: string | null;
   emailAlertEnabled: boolean;
 };
 
