@@ -59,6 +59,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
 
   const isPending = updateAlertSettingsMutation.isPending;
   const isLoading = isEmailLoading || isSubLoading || isCatLoading;
+  const showEmailError = !!emailEdit.email && !emailEdit.isEmailValid;
 
   if (!isOpen) return null;
 
@@ -94,55 +95,60 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
             </label>
 
             {emailEdit.isEditingEmail ? (
-              <div className="flex items-center gap-1.5">
-                {emailEdit.isCustomDomain ? (
-                  <input
-                    id={emailInputId}
-                    type="text"
-                    value={emailEdit.customDomain}
-                    onChange={(e) => emailEdit.setCustomDomain(e.target.value)}
-                    onKeyDown={emailEdit.handleKeyDown}
-                    placeholder="example@sju.ac.kr"
-                    autoFocus
-                    className="h-10 min-w-0 flex-1 rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
-                  />
-                ) : (
-                  <>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5">
+                  {emailEdit.isCustomDomain ? (
                     <input
                       id={emailInputId}
                       type="text"
-                      value={emailEdit.localPart}
-                      onChange={(e) => emailEdit.setLocalPart(e.target.value)}
+                      value={emailEdit.customDomain}
+                      onChange={(e) => emailEdit.setCustomDomain(e.target.value)}
                       onKeyDown={emailEdit.handleKeyDown}
-                      placeholder="이메일"
-                      disabled={isEmailLoading}
+                      placeholder="example@sju.ac.kr"
                       autoFocus
-                      className="h-10 min-w-0 flex-1 rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 disabled:bg-slate-100 disabled:text-slate-400"
+                      className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
                     />
-                    <span className="shrink-0 text-sm font-medium text-slate-400">@</span>
-                    <select
-                      value={emailEdit.selectedDomain}
-                      onChange={emailEdit.handleDomainChange}
-                      className="h-10 rounded-lg border border-teal-400 bg-white px-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                  ) : (
+                    <>
+                      <input
+                        id={emailInputId}
+                        type="text"
+                        value={emailEdit.localPart}
+                        onChange={(e) => emailEdit.setLocalPart(e.target.value)}
+                        onKeyDown={emailEdit.handleKeyDown}
+                        placeholder="이메일"
+                        disabled={isEmailLoading}
+                        autoFocus
+                        className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 disabled:bg-slate-100 disabled:text-slate-400 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
+                      />
+                      <span className="shrink-0 text-sm font-medium text-slate-400">@</span>
+                      <select
+                        value={emailEdit.selectedDomain}
+                        onChange={emailEdit.handleDomainChange}
+                        className={`h-10 rounded-lg border bg-white px-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
+                      >
+                        {DOMAIN_OPTIONS.map((d) => (
+                          <option key={d} value={d}>
+                            {d}
+                          </option>
+                        ))}
+                        <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
+                      </select>
+                    </>
+                  )}
+                  {emailEdit.emailBeforeEdit && (
+                    <button
+                      type="button"
+                      onClick={emailEdit.handleCancelEditEmail}
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                      aria-label="수정 취소"
                     >
-                      {DOMAIN_OPTIONS.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
-                      ))}
-                      <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
-                    </select>
-                  </>
-                )}
-                {emailEdit.emailBeforeEdit && (
-                  <button
-                    type="button"
-                    onClick={emailEdit.handleCancelEditEmail}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-                    aria-label="수정 취소"
-                  >
-                    <X className="h-4 w-4" aria-hidden="true" />
-                  </button>
+                      <X className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+                {showEmailError && (
+                  <p className="text-xs text-red-500">올바른 이메일 형식을 입력해주세요</p>
                 )}
               </div>
             ) : (
