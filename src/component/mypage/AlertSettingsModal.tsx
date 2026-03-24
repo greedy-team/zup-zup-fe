@@ -94,52 +94,55 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
             </label>
 
             {emailEdit.isEditingEmail ? (
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5">
+                {emailEdit.isCustomDomain ? (
                   <input
                     id={emailInputId}
-                    type="text"
-                    value={emailEdit.localPart}
-                    onChange={(e) => emailEdit.setLocalPart(e.target.value)}
-                    onKeyDown={emailEdit.handleKeyDown}
-                    placeholder="이메일"
-                    disabled={isEmailLoading}
-                    autoFocus
-                    className="h-10 min-w-0 flex-1 rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 disabled:bg-slate-100 disabled:text-slate-400"
-                  />
-                  <span className="shrink-0 text-sm font-medium text-slate-400">@</span>
-                  <select
-                    value={emailEdit.isCustomDomain ? DIRECT_INPUT : emailEdit.selectedDomain}
-                    onChange={emailEdit.handleDomainChange}
-                    className="h-10 rounded-lg border border-teal-400 bg-white px-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
-                  >
-                    {DOMAIN_OPTIONS.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                    <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
-                  </select>
-                  {emailEdit.emailBeforeEdit && (
-                    <button
-                      type="button"
-                      onClick={emailEdit.handleCancelEditEmail}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-                      aria-label="수정 취소"
-                    >
-                      <X className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  )}
-                </div>
-                {emailEdit.isCustomDomain && (
-                  <input
                     type="text"
                     value={emailEdit.customDomain}
                     onChange={(e) => emailEdit.setCustomDomain(e.target.value)}
                     onKeyDown={emailEdit.handleKeyDown}
-                    placeholder="도메인 직접 입력 (예: company.com)"
-                    className="h-10 w-full rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                    placeholder="example@sju.ac.kr"
+                    autoFocus
+                    className="h-10 min-w-0 flex-1 rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
                   />
+                ) : (
+                  <>
+                    <input
+                      id={emailInputId}
+                      type="text"
+                      value={emailEdit.localPart}
+                      onChange={(e) => emailEdit.setLocalPart(e.target.value)}
+                      onKeyDown={emailEdit.handleKeyDown}
+                      placeholder="이메일"
+                      disabled={isEmailLoading}
+                      autoFocus
+                      className="h-10 min-w-0 flex-1 rounded-lg border border-teal-400 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 disabled:bg-slate-100 disabled:text-slate-400"
+                    />
+                    <span className="shrink-0 text-sm font-medium text-slate-400">@</span>
+                    <select
+                      value={emailEdit.selectedDomain}
+                      onChange={emailEdit.handleDomainChange}
+                      className="h-10 rounded-lg border border-teal-400 bg-white px-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                    >
+                      {DOMAIN_OPTIONS.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                      <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
+                    </select>
+                  </>
+                )}
+                {emailEdit.emailBeforeEdit && (
+                  <button
+                    type="button"
+                    onClick={emailEdit.handleCancelEditEmail}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                    aria-label="수정 취소"
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
                 )}
               </div>
             ) : (
