@@ -23,7 +23,7 @@ const parseEmail = (emailValue: string): ParsedEmail | null => {
   if (DOMAIN_OPTIONS.includes(dom)) {
     return { localPart: local, selectedDomain: dom, isCustomDomain: false, customDomain: '' };
   }
-  return { localPart: local, selectedDomain: DOMAIN_OPTIONS[0], isCustomDomain: true, customDomain: dom };
+  return { localPart: local, selectedDomain: DOMAIN_OPTIONS[0], isCustomDomain: true, customDomain: emailValue };
 };
 
 export const useEmailEditState = (
@@ -38,8 +38,7 @@ export const useEmailEditState = (
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [emailAlertEnabled, setEmailAlertEnabled] = useState(false);
 
-  const activeDomain = isCustomDomain ? customDomain : selectedDomain;
-  const email = localPart && activeDomain ? `${localPart}@${activeDomain}` : '';
+  const email = isCustomDomain ? customDomain : localPart && selectedDomain ? `${localPart}@${selectedDomain}` : '';
   const isEmailValid = EMAIL_REGEX.test(email);
 
   useEffect(() => {
@@ -93,6 +92,7 @@ export const useEmailEditState = (
   const handleDomainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === DIRECT_INPUT) {
       setIsCustomDomain(true);
+      setCustomDomain(localPart && selectedDomain ? `${localPart}@${selectedDomain}` : '');
     } else {
       setIsCustomDomain(false);
       setSelectedDomain(e.target.value);
