@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Inbox } from 'lucide-react';
+import { Inbox, Bell } from 'lucide-react';
 import { MyPageHeader } from '../../component/mypage/MyPageHeader';
+import { AlertSettingsModal } from '../../component/mypage/AlertSettingsModal';
 import { PledgedLostItemCard } from '../../component/mypage/PledgedLostItemCard';
 import {
   usePledgedLostItems,
@@ -17,6 +18,7 @@ const DEFAULT_PAGE = 1;
 
 export const MyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
 
   const currentPage = getPageFromSearchParams(searchParams, DEFAULT_PAGE);
@@ -62,6 +64,19 @@ export const MyPage = () => {
     <div className="flex w-full justify-center bg-gray-50">
       <div className="flex min-h-full w-full max-w-[1104px] flex-col gap-6 px-4 py-8">
         <MyPageHeader totalFoundCount={data?.pageInfo?.totalElements ?? 0} />
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setIsAlertModalOpen(true)}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
+          >
+            <Bell className="h-4 w-4 text-teal-500" aria-hidden="true" />
+            이메일 알림 설정
+          </button>
+        </div>
+
+        <AlertSettingsModal isOpen={isAlertModalOpen} onClose={() => setIsAlertModalOpen(false)} />
 
         {isLoading && !data && (
           <div className="rounded-2xl bg-white px-6 py-10 text-center text-sm text-slate-500 shadow-sm">

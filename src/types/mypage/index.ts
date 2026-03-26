@@ -37,3 +37,21 @@ export type FoundCompleteResponse = {
   status: string;
   message: string;
 };
+
+export type EmailAlertResponse = {
+  email: string | null;
+  emailAlertEnabled: boolean;
+};
+
+export type EmailAlertRequest = {
+  email: string;
+  emailAlertEnabled: boolean;
+};
+
+export type SubscriptionsResponse = {
+  categoryIds: number[];
+};
+
+export type SubscriptionsRequest = {
+  categoryIds: number[];
+};
