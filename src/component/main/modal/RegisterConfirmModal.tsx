@@ -24,7 +24,7 @@ const RegisterConfirmModal = () => {
 
   const handleConfirm = () => {
     setIsRegisterConfirmModalOpen(false);
-    navigate(`/register/${selectedAreaId}`);
+    navigate(`/register/${selectedArea?.areaName}`);
   };
 
   return (

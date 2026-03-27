@@ -6,7 +6,7 @@ import RegisterReview from '../../pages/register/RegisterReview';
 
 export const registerRoutes: RouteObject[] = [
   {
-    path: 'register/:schoolAreaId',
+    path: 'register/:areaName',
     element: <RegisterLayout />,
     children: [
       { index: true, element: <Navigate to="category" replace /> },
