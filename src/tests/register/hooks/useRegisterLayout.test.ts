@@ -13,8 +13,12 @@ const mockNavigate = vi.fn();
 const mockUseLocation = vi.fn();
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
-  useParams: () => ({ schoolAreaId: '1' }),
+  useParams: () => ({ areaName: '학술정보원' }),
   useLocation: () => mockUseLocation(),
+}));
+
+vi.mock('../../../api/main/hooks/useMain', () => ({
+  useSchoolAreasQuery: () => ({ data: [{ id: 1, areaName: '학술정보원' }] }),
 }));
 
 vi.mock('../../../hooks/register/useRegisterProcess');

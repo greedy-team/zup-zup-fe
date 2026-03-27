@@ -50,7 +50,7 @@ describe('등록 확인 모달', () => {
 
     await user.click(await screen.findByRole('button', { name: '등록' }));
     // 등록 버튼 클릭 시 등록 페이지로 이동한다
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/register/1');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/register/학술정보원');
 
     // 모달이 사라진 상태인지 확인
     expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
