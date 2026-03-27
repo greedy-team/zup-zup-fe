@@ -5,7 +5,7 @@ export default function NotFoundPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex h-full w-full items-center justify-center bg-gray-50">
       <div className="w-full max-w-sm space-y-6 px-6 text-center">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-teal-50">
           <SearchX className="h-10 w-10 text-teal-600" />
