@@ -77,24 +77,24 @@ export default function App() {
             <Route path="mypage" element={<MyPage />} />
             <Route path="more" element={<MorePage />} />
             <Route path="more/team" element={<AboutTeamPage />} />
-<Route path="onboarding">
-  <Route index element={<OnboardingPage />} />
-  <Route path="find-tour" element={<FindTourLayout />}>
-    <Route index element={<Navigate to="info" replace />} />
-    <Route path="info" element={<FindTourInfo />} />
-    <Route path="quiz" element={<FindTourQuiz />} />
-    <Route path="detail" element={<FindTourDetail />} />
-    <Route path="pledge" element={<FindTourPledge />} />
-    <Route path="deposit" element={<FindTourDeposit />} />
-  </Route>
-  <Route path="register-tour" element={<RegisterTourLayout />}>
-    <Route index element={<Navigate to="category" replace />} />
-    <Route path="category" element={<RegisterTourCategory />} />
-    <Route path="details" element={<RegisterTourDetails />} />
-    <Route path="review" element={<RegisterTourReview />} />
-  </Route>
-  <Route path="mypage-tour" element={<MyPageTour />} />
-</Route>
+            <Route path="onboarding">
+              <Route index element={<OnboardingPage />} />
+              <Route path="find-tour" element={<FindTourLayout />}>
+                <Route index element={<Navigate to="info" replace />} />
+                <Route path="info" element={<FindTourInfo />} />
+                <Route path="quiz" element={<FindTourQuiz />} />
+                <Route path="detail" element={<FindTourDetail />} />
+                <Route path="pledge" element={<FindTourPledge />} />
+                <Route path="deposit" element={<FindTourDeposit />} />
+              </Route>
+              <Route path="register-tour" element={<RegisterTourLayout />}>
+                <Route index element={<Navigate to="category" replace />} />
+                <Route path="category" element={<RegisterTourCategory />} />
+                <Route path="details" element={<RegisterTourDetails />} />
+                <Route path="review" element={<RegisterTourReview />} />
+              </Route>
+              <Route path="mypage-tour" element={<MyPageTour />} />
+            </Route>
             <Route path="*" element={<MainPage />} />
           </Route>
           <Route path="admin" element={<AdminPage />} />
