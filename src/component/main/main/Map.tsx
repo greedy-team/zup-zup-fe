@@ -54,7 +54,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
     } else {
       next.set('schoolAreaId', String(areaId));
     }
-    next.set('page', '1');
+    next.delete('page');
     setSearchParams(next, { replace: true });
   };
 
