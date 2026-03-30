@@ -1,16 +1,18 @@
+import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
-import OnboardingPage from '../../pages/onboarding/OnboardingPage';
-import FindTourLayout from '../../pages/onboarding/tour/FindTourLayout';
-import FindTourInfo from '../../pages/onboarding/tour/FindTourInfo';
-import FindTourQuiz from '../../pages/onboarding/tour/FindTourQuiz';
-import FindTourDetail from '../../pages/onboarding/tour/FindTourDetail';
-import FindTourPledge from '../../pages/onboarding/tour/FindTourPledge';
-import FindTourDeposit from '../../pages/onboarding/tour/FindTourDeposit';
-import RegisterTourLayout from '../../pages/onboarding/tour/RegisterTourLayout';
-import RegisterTourCategory from '../../pages/onboarding/tour/RegisterTourCategory';
-import RegisterTourDetails from '../../pages/onboarding/tour/RegisterTourDetails';
-import RegisterTourReview from '../../pages/onboarding/tour/RegisterTourReview';
-import MyPageTour from '../../pages/onboarding/tour/MyPageTour';
+
+const OnboardingPage = lazy(() => import('../../pages/onboarding/OnboardingPage'));
+const FindTourLayout = lazy(() => import('../../pages/onboarding/tour/FindTourLayout'));
+const FindTourInfo = lazy(() => import('../../pages/onboarding/tour/FindTourInfo'));
+const FindTourQuiz = lazy(() => import('../../pages/onboarding/tour/FindTourQuiz'));
+const FindTourDetail = lazy(() => import('../../pages/onboarding/tour/FindTourDetail'));
+const FindTourPledge = lazy(() => import('../../pages/onboarding/tour/FindTourPledge'));
+const FindTourDeposit = lazy(() => import('../../pages/onboarding/tour/FindTourDeposit'));
+const RegisterTourLayout = lazy(() => import('../../pages/onboarding/tour/RegisterTourLayout'));
+const RegisterTourCategory = lazy(() => import('../../pages/onboarding/tour/RegisterTourCategory'));
+const RegisterTourDetails = lazy(() => import('../../pages/onboarding/tour/RegisterTourDetails'));
+const RegisterTourReview = lazy(() => import('../../pages/onboarding/tour/RegisterTourReview'));
+const MyPageTour = lazy(() => import('../../pages/onboarding/tour/MyPageTour'));
 
 export const onboardingRoutes: RouteObject[] = [
   {
