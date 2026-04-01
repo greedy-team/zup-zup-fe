@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import SpinnerIcon from '../component/common/Icons/SpinnerIcon';
 import Sidebar from '../component/root/layout/Sidebar';
 import OnboardingOverlay from '../component/onboarding/OnboardingOverlay';
 import SectionTourOverlay from '../component/onboarding/SectionTourOverlay';
@@ -15,7 +17,15 @@ export default function RootLayout() {
         id="scroll-root"
         className="order-1 flex min-h-0 min-w-0 flex-1 overflow-auto md:order-2"
       >
-        <Outlet />
+        <Suspense
+          fallback={
+            <div className="flex flex-1 items-center justify-center">
+              <SpinnerIcon />
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </main>
 
       <div className="order-2 w-full shrink-0 md:order-1 md:w-18">

@@ -26,7 +26,7 @@ const CategoryRadio = () => {
     } else {
       next.set('categoryId', String(id));
     }
-    next.set('page', '1');
+    next.delete('page');
     setSearchParams(next, { replace: true });
   };
 

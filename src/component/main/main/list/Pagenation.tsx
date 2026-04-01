@@ -22,7 +22,7 @@ const Pagenation = () => {
   useEffect(() => {
     if (!isValidPage(rawPage, totalPages)) {
       const next = new URLSearchParams(searchParams);
-      next.set('page', '1');
+      next.delete('page');
       setSearchParams(next, { replace: true });
     }
   }, [rawPage, totalPages]);
@@ -31,7 +31,11 @@ const Pagenation = () => {
 
   const setPage = (p: number) => {
     const next = new URLSearchParams(searchParams);
-    next.set('page', String(p));
+    if (p === 1) {
+      next.delete('page');
+    } else {
+      next.set('page', String(p));
+    }
     setSearchParams(next, { replace: true });
   };
 

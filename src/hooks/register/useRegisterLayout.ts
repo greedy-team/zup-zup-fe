@@ -3,13 +3,17 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRegisterProcess } from './useRegisterProcess';
 import { REGISTER_PROCESS_STEPS } from '../../constants/register';
 import { useSetSelectedMode } from '../../store/hooks/useMainStore';
+import { useSchoolAreasQuery } from '../../api/main/hooks/useMain';
 
 export const useRegisterLayout = () => {
-  const { schoolAreaId } = useParams<{ schoolAreaId: string }>();
+  const { areaName } = useParams<{ areaName: string }>();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const registerProcess = useRegisterProcess(Number(schoolAreaId) || null);
+  const { data: schoolAreas = [] } = useSchoolAreasQuery();
+  const schoolAreaId = schoolAreas.find((area) => area.areaName === areaName)?.id ?? null;
+
+  const registerProcess = useRegisterProcess(schoolAreaId);
   const setSelectedMode = useSetSelectedMode();
 
   const steps = REGISTER_PROCESS_STEPS.INDEXS;
