@@ -2,11 +2,14 @@ import Authentication from './Authentication';
 import Logo from './Logo';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Map, CirclePlus, CircleUser, Ellipsis } from 'lucide-react';
+import { Map, CirclePlus, CircleUser, Ellipsis, LogIn, LogOut } from 'lucide-react';
 import { useSelectedMode, useSetSelectedMode } from '../../../store/hooks/useMainStore';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
+import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
+import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 import { clearFormData } from '../../../utils/register/registerStorage';
 import type { Mode } from '../../../store/slices/mainSlice';
+import { useOnboardingStore } from '../../../store/onboardingStore';
 
 const Sidebar = () => {
   const selectedMode = useSelectedMode();
@@ -16,6 +19,16 @@ const Sidebar = () => {
   const { pathname } = useLocation();
   const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx);
   const endTour = useOnboardingStore((s) => s.actions.endTour);
+  const logoutMutation = useLogoutMutation();
+  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
+
+  const handleFloatingAuth = () => {
+    if (isAuthenticated) {
+      logoutMutation.mutate(undefined, { onSuccess: () => navigate('/', { replace: true }) });
+    } else {
+      redirectToLoginKeepPath();
+    }
+  };
 
   useEffect(() => {
     if (pathname.startsWith('/register')) {
@@ -143,9 +156,49 @@ const Sidebar = () => {
           </span>
         </button>
 
-        {/* 5) 로그인 / 로그아웃 */}
-        <Authentication />
+        {/* 5) 더보기 */}
+        <button
+          data-tour="mobile-sidebar-more"
+          onClick={() => {
+            navigate('/more');
+            setSelectedMode('more');
+          }}
+          className={`${iconBtnBase} ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
+          aria-label="더보기"
+        >
+          <Ellipsis
+            className={`h-6 w-6 sm:h-15 sm:w-15 ${
+              activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
+          />
+          <span
+            className={`mt-1 text-xs sm:text-lg ${
+              activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
+            }`}
+          >
+            더보기
+          </span>
+        </button>
       </div>
+
+      {/* 모바일 전용: 로그인/로그아웃 플로팅 버튼 */}
+      <button
+        onClick={handleFloatingAuth}
+        className="fixed right-4 bottom-22 z-50 flex cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full border border-gray-300 bg-teal-50 px-3 py-2 text-gray-600 shadow-lg transition hover:text-teal-500 active:scale-95 md:hidden"
+        aria-label={isAuthenticated ? '로그아웃' : '로그인'}
+      >
+        {isAuthenticated ? (
+          <>
+            <LogOut className="h-5 w-5" />
+            <span className="text-xs">로그아웃</span>
+          </>
+        ) : (
+          <>
+            <LogIn className="h-5 w-5" />
+            <span className="text-xs">로그인</span>
+          </>
+        )}
+      </button>
 
       {/* ---------- 데스크탑(md+): 세로 레이아웃 ---------- */}
       <div className="hidden h-full flex-col md:flex">
