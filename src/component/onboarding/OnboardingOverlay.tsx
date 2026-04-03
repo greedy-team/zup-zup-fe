@@ -12,11 +12,13 @@ import {
 import { STEPS } from './onboardingSteps';
 import OnboardingArrow from './OnboardingArrow';
 import StepDots from './StepDots';
+import { useOnboardingStore } from '../../store/onboardingStore';
 
 type Props = { onComplete: () => void };
 
 export default function OnboardingOverlay({ onComplete }: Props) {
-  const [step, setStep] = useState(0);
+  const step = useOnboardingStore((s) => s.overlayStep);
+  const setOverlayStep = useOnboardingStore((s) => s.actions.setOverlayStep);
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -61,8 +63,8 @@ export default function OnboardingOverlay({ onComplete }: Props) {
     if (h > 0) setMeasuredHeight(h);
   }, [step, isDesktop]);
 
-  const handleNext = () => (isLast ? onComplete() : setStep((s) => s + 1));
-  const handlePrev = () => setStep((s) => s - 1);
+  const handleNext = () => (isLast ? onComplete() : setOverlayStep(step + 1));
+  const handlePrev = () => setOverlayStep(step - 1);
 
   const spotlightStyle = targetRect
     ? {
