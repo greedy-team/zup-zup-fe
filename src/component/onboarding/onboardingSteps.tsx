@@ -65,7 +65,8 @@ export const STEPS: Step[] = [
       '사이드바의 더보기 메뉴에서 서비스 소개, 팀 소개, 피드백 전송 및 서비스 가이드를 다시 확인할 수 있어요.',
     selector: '[data-tour="sidebar-more"]',
     placement: 'right',
-    mobileSelector: null,
+    mobileSelector: '[data-tour="mobile-sidebar-more"]',
+    mobilePlacement: 'top',
   },
 ];
 
@@ -307,3 +308,9 @@ export const SECTIONS: OnboardingSection[] = [
     ],
   },
 ];
+
+export const SECTION_MODE_MAP: Record<string, 'find' | 'register' | 'mypage' | 'more'> = {
+  find: 'find',
+  register: 'register',
+  mypage: 'mypage',
+};

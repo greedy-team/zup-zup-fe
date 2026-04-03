@@ -2,6 +2,26 @@ import type { StateCreator } from 'zustand';
 
 export type Mode = 'register' | 'find' | 'mypage' | 'more';
 
+function deriveInitialMode(): Mode {
+  const path = window.location.pathname;
+  if (path.startsWith('/mypage')) return 'mypage';
+  if (path.startsWith('/more') || path.startsWith('/onboarding')) return 'more';
+  if (path.startsWith('/register')) return 'register';
+  if (path === '/') {
+    try {
+      const raw = sessionStorage.getItem('sejong-zupzup-onboarding-session');
+      if (raw) {
+        const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: number | null };
+        if (tourSectionIdx !== null) {
+          const sectionModes: Partial<Record<number, Mode>> = { 2: 'register' };
+          return sectionModes[tourSectionIdx] ?? 'find';
+        }
+      }
+    } catch {}
+  }
+  return 'find';
+}
+
 export type MainSlice = {
   selectedMode: Mode;
   isRegisterConfirmModalOpen: boolean;
@@ -12,7 +32,7 @@ export type MainSlice = {
 };
 
 export const createMainSlice: StateCreator<MainSlice> = (set) => ({
-  selectedMode: 'find',
+  selectedMode: deriveInitialMode(),
   isRegisterConfirmModalOpen: false,
   actions: {
     setSelectedMode: (mode) => set({ selectedMode: mode }),
