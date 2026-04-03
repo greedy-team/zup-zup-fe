@@ -64,15 +64,18 @@ export function useSectionTour(): SectionTourControls {
     return () => window.removeEventListener('resize', handler);
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!activeSelector) {
       setTargetRect(null);
       return;
     }
     const update = () => setTargetRect(getTargetRect(activeSelector));
-    update();
+    const raf = requestAnimationFrame(update);
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', update);
+    };
   }, [stepIdx, tourSectionIdx, activeSelector]);
 
   useLayoutEffect(() => {
