@@ -14,6 +14,8 @@ const Sidebar = () => {
   const isAuthenticated = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx);
+  const endTour = useOnboardingStore((s) => s.actions.endTour);
 
   useEffect(() => {
     if (pathname.startsWith('/register')) {
@@ -50,6 +52,7 @@ const Sidebar = () => {
   };
 
   const goHome = () => {
+    if (tourSectionIdx !== null) endTour();
     clearFormData();
     handleChangeMode('find');
   };
