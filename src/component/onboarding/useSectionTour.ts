@@ -76,7 +76,7 @@ export function useSectionTour(): SectionTourControls {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', update);
     };
-  }, [stepIdx, tourSectionIdx, activeSelector]);
+  }, [stepIdx, tourSectionIdx, activeSelector, location.pathname]);
 
   useLayoutEffect(() => {
     if (!tooltipRef.current) return;
