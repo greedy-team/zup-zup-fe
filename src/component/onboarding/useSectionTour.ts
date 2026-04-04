@@ -31,7 +31,7 @@ export type SectionTourControls = {
 export function useSectionTour(): SectionTourControls {
   const navigate = useNavigate();
   const location = useLocation();
-  const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx)!;
+  const tourSectionId = useOnboardingStore((s) => s.tourSectionId)!;
   const stepIdx = useOnboardingStore((s) => s.tourStepIdx);
   const { endTour, setTourStepIdx } = useOnboardingStore((s) => s.actions);
 
@@ -41,7 +41,7 @@ export function useSectionTour(): SectionTourControls {
   const [measuredHeight, setMeasuredHeight] = useState(TOOLTIP_HEIGHT_ESTIMATE);
   const [isSheetOpen, setIsSheetOpen] = useState(true);
 
-  const section = SECTIONS[tourSectionIdx];
+  const section = SECTIONS.find((s) => s.id === tourSectionId)!;
   const current = section.steps[stepIdx];
   const isFirst = stepIdx === 0;
   const isLast = stepIdx === section.steps.length - 1;
@@ -64,27 +64,30 @@ export function useSectionTour(): SectionTourControls {
     return () => window.removeEventListener('resize', handler);
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!activeSelector) {
       setTargetRect(null);
       return;
     }
     const update = () => setTargetRect(getTargetRect(activeSelector));
-    update();
+    const raf = requestAnimationFrame(update);
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [stepIdx, tourSectionIdx, activeSelector]);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', update);
+    };
+  }, [stepIdx, tourSectionId, activeSelector, location.pathname]);
 
   useLayoutEffect(() => {
     if (!tooltipRef.current) return;
     const h = tooltipRef.current.offsetHeight;
     if (h > 0) setMeasuredHeight(h);
-  }, [stepIdx, tourSectionIdx, isDesktop, targetRect]);
+  }, [stepIdx, tourSectionId, isDesktop, targetRect]);
 
   // 스텝 이동 시 시트 자동으로 열기
   useEffect(() => {
     setIsSheetOpen(true);
-  }, [stepIdx, tourSectionIdx]);
+  }, [stepIdx, tourSectionId]);
 
   // 투어 범위 밖 경로로 이동하면 투어 종료 (사이드바·탭바 등으로 이탈 시)
   useEffect(() => {

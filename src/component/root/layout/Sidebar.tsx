@@ -1,12 +1,23 @@
 import Authentication from './Authentication';
 import Logo from './Logo';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Map, CirclePlus, CircleUser, Ellipsis } from 'lucide-react';
+import {
+  Map,
+  CirclePlus,
+  CircleUser,
+  Ellipsis,
+  X,
+  BookOpen,
+  Users,
+  MessageCircleMore,
+} from 'lucide-react';
 import { useSelectedMode, useSetSelectedMode } from '../../../store/hooks/useMainStore';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
 import { clearFormData } from '../../../utils/register/registerStorage';
 import type { Mode } from '../../../store/slices/mainSlice';
+import { useOnboardingStore } from '../../../store/onboardingStore';
+import { SECTION_MODE_MAP } from '../../onboarding/onboardingSteps';
 
 const Sidebar = () => {
   const selectedMode = useSelectedMode();
@@ -14,6 +25,21 @@ const Sidebar = () => {
   const isAuthenticated = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const tourSectionId = useOnboardingStore((s) => s.tourSectionId);
+  const endTour = useOnboardingStore((s) => s.actions.endTour);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreFabRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isMoreOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreFabRef.current && !moreFabRef.current.contains(e.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMoreOpen]);
 
   useEffect(() => {
     if (pathname.startsWith('/register')) {
@@ -24,8 +50,14 @@ const Sidebar = () => {
       setSelectedMode('mypage');
     } else if (pathname.startsWith('/more')) {
       setSelectedMode('more');
+    } else if (pathname.startsWith('/onboarding')) {
+      if (tourSectionId !== null) {
+        setSelectedMode(SECTION_MODE_MAP[tourSectionId] ?? 'more');
+      } else {
+        setSelectedMode('more');
+      }
     }
-  }, [pathname, setSelectedMode]);
+  }, [pathname, setSelectedMode, tourSectionId]);
 
   const handleChangeMode = (mode: Mode) => {
     setSelectedMode(mode);
@@ -50,6 +82,7 @@ const Sidebar = () => {
   };
 
   const goHome = () => {
+    if (tourSectionId !== null) endTour();
     clearFormData();
     handleChangeMode('find');
   };
@@ -140,8 +173,87 @@ const Sidebar = () => {
           </span>
         </button>
 
-        {/* 5) 로그인 / 로그아웃 */}
+        {/* 5) 로그인/로그아웃 */}
         <Authentication />
+      </div>
+
+      {/* 모바일 전용: 더보기 FAB */}
+      <div
+        ref={moreFabRef}
+        className="fixed right-4 bottom-24 z-50 flex flex-col items-end gap-2 md:hidden"
+      >
+        {[
+          {
+            label: '가이드',
+            icon: <BookOpen className="h-5 w-5" />,
+            onClick: () => { navigate('/onboarding'); setIsMoreOpen(false); },
+          },
+          {
+            label: '팀 소개',
+            icon: <Users className="h-5 w-5" />,
+            onClick: () => { navigate('/more/team'); setIsMoreOpen(false); },
+          },
+          {
+            label: '피드백',
+            icon: <MessageCircleMore className="h-5 w-5" />,
+            href: 'https://forms.gle/xzvHjcbKh3vumBXQA',
+          },
+        ].map((item, i, arr) => (
+          <div
+            key={item.label}
+            style={{
+              transitionDelay: isMoreOpen ? `${(arr.length - 1 - i) * 50}ms` : `${i * 50}ms`,
+            }}
+            className={`transition-all duration-200 ease-out ${
+              isMoreOpen
+                ? 'translate-y-0 opacity-100'
+                : 'pointer-events-none translate-y-4 opacity-0'
+            }`}
+          >
+            {item.href ? (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMoreOpen(false)}
+                className="flex flex-col items-center gap-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
+                  {item.icon}
+                </div>
+                <span className="text-xs text-gray-600">{item.label}</span>
+              </a>
+            ) : (
+              <button
+                onClick={item.onClick}
+                className="flex flex-col items-center gap-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
+                  {item.icon}
+                </div>
+                <span className="text-xs text-gray-600">{item.label}</span>
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          data-tour="mobile-sidebar-more"
+          onClick={() => setIsMoreOpen((v) => !v)}
+          className={`flex h-12 w-12 items-center justify-center rounded-full border shadow-lg transition duration-200 active:scale-95 ${
+            isMoreOpen
+              ? 'border-teal-500 bg-teal-500 text-white'
+              : activeMore
+                ? 'border-gray-300 bg-teal-50 text-teal-700'
+                : 'border-gray-300 bg-teal-50 text-gray-600 hover:text-teal-500'
+          }`}
+          aria-label="더보기"
+        >
+          {isMoreOpen ? (
+            <X className="h-5 w-5 transition-transform duration-200" />
+          ) : (
+            <Ellipsis className="h-5 w-5 transition-transform duration-200" />
+          )}
+        </button>
       </div>
 
       {/* ---------- 데스크탑(md+): 세로 레이아웃 ---------- */}
@@ -197,10 +309,7 @@ const Sidebar = () => {
         <div className="mt-auto">
           <button
             data-tour="sidebar-more"
-            onClick={() => {
-              navigate('/more');
-              setSelectedMode('more');
-            }}
+            onClick={() => navigate('/more')}
             className={`${iconBtnBase} aspect-square ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
             aria-label="더보기"
           >

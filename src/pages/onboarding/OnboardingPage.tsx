@@ -1,15 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { SECTIONS } from '../../component/onboarding/onboardingSteps';
+import { SECTIONS, SECTION_MODE_MAP } from '../../component/onboarding/onboardingSteps';
 import { useOnboardingStore } from '../../store/onboardingStore';
+import { useSetSelectedMode } from '../../store/hooks/useMainStore';
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
   const startTour = useOnboardingStore((s) => s.actions.startTour);
+  const setSelectedMode = useSetSelectedMode();
 
   const handleSectionClick = (idx: number) => {
-    startTour(idx);
     const section = SECTIONS[idx];
+    startTour(section.id);
+    const mode = SECTION_MODE_MAP[section.id] ?? 'more';
+    setSelectedMode(mode);
     // 첫 스텝에 전용 투어 경로가 있으면 그쪽으로 이동 (section.route로 이동 시 auth 리다이렉트 등 발생 가능)
     navigate(section.steps[0].route ?? section.route);
   };
