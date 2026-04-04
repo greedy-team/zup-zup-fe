@@ -5,11 +5,11 @@ export const SESSION_KEY = 'sejong-zupzup-onboarding-session';
 
 type SessionState = {
   overlayStep: number;
-  tourSectionIdx: string | null;
+  tourSectionId: string | null;
   tourStepIdx: number;
 };
 
-const SESSION_DEFAULTS: SessionState = { overlayStep: 0, tourSectionIdx: null, tourStepIdx: 0 };
+const SESSION_DEFAULTS: SessionState = { overlayStep: 0, tourSectionId: null, tourStepIdx: 0 };
 
 function loadSession(): SessionState {
   try {
@@ -31,7 +31,7 @@ type OnboardingStore = {
   /** 첫 방문 오버레이 현재 스텝 */
   overlayStep: number;
   /** /onboarding 허브에서 시작하는 섹션 투어 (null = 비활성) */
-  tourSectionIdx: string | null;
+  tourSectionId: string | null;
   tourStepIdx: number;
   actions: {
     /** 첫 방문 오버레이 완료 */
@@ -51,7 +51,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => {
   return {
     isActive: !localStorage.getItem(STORAGE_KEY),
     overlayStep: session.overlayStep,
-    tourSectionIdx: session.tourSectionIdx,
+    tourSectionId: session.tourSectionId,
     tourStepIdx: session.tourStepIdx,
     actions: {
       complete: () => {
@@ -60,23 +60,23 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => {
         set({ isActive: false, overlayStep: 0 });
       },
       setOverlayStep: (step) => {
-        const { tourSectionIdx, tourStepIdx } = get();
-        saveSession({ overlayStep: step, tourSectionIdx, tourStepIdx });
+        const { tourSectionId, tourStepIdx } = get();
+        saveSession({ overlayStep: step, tourSectionId, tourStepIdx });
         set({ overlayStep: step });
       },
       startTour: (sectionId) => {
         const { overlayStep } = get();
-        saveSession({ overlayStep, tourSectionIdx: sectionId, tourStepIdx: 0 });
-        set({ tourSectionIdx: sectionId, tourStepIdx: 0 });
+        saveSession({ overlayStep, tourSectionId: sectionId, tourStepIdx: 0 });
+        set({ tourSectionId: sectionId, tourStepIdx: 0 });
       },
       endTour: () => {
         const { overlayStep } = get();
-        saveSession({ overlayStep, tourSectionIdx: null, tourStepIdx: 0 });
-        set({ tourSectionIdx: null, tourStepIdx: 0 });
+        saveSession({ overlayStep, tourSectionId: null, tourStepIdx: 0 });
+        set({ tourSectionId: null, tourStepIdx: 0 });
       },
       setTourStepIdx: (idx) => {
-        const { overlayStep, tourSectionIdx } = get();
-        saveSession({ overlayStep, tourSectionIdx, tourStepIdx: idx });
+        const { overlayStep, tourSectionId } = get();
+        saveSession({ overlayStep, tourSectionId, tourStepIdx: idx });
         set({ tourStepIdx: idx });
       },
     },

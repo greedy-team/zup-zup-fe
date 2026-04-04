@@ -14,9 +14,9 @@ function deriveInitialMode(): Mode {
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
-        const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: string | null };
-        if (tourSectionIdx !== null) {
-          return SECTION_MODE_MAP[tourSectionIdx] ?? 'find';
+        const { tourSectionId } = JSON.parse(raw) as { tourSectionId: string | null };
+        if (tourSectionId !== null) {
+          return SECTION_MODE_MAP[tourSectionId] ?? 'find';
         }
       }
     } catch {}

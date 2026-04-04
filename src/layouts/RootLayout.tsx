@@ -9,7 +9,7 @@ import { useOnboardingStore } from '../store/onboardingStore';
 export default function RootLayout() {
   const isActive = useOnboardingStore((s) => s.isActive);
   const complete = useOnboardingStore((s) => s.actions.complete);
-  const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx);
+  const tourSectionId = useOnboardingStore((s) => s.tourSectionId);
 
   return (
     <div className="flex h-dvh min-h-0 flex-col overflow-hidden md:flex-row">
@@ -36,7 +36,7 @@ export default function RootLayout() {
       {isActive && <OnboardingOverlay onComplete={complete} />}
 
       {/* /onboarding 허브에서 시작하는 섹션 투어 오버레이 */}
-      {tourSectionIdx !== null && <SectionTourOverlay />}
+      {tourSectionId !== null && <SectionTourOverlay />}
     </div>
   );
 }

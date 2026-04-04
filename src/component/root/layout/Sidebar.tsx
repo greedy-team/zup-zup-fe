@@ -25,7 +25,7 @@ const Sidebar = () => {
   const isAuthenticated = useAuthFlag();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx);
+  const tourSectionId = useOnboardingStore((s) => s.tourSectionId);
   const endTour = useOnboardingStore((s) => s.actions.endTour);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const moreFabRef = useRef<HTMLDivElement>(null);
@@ -51,13 +51,13 @@ const Sidebar = () => {
     } else if (pathname.startsWith('/more')) {
       setSelectedMode('more');
     } else if (pathname.startsWith('/onboarding')) {
-      if (tourSectionIdx !== null) {
-        setSelectedMode(SECTION_MODE_MAP[tourSectionIdx] ?? 'more');
+      if (tourSectionId !== null) {
+        setSelectedMode(SECTION_MODE_MAP[tourSectionId] ?? 'more');
       } else {
         setSelectedMode('more');
       }
     }
-  }, [pathname, setSelectedMode, tourSectionIdx]);
+  }, [pathname, setSelectedMode, tourSectionId]);
 
   const handleChangeMode = (mode: Mode) => {
     setSelectedMode(mode);
@@ -82,7 +82,7 @@ const Sidebar = () => {
   };
 
   const goHome = () => {
-    if (tourSectionIdx !== null) endTour();
+    if (tourSectionId !== null) endTour();
     clearFormData();
     handleChangeMode('find');
   };
