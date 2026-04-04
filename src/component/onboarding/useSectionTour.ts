@@ -41,7 +41,7 @@ export function useSectionTour(): SectionTourControls {
   const [measuredHeight, setMeasuredHeight] = useState(TOOLTIP_HEIGHT_ESTIMATE);
   const [isSheetOpen, setIsSheetOpen] = useState(true);
 
-  const section = SECTIONS[tourSectionIdx];
+  const section = SECTIONS.find((s) => s.id === tourSectionIdx)!;
   const current = section.steps[stepIdx];
   const isFirst = stepIdx === 0;
   const isLast = stepIdx === section.steps.length - 1;

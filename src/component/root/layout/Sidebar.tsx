@@ -10,7 +10,7 @@ import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 import { clearFormData } from '../../../utils/register/registerStorage';
 import type { Mode } from '../../../store/slices/mainSlice';
 import { useOnboardingStore } from '../../../store/onboardingStore';
-import { SECTIONS, SECTION_MODE_MAP } from '../../onboarding/onboardingSteps';
+import { SECTION_MODE_MAP } from '../../onboarding/onboardingSteps';
 
 const Sidebar = () => {
   const selectedMode = useSelectedMode();
@@ -42,8 +42,7 @@ const Sidebar = () => {
       setSelectedMode('more');
     } else if (pathname.startsWith('/onboarding')) {
       if (tourSectionIdx !== null) {
-        const sectionId = SECTIONS[tourSectionIdx].id;
-        setSelectedMode(SECTION_MODE_MAP[sectionId] ?? 'more');
+        setSelectedMode(SECTION_MODE_MAP[tourSectionIdx] ?? 'more');
       } else {
         setSelectedMode('more');
       }

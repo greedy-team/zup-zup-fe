@@ -10,8 +10,8 @@ export default function OnboardingPage() {
   const setSelectedMode = useSetSelectedMode();
 
   const handleSectionClick = (idx: number) => {
-    startTour(idx);
     const section = SECTIONS[idx];
+    startTour(section.id);
     const mode = SECTION_MODE_MAP[section.id] ?? 'more';
     setSelectedMode(mode);
     // 첫 스텝에 전용 투어 경로가 있으면 그쪽으로 이동 (section.route로 이동 시 auth 리다이렉트 등 발생 가능)

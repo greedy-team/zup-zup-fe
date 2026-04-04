@@ -5,7 +5,7 @@ export const SESSION_KEY = 'sejong-zupzup-onboarding-session';
 
 type SessionState = {
   overlayStep: number;
-  tourSectionIdx: number | null;
+  tourSectionIdx: string | null;
   tourStepIdx: number;
 };
 
@@ -31,7 +31,7 @@ type OnboardingStore = {
   /** 첫 방문 오버레이 현재 스텝 */
   overlayStep: number;
   /** /onboarding 허브에서 시작하는 섹션 투어 (null = 비활성) */
-  tourSectionIdx: number | null;
+  tourSectionIdx: string | null;
   tourStepIdx: number;
   actions: {
     /** 첫 방문 오버레이 완료 */
@@ -39,7 +39,7 @@ type OnboardingStore = {
     /** 첫 방문 오버레이 스텝 이동 */
     setOverlayStep: (step: number) => void;
     /** 섹션 투어 시작 */
-    startTour: (sectionIdx: number) => void;
+    startTour: (sectionId: string) => void;
     /** 섹션 투어 종료 */
     endTour: () => void;
     setTourStepIdx: (idx: number) => void;
@@ -64,10 +64,10 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => {
         saveSession({ overlayStep: step, tourSectionIdx, tourStepIdx });
         set({ overlayStep: step });
       },
-      startTour: (sectionIdx) => {
+      startTour: (sectionId) => {
         const { overlayStep } = get();
-        saveSession({ overlayStep, tourSectionIdx: sectionIdx, tourStepIdx: 0 });
-        set({ tourSectionIdx: sectionIdx, tourStepIdx: 0 });
+        saveSession({ overlayStep, tourSectionIdx: sectionId, tourStepIdx: 0 });
+        set({ tourSectionIdx: sectionId, tourStepIdx: 0 });
       },
       endTour: () => {
         const { overlayStep } = get();

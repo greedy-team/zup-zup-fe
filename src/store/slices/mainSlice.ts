@@ -1,5 +1,6 @@
 import type { StateCreator } from 'zustand';
 import { SESSION_KEY } from '../onboardingStore';
+import { SECTION_MODE_MAP } from '../../component/onboarding/onboardingSteps';
 
 export type Mode = 'register' | 'find' | 'mypage' | 'more';
 
@@ -12,10 +13,9 @@ function deriveInitialMode(): Mode {
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
-        const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: number | null };
+        const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: string | null };
         if (tourSectionIdx !== null) {
-          const sectionModes: Partial<Record<number, Mode>> = { 2: 'register' };
-          return sectionModes[tourSectionIdx] ?? 'find';
+          return (SECTION_MODE_MAP[tourSectionIdx] as Mode | undefined) ?? 'find';
         }
       }
     } catch {}
