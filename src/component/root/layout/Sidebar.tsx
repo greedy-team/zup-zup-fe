@@ -1,12 +1,19 @@
 import Authentication from './Authentication';
 import Logo from './Logo';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Map, CirclePlus, CircleUser, Ellipsis, LogIn, LogOut } from 'lucide-react';
+import {
+  Map,
+  CirclePlus,
+  CircleUser,
+  Ellipsis,
+  X,
+  BookOpen,
+  Users,
+  MessageCircleMore,
+} from 'lucide-react';
 import { useSelectedMode, useSetSelectedMode } from '../../../store/hooks/useMainStore';
 import { useAuthFlag } from '../../../store/hooks/useAuth';
-import { useLogoutMutation } from '../../../api/auth/hooks/useAuth';
-import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 import { clearFormData } from '../../../utils/register/registerStorage';
 import type { Mode } from '../../../store/slices/mainSlice';
 import { useOnboardingStore } from '../../../store/onboardingStore';
@@ -20,16 +27,19 @@ const Sidebar = () => {
   const { pathname } = useLocation();
   const tourSectionIdx = useOnboardingStore((s) => s.tourSectionIdx);
   const endTour = useOnboardingStore((s) => s.actions.endTour);
-  const logoutMutation = useLogoutMutation();
-  const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreFabRef = useRef<HTMLDivElement>(null);
 
-  const handleFloatingAuth = () => {
-    if (isAuthenticated) {
-      logoutMutation.mutate(undefined, { onSuccess: () => navigate('/', { replace: true }) });
-    } else {
-      redirectToLoginKeepPath();
-    }
-  };
+  useEffect(() => {
+    if (!isMoreOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreFabRef.current && !moreFabRef.current.contains(e.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMoreOpen]);
 
   useEffect(() => {
     if (pathname.startsWith('/register')) {
@@ -163,46 +173,94 @@ const Sidebar = () => {
           </span>
         </button>
 
-        {/* 5) 더보기 */}
-        <button
-          data-tour="mobile-sidebar-more"
-          onClick={() => navigate('/more')}
-          className={`${iconBtnBase} ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
-          aria-label="더보기"
-        >
-          <Ellipsis
-            className={`h-6 w-6 sm:h-15 sm:w-15 ${
-              activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
-            }`}
-          />
-          <span
-            className={`mt-1 text-xs sm:text-lg ${
-              activeMore ? 'text-white' : 'text-gray-600 group-hover:text-teal-500'
-            }`}
-          >
-            더보기
-          </span>
-        </button>
+        {/* 5) 로그인/로그아웃 */}
+        <Authentication />
       </div>
 
-      {/* 모바일 전용: 로그인/로그아웃 플로팅 버튼 */}
-      <button
-        onClick={handleFloatingAuth}
-        className="fixed right-4 bottom-22 z-50 flex cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full border border-gray-300 bg-teal-50 px-3 py-2 text-gray-600 shadow-lg transition hover:text-teal-500 active:scale-95 md:hidden"
-        aria-label={isAuthenticated ? '로그아웃' : '로그인'}
+      {/* 모바일 전용: 더보기 FAB */}
+      <div
+        ref={moreFabRef}
+        className="fixed right-4 bottom-24 z-50 flex flex-col items-end gap-2 md:hidden"
       >
-        {isAuthenticated ? (
-          <>
-            <LogOut className="h-5 w-5" />
-            <span className="text-xs">로그아웃</span>
-          </>
-        ) : (
-          <>
-            <LogIn className="h-5 w-5" />
-            <span className="text-xs">로그인</span>
-          </>
-        )}
-      </button>
+        {[
+          {
+            label: '서비스 소개',
+            icon: <BookOpen className="h-4 w-4 shrink-0" />,
+            onClick: () => {
+              navigate('/onboarding');
+              setIsMoreOpen(false);
+            },
+          },
+          {
+            label: '줍줍 소개',
+            icon: <Users className="h-4 w-4 shrink-0" />,
+            onClick: () => {
+              navigate('/more/team');
+              setIsMoreOpen(false);
+            },
+          },
+          {
+            label: '피드백 남기기',
+            icon: <MessageCircleMore className="h-4 w-4 shrink-0" />,
+            href: 'https://forms.gle/xzvHjcbKh3vumBXQA',
+          },
+        ].map((item, i, arr) => (
+          <div
+            key={item.label}
+            style={{
+              transitionDelay: isMoreOpen ? `${(arr.length - 1 - i) * 50}ms` : `${i * 50}ms`,
+            }}
+            className={`transition-all duration-200 ease-out ${
+              isMoreOpen
+                ? 'translate-y-0 opacity-100'
+                : 'pointer-events-none translate-y-4 opacity-0'
+            }`}
+          >
+            {item.href ? (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMoreOpen(false)}
+                className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-md transition hover:text-teal-500"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-50 text-teal-500">
+                  {item.icon}
+                </div>
+                <span>{item.label}</span>
+              </a>
+            ) : (
+              <button
+                onClick={item.onClick}
+                className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-md transition hover:text-teal-500"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-50 text-teal-500">
+                  {item.icon}
+                </div>
+                <span>{item.label}</span>
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          data-tour="mobile-sidebar-more"
+          onClick={() => setIsMoreOpen((v) => !v)}
+          className={`flex h-12 w-12 items-center justify-center rounded-full border shadow-lg transition duration-200 active:scale-95 ${
+            isMoreOpen
+              ? 'border-teal-500 bg-teal-500 text-white'
+              : activeMore
+                ? 'border-gray-300 bg-teal-50 text-teal-700'
+                : 'border-gray-300 bg-teal-50 text-gray-600 hover:text-teal-500'
+          }`}
+          aria-label="더보기"
+        >
+          {isMoreOpen ? (
+            <X className="h-5 w-5 transition-transform duration-200" />
+          ) : (
+            <Ellipsis className="h-5 w-5 transition-transform duration-200" />
+          )}
+        </button>
+      </div>
 
       {/* ---------- 데스크탑(md+): 세로 레이아웃 ---------- */}
       <div className="hidden h-full flex-col md:flex">
