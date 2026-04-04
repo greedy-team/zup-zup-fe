@@ -10,6 +10,7 @@ import { useRedirectToLoginKeepPath } from '../../../utils/auth/loginRedirect';
 import { clearFormData } from '../../../utils/register/registerStorage';
 import type { Mode } from '../../../store/slices/mainSlice';
 import { useOnboardingStore } from '../../../store/onboardingStore';
+import { SECTIONS, SECTION_MODE_MAP } from '../../onboarding/onboardingSteps';
 
 const Sidebar = () => {
   const selectedMode = useSelectedMode();
@@ -37,10 +38,17 @@ const Sidebar = () => {
       setSelectedMode('find');
     } else if (pathname.startsWith('/mypage')) {
       setSelectedMode('mypage');
-    } else if (pathname.startsWith('/more') || pathname.startsWith('/onboarding')) {
+    } else if (pathname.startsWith('/more')) {
       setSelectedMode('more');
+    } else if (pathname.startsWith('/onboarding')) {
+      if (tourSectionIdx !== null) {
+        const sectionId = SECTIONS[tourSectionIdx].id;
+        setSelectedMode(SECTION_MODE_MAP[sectionId] ?? 'more');
+      } else {
+        setSelectedMode('more');
+      }
     }
-  }, [pathname, setSelectedMode]);
+  }, [pathname, setSelectedMode, tourSectionIdx]);
 
   const handleChangeMode = (mode: Mode) => {
     setSelectedMode(mode);
@@ -159,10 +167,7 @@ const Sidebar = () => {
         {/* 5) 더보기 */}
         <button
           data-tour="mobile-sidebar-more"
-          onClick={() => {
-            navigate('/more');
-            setSelectedMode('more');
-          }}
+          onClick={() => navigate('/more')}
           className={`${iconBtnBase} ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
           aria-label="더보기"
         >
@@ -253,10 +258,7 @@ const Sidebar = () => {
         <div className="mt-auto">
           <button
             data-tour="sidebar-more"
-            onClick={() => {
-              navigate('/more');
-              setSelectedMode('more');
-            }}
+            onClick={() => navigate('/more')}
             className={`${iconBtnBase} aspect-square ${activeMore ? 'bg-teal-700 text-white' : ''} group`}
             aria-label="더보기"
           >
