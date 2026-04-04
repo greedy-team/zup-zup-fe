@@ -7,18 +7,20 @@ export type Mode = 'register' | 'find' | 'mypage' | 'more';
 function deriveInitialMode(): Mode {
   const path = window.location.pathname;
   if (path.startsWith('/mypage')) return 'mypage';
-  if (path.startsWith('/more') || path.startsWith('/onboarding')) return 'more';
+  if (path.startsWith('/more')) return 'more';
   if (path.startsWith('/register')) return 'register';
-  if (path === '/') {
+  const isOnboarding = path.startsWith('/onboarding');
+  if (path === '/' || isOnboarding) {
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
         const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: string | null };
         if (tourSectionIdx !== null) {
-          return (SECTION_MODE_MAP[tourSectionIdx] as Mode | undefined) ?? 'find';
+          return SECTION_MODE_MAP[tourSectionIdx] ?? 'find';
         }
       }
     } catch {}
+    if (isOnboarding) return 'more';
   }
   return 'find';
 }

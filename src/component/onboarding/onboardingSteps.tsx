@@ -310,7 +310,10 @@ export const SECTIONS: OnboardingSection[] = [
 ];
 
 export const SECTION_MODE_MAP: Record<string, 'find' | 'register' | 'mypage' | 'more'> = {
+  main: 'more',
   find: 'find',
   register: 'register',
   mypage: 'mypage',
+  more: 'more',
+  login: 'more',
 };
