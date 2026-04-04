@@ -184,24 +184,18 @@ const Sidebar = () => {
       >
         {[
           {
-            label: '서비스 소개',
-            icon: <BookOpen className="h-4 w-4 shrink-0" />,
-            onClick: () => {
-              navigate('/onboarding');
-              setIsMoreOpen(false);
-            },
+            label: '가이드',
+            icon: <BookOpen className="h-5 w-5" />,
+            onClick: () => { navigate('/onboarding'); setIsMoreOpen(false); },
           },
           {
-            label: '줍줍 소개',
-            icon: <Users className="h-4 w-4 shrink-0" />,
-            onClick: () => {
-              navigate('/more/team');
-              setIsMoreOpen(false);
-            },
+            label: '팀 소개',
+            icon: <Users className="h-5 w-5" />,
+            onClick: () => { navigate('/more/team'); setIsMoreOpen(false); },
           },
           {
-            label: '피드백 남기기',
-            icon: <MessageCircleMore className="h-4 w-4 shrink-0" />,
+            label: '피드백',
+            icon: <MessageCircleMore className="h-5 w-5" />,
             href: 'https://forms.gle/xzvHjcbKh3vumBXQA',
           },
         ].map((item, i, arr) => (
@@ -222,22 +216,22 @@ const Sidebar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMoreOpen(false)}
-                className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-md transition hover:text-teal-500"
+                className="flex flex-col items-center gap-1"
               >
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-50 text-teal-500">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
                   {item.icon}
                 </div>
-                <span>{item.label}</span>
+                <span className="text-xs text-gray-600">{item.label}</span>
               </a>
             ) : (
               <button
                 onClick={item.onClick}
-                className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-md transition hover:text-teal-500"
+                className="flex flex-col items-center gap-1"
               >
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-50 text-teal-500">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
                   {item.icon}
                 </div>
-                <span>{item.label}</span>
+                <span className="text-xs text-gray-600">{item.label}</span>
               </button>
             )}
           </div>
