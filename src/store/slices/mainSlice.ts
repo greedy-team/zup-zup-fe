@@ -1,4 +1,5 @@
 import type { StateCreator } from 'zustand';
+import { SESSION_KEY } from '../onboardingStore';
 
 export type Mode = 'register' | 'find' | 'mypage' | 'more';
 
@@ -9,7 +10,7 @@ function deriveInitialMode(): Mode {
   if (path.startsWith('/register')) return 'register';
   if (path === '/') {
     try {
-      const raw = sessionStorage.getItem('sejong-zupzup-onboarding-session');
+      const raw = sessionStorage.getItem(SESSION_KEY);
       if (raw) {
         const { tourSectionIdx } = JSON.parse(raw) as { tourSectionIdx: number | null };
         if (tourSectionIdx !== null) {

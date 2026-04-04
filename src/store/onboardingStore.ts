@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const STORAGE_KEY = 'sejong-zupzup-onboarding-done';
-const SESSION_KEY = 'sejong-zupzup-onboarding-session';
+export const SESSION_KEY = 'sejong-zupzup-onboarding-session';
 
 type SessionState = {
   overlayStep: number;
