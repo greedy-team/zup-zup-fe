@@ -1,0 +1,104 @@
+name: PR CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: pr-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      CI: true
+      VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+      VITE_KAKAO_MAP_API_KEY: ${{ secrets.VITE_KAKAO_MAP_API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Verify Node & npm
+        run: |
+          node -v
+          npm -v
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Check (lint+typecheck+test)
+        run: |
+          if jq -e '.scripts.check' package.json > /dev/null; then
+            npm run check
+          else
+            echo "No 'check' script; skipping."
+          fi
+
+      - name: Build (Vite -> dist/)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Create review on failure
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const pull_number = context.payload.pull_request.number;
+
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number,
+              body: [
+                "🚧 CI가 정상적으로 통과하지 못했습니다.",
+                "",
+                "아래 단계 중 하나에서 문제가 생긴 것 같아요:",
+                "",
+                "- dependencies 설치 단계 (`npm ci`)",
+                "- `npm run check` (lint / typecheck / test)",
+                "- `npm run build` (빌드)",
+                "",
+                "GitHub Actions 로그 한 번만 확인해 주시고,",
+                "수정 후에 다시 push 해주시면 감사하겠습니다. 😊",
+                "",
+                "🐾줍줍 봇 올림"
+              ].join("\n"),
+              event: "REQUEST_CHANGES",
+            });
+
+      - name: Create review on success
+        if: success() && github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const pull_number = context.payload.pull_request.number;
+
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number,
+              body: [
+                "✅ CI가 정상적으로 통과했습니다.",
+                "",
+                "이번 빌드는 문제 없이 잘 마무리됐어요 😎",
+                "변경 내용 한 번 더 확인해보시고, 편하게 머지해주시면 될 것 같아요.",
+                "",
+                "오늘도 개발하시느라 고생 많으셨어요 💚",
+                "",
+                "🐾줍줍 봇 올림"
+              ].join("\n"),
+              event: "COMMENT",
+            });
