@@ -22,7 +22,7 @@ const RegisterReview = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-normal text-gray-700">입력 정보를 확인해주세요</h2>
+      <h2 className="mb-4 text-lg font-normal text-gray-700">입력 정보를 확인해주세요</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* 왼쪽 */}
         <div className="space-y-3 md:col-span-1">

@@ -21,18 +21,18 @@ const ResultModal = ({ status, title, message, buttonText, onConfirm }: ResultMo
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl bg-gray-100 p-8 text-center shadow-xl">
+      <div className="w-full max-w-xs rounded-2xl bg-gray-100 p-6 text-center shadow-xl">
         <div
-          className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full ${iconBgClass}`}
+          className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${iconBgClass}`}
         >
           {Icon}
         </div>
-        <h2 className="mt-6 text-2xl font-medium text-gray-800">{title}</h2>
-        <p className="mt-2 text-gray-600">{message}</p>
+        <h2 className="mt-4 text-lg font-medium text-gray-800">{title}</h2>
+        <p className="mt-1.5 text-sm text-gray-600">{message}</p>
         <button
           ref={buttonRef}
           onClick={onConfirm}
-          className="mt-8 w-full rounded-lg bg-teal-500 py-3 text-base font-medium text-white transition hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:outline-none"
+          className="mt-6 w-full rounded-lg bg-teal-500 py-2.5 text-sm font-medium text-white transition hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:outline-none"
         >
           {buttonText}
         </button>

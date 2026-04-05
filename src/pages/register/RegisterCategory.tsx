@@ -63,10 +63,7 @@ const RegisterCategory = () => {
   return (
     <div>
       <h2 className="mb-4 text-lg font-normal text-gray-700">카테고리를 선택해주세요</h2>
-      <div
-        role="radiogroup"
-        className="mb-4 grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6"
-      >
+      <div role="radiogroup" className="mb-4 grid grid-cols-4 gap-4">
         {categories.map((category) => {
           const Icon = getCategoryIcon(category.name);
           const isSelected = selectedCategory?.id === category.id;
@@ -74,7 +71,7 @@ const RegisterCategory = () => {
           return (
             <label
               key={category.id}
-              className={`flex aspect-square flex-col items-center justify-center border-2 p-4 ${COMMON_BUTTON_CLASSNAME} ${
+              className={`flex aspect-square flex-col items-center justify-center border-2 p-1.5 ${COMMON_BUTTON_CLASSNAME} ${
                 isSelected
                   ? 'border-teal-500 bg-emerald-50 focus-visible:ring-teal-300'
                   : 'border-gray-200 bg-white hover:border-gray-400 focus-visible:ring-gray-300'
@@ -88,8 +85,8 @@ const RegisterCategory = () => {
                 onChange={() => setSelectedCategory(category)}
                 className="hidden"
               />
-              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded sm:h-13 sm:w-13">
-                <Icon className="h-7 w-7 sm:h-8 sm:w-8" aria-hidden="true" />
+              <div className="mb-2 flex h-6 w-6 items-center justify-center rounded sm:h-14 sm:w-14">
+                <Icon className="h-8 w-8 sm:h-10 sm:w-10" aria-hidden="true" />
               </div>
               <span className="text-xs font-medium text-gray-800 sm:text-sm">{category.name}</span>
             </label>

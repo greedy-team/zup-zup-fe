@@ -117,14 +117,18 @@ const RegisterDetails = () => {
         </div>
       </FormSection>
 
-      <FormSection title="보관 장소 (예: 학생회관 401호)">
+      <FormSection title="보관 장소">
+        <p className="mb-2 text-sm text-gray-400">
+          습득물을 학생회관 401호에 가져다 주시면 총학생회에서 관리하여 분실자가 더 쉽게 찾을 수
+          있습니다.
+        </p>
         <input
           id="depositArea"
           type="text"
           name="depositArea"
           value={formData.depositArea}
           onChange={handleChange}
-          placeholder="분실물을 보관하고 있는 장소를 입력해주세요"
+          placeholder="예: 학생회관 401호"
           className={`${COMMON_INPUT_CLASSNAME} w-full border-gray-300 p-2 shadow-md focus-visible:border-gray-500 focus-visible:ring-gray-500`}
         />
       </FormSection>

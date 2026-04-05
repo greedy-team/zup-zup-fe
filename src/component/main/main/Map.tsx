@@ -115,10 +115,16 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
       <div
         ref={categoryBarRef}
         data-tour="category-bar"
-        className={`absolute top-0 z-30 flex justify-center pt-4 transition-all duration-300 ease-out ${
+        className={`absolute top-0 z-30 flex items-center px-3 pt-4 transition-all duration-300 ease-out ${
           isDesktopListOpen ? 'md:right-0 md:left-[380px]' : 'md:right-0 md:left-0'
         } right-0 left-0`}
       >
+        <img
+          src="/favicon.svg"
+          alt="logo"
+          className="h-11 w-11 shrink-0 md:hidden"
+          style={{ mixBlendMode: 'multiply' }}
+        />
         <CategoryRadio />
       </div>
 
@@ -129,7 +135,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
           } right-0 left-0`}
           style={{ top: 'calc(var(--cat-h) + 3rem)' }}
         >
-          <div className="-translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
+          <div className="rounded-2xl border border-teal-300 bg-white px-5 py-2 text-sm font-medium text-black shadow-md">
             {selectedArea?.areaName}
           </div>
         </div>
@@ -141,7 +147,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
           } right-0 left-0`}
           style={{ top: 'calc(var(--cat-h) + 10rem)' }}
         >
-          <div className="-translate-y-1/2 transform rounded-lg border bg-teal-200/70 px-6 py-3 shadow-lg">
+          <div className="rounded-2xl border border-teal-300 bg-white px-5 py-2 text-sm font-medium text-black shadow-md">
             {hoverArea?.areaName}
           </div>
         </div>
@@ -154,7 +160,7 @@ const Map = ({ isDesktopListOpen = false }: MapProps) => {
           } right-0 left-0`}
           style={{ top: 'calc(var(--cat-h) + 5rem)' }}
         >
-          <p className="-translate-y-1/2 transform rounded-lg border bg-teal-400/70 px-6 py-3 text-center text-lg font-medium text-black shadow-lg">
+          <p className="rounded-2xl border border-teal-300 bg-white px-8 py-3 text-base font-medium text-black shadow-md">
             분실물을 발견한 위치를 선택해주세요
           </p>
         </div>

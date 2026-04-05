@@ -77,7 +77,7 @@ describe('RegisterDetails', () => {
     expect(screen.getByText(/다음 중 분실물의 색상으로/)).toBeInTheDocument();
     expect(screen.getByText('선택된 건물').nextSibling).toHaveTextContent('학생회관');
     expect(screen.getByLabelText(/상세 위치/)).toHaveValue('401호 앞');
-    expect(screen.getByPlaceholderText(/보관하고 있는 장소/)).toHaveValue('학생회관 1층');
+    expect(screen.getByPlaceholderText(/학생회관 401호/)).toHaveValue('학생회관 1층');
     expect(screen.getByPlaceholderText(/추가 정보/)).toHaveValue('검은색 케이스');
   });
 
