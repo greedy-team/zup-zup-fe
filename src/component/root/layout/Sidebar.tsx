@@ -7,7 +7,6 @@ import {
   CirclePlus,
   CircleUser,
   Ellipsis,
-  X,
   House,
 } from 'lucide-react';
 import {
