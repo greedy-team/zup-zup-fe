@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { BookOpen, Users, MessageCircleMore, Ellipsis, X } from 'lucide-react';
 import Map from './Map';
 import LostList from './list/LostList';
 import { useSelectedMode, useSetBottomSheetOpen } from '../../../store/hooks/useMainStore';
@@ -12,6 +13,21 @@ const DRAG_THRESHOLD = 50; // 상태 전환 기준 드래그 거리(px)
 const Main = () => {
   const selectedMode = useSelectedMode();
   const setBottomSheetOpen = useSetBottomSheetOpen();
+  const navigate = useNavigate();
+
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreFabRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isMoreOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreFabRef.current && !moreFabRef.current.contains(e.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMoreOpen]);
 
   const [searchParams] = useSearchParams();
   const rawAreaId = searchParams.get('schoolAreaId');
@@ -154,6 +170,102 @@ const Main = () => {
           <div className="min-h-0 flex-1">
             <Map isDesktopListOpen={isDesktopListOpen} />
           </div>
+
+          {/* 모바일 전용: 더보기 FAB */}
+          {(selectedMode === 'find' || selectedMode === 'register') && (
+            <div
+              ref={moreFabRef}
+              className={`absolute right-4 z-50 flex gap-2 transition-[bottom] duration-300 ease-out md:hidden ${
+                sheetOpen ? 'flex-row items-center' : 'flex-col items-end'
+              }`}
+              style={{
+                bottom:
+                  selectedMode === 'find'
+                    ? sheetOpen
+                      ? `calc(72% + 1rem)`
+                      : `calc(${PEEK_HEIGHT}px + 1rem)`
+                    : '1rem',
+              }}
+            >
+              {[
+                {
+                  label: '가이드',
+                  icon: <BookOpen className="h-5 w-5" />,
+                  onClick: () => {
+                    navigate('/onboarding');
+                    setIsMoreOpen(false);
+                  },
+                },
+                {
+                  label: '팀 소개',
+                  icon: <Users className="h-5 w-5" />,
+                  onClick: () => {
+                    navigate('/more/team');
+                    setIsMoreOpen(false);
+                  },
+                },
+                {
+                  label: '피드백',
+                  icon: <MessageCircleMore className="h-5 w-5" />,
+                  href: 'https://forms.gle/xzvHjcbKh3vumBXQA',
+                },
+              ].map((item, i, arr) => {
+                const openDelay = (arr.length - 1 - i) * 50;
+                const closeDelay = i * 50;
+                const hiddenClass = sheetOpen
+                  ? 'pointer-events-none translate-x-4 opacity-0'
+                  : 'pointer-events-none translate-y-4 opacity-0';
+
+                return (
+                  <div
+                    key={item.label}
+                    style={{ transitionDelay: `${isMoreOpen ? openDelay : closeDelay}ms` }}
+                    className={`transition-all duration-200 ease-out ${
+                      isMoreOpen ? 'translate-x-0 translate-y-0 opacity-100' : hiddenClass
+                    }`}
+                  >
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsMoreOpen(false)}
+                        className="flex flex-col items-center gap-1"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
+                          {item.icon}
+                        </div>
+                        <span className="text-xs text-gray-600">{item.label}</span>
+                      </a>
+                    ) : (
+                      <button onClick={item.onClick} className="flex flex-col items-center gap-1">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-teal-500 shadow-md transition hover:bg-teal-50">
+                          {item.icon}
+                        </div>
+                        <span className="text-xs text-gray-600">{item.label}</span>
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+              <button
+                data-tour="mobile-sidebar-more"
+                onClick={() => setIsMoreOpen((v) => !v)}
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border shadow-lg transition duration-200 active:scale-95 ${
+                  isMoreOpen
+                    ? 'border-teal-500 bg-teal-500 text-white'
+                    : 'border-gray-300 bg-white text-gray-600 hover:text-teal-500'
+                }`}
+                aria-label="더보기"
+              >
+                {isMoreOpen ? (
+                  <X className="h-5 w-5 transition-transform duration-200" />
+                ) : (
+                  <Ellipsis className="h-5 w-5 transition-transform duration-200" />
+                )}
+              </button>
+            </div>
+          )}
 
           {/* 모바일 바텀시트 */}
           {selectedMode === 'find' && (
