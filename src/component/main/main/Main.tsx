@@ -185,6 +185,7 @@ const Main = () => {
                       ? 'calc(72% + 1rem)'
                       : `calc(${PEEK_HEIGHT}px + 1rem)`
                     : '1rem',
+                touchAction: 'none',
               }}
             >
               {[
