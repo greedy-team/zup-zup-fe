@@ -38,7 +38,7 @@ export default function LostList() {
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 10rem)' }}
       >
-        <ul className="m-0 list-none space-y-3 p-0">
+        <ul className="m-0 list-none space-y-3 p-0 pt-1">
           {items.map((item) => (
             <LostListItem key={item.lostItemId} item={item} />
           ))}
