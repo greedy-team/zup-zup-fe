@@ -5,6 +5,7 @@ import type {
 } from '../../../../types/main/components';
 import { useNavigate } from 'react-router-dom';
 import { COMMON_BUTTON_CLASSNAME } from '../../../../constants/common';
+import { ETC_CATEGORY_ID } from '../../../../constants/category';
 import {
   Smartphone,
   Briefcase,
@@ -31,47 +32,32 @@ function formatKST(iso: string) {
   }
 }
 
-const getCategoryIcon = (categoryName: string) => {
-  const trimmedCategoryName = categoryName.trim();
-
-  switch (trimmedCategoryName) {
-    case '핸드폰':
+const getCategoryIcon = (categoryId: number) => {
+  switch (categoryId) {
+    case 1:
       return Smartphone;
-
-    case '가방':
+    case 2:
       return Briefcase;
-
-    case '결제 카드':
+    case 3:
       return CreditCard;
-
-    case 'ID 카드':
+    case 4:
       return IdCard;
-
-    case '기숙사 카드':
+    case 5:
       return IdCardLanyard;
-
-    case '지갑':
+    case 6:
       return Wallet;
-
-    case '액세서리':
+    case 7:
       return Gem;
-
-    case '패드':
+    case 8:
       return Tablet;
-
-    case '노트북':
+    case 9:
       return Laptop;
-
-    case '전자 음향기기':
+    case 10:
       return Headphones;
-
-    case '기타':
     default:
       return Ellipsis;
   }
 };
-
-const isEtcCategory = (name: string) => name.trim() === '기타';
 
 function StatusBadge({ status }: StatusBadgeComponentProps) {
   const isFound = status === 'found';
@@ -90,14 +76,14 @@ export default function LostListItem({ item, className }: ListItemComponentProps
 
   const navigate = useNavigate();
 
-  const etcCategory = isEtcCategory(item.categoryName);
-  const CategoryIcon = getCategoryIcon(item.categoryName);
+  const isEtc = item.categoryId === ETC_CATEGORY_ID;
+  const CategoryIcon = getCategoryIcon(item.categoryId);
 
   return (
     <li className={`relative rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 ${className}`}>
       <div className="flex gap-2">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-teal-50">
-          {etcCategory && item.imageUrl && !imgError ? (
+          {isEtc && item.imageUrl && !imgError ? (
             <img
               src={item.imageUrl}
               alt={item.categoryName}
