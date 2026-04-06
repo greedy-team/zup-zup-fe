@@ -52,6 +52,7 @@ const Main = () => {
   const startYRef = useRef(0);
   const sheetOpenRef = useRef(false);
   sheetOpenRef.current = sheetOpen;
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedMode !== 'register' && selectedAreaId !== 0) {
@@ -82,7 +83,13 @@ const Main = () => {
 
     const onMouseMove = (e: MouseEvent) => {
       const delta = e.clientY - startYRef.current;
-      setDragOffset(sheetOpenRef.current ? Math.max(0, delta) : Math.min(0, delta));
+      if (sheetOpenRef.current) {
+        setDragOffset(Math.max(0, delta));
+      } else {
+        const sheetHeight = sheetRef.current?.offsetHeight ?? 0;
+        const minOffset = -(sheetHeight - PEEK_HEIGHT);
+        setDragOffset(Math.max(minOffset, Math.min(0, delta)));
+      }
     };
 
     const onMouseUp = (e: MouseEvent) => {
@@ -108,7 +115,13 @@ const Main = () => {
 
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     const delta = e.touches[0].clientY - startYRef.current;
-    setDragOffset(sheetOpenRef.current ? Math.max(0, delta) : Math.min(0, delta));
+    if (sheetOpenRef.current) {
+      setDragOffset(Math.max(0, delta));
+    } else {
+      const sheetHeight = sheetRef.current?.offsetHeight ?? 0;
+      const minOffset = -(sheetHeight - PEEK_HEIGHT);
+      setDragOffset(Math.max(minOffset, Math.min(0, delta)));
+    }
   }, []);
 
   const onTouchEnd = useCallback((e: React.TouchEvent) => {
@@ -271,6 +284,7 @@ const Main = () => {
           {/* 모바일 바텀시트 */}
           {selectedMode === 'find' && (
             <div
+              ref={sheetRef}
               className="absolute bottom-0 left-0 right-0 z-40 flex h-[72%] flex-col rounded-t-2xl bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.12)] md:hidden"
               style={{
                 transform: getSheetTransform(),
