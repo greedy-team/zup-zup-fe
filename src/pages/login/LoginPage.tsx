@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [portalId, setPortalId] = useState('');
   const [portalPassword, setPortalPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const loginMutation = useLoginMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,61 +35,57 @@ export default function LoginPage() {
     );
   };
 
+  const infoItems = [
+    '로그인을 위해선 세종대학교 포털에서 개인정보수집 동의가 되어있어야 합니다.',
+    '로그인 시 대양휴머니티칼리지를 통해 세종대학교 구성원임을 인증합니다.',
+    '사용자의 학번 외의 정보는 절대 저장되지 않습니다.',
+  ];
+
   return (
-    <main className="mx-auto max-w-6xl px-6 pt-16 pb-12 md:pt-24">
-      <section className="overflow-hidden rounded-2xl border shadow-md">
+    <main className="mx-auto max-w-5xl px-6 pt-12 pb-12 md:pt-20">
+      <section className="overflow-hidden rounded-2xl shadow-lg">
         <div className="grid md:grid-cols-2">
-          <aside className="hidden min-h-[520px] items-start justify-start bg-teal-50 px-10 py-12 md:flex">
-            <div className="mx-auto w-full max-w-md">
+          {/* 데스크탑 전용 안내 패널 */}
+          <aside className="hidden min-h-[480px] flex-col items-start justify-center bg-teal-50 px-10 py-12 md:flex">
+            <div className="w-full max-w-sm">
               <img
                 src={LoginLogo}
                 alt="로그인 로고"
-                className="h-16 w-auto max-w-[220px] object-contain opacity-90"
+                className="h-12 w-auto max-w-[180px] object-contain opacity-90"
               />
-              <h2 className="mt-6 text-3xl font-extrabold tracking-tight">로그인 안내</h2>
-              <ol className="mt-6 list-decimal space-y-4 pl-6 text-base leading-relaxed text-gray-700">
-                <li>로그인을 위해선 세종대학교 포털에서 개인정보수집 동의가 되어있어야 합니다.</li>
-                <li>로그인 시 대양휴머니티칼리지를 통해 세종대학교 구성원임을 인증합니다.</li>
-                <li>사용자의 학번 외의 정보는 절대 저장되지 않습니다.</li>
+              <h2 className="mt-6 text-xl font-bold tracking-tight text-gray-800">로그인 안내</h2>
+              <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm leading-relaxed text-gray-500">
+                {infoItems.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
               </ol>
             </div>
           </aside>
 
+          {/* 로그인 폼 */}
           <section className="bg-white px-8 py-10 md:px-10 md:py-12">
-            <div className="mx-auto w-full max-w-md">
-              <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-extrabold">로그인</h1>
-                <button
-                  type="button"
-                  aria-label="로그인 안내 보기"
-                  onClick={() => setIsInfoOpen(true)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700 shadow-sm hover:bg-teal-200 focus:ring-2 focus:ring-teal-400 focus:outline-none md:hidden"
-                  title="안내"
-                >
-                  i
-                </button>
-              </div>
+            <div className="mx-auto w-full max-w-sm">
+              <h1 className="text-xl font-bold text-gray-900">로그인</h1>
+              <p className="mt-1.5 text-sm text-gray-400">세종대학교 포털 계정으로 로그인하세요.</p>
 
-              <p className="mt-3 text-base text-gray-600">세종대학교 포털 계정으로 로그인하세요.</p>
-
-              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+              <form onSubmit={handleSubmit} className="mt-7 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium">학번</label>
+                  <label className="block text-sm font-medium text-gray-700">학번</label>
                   <input
-                    className="mt-2 w-full rounded-lg border p-3 text-base focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:outline-none"
                     value={portalId}
                     onChange={(e) => setPortalId(e.target.value)}
                     inputMode="text"
                     autoComplete="username"
-                    placeholder="예: 230XXXXX"
+                    placeholder="예: 230XXXX"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium">비밀번호</label>
+                  <label className="block text-sm font-medium text-gray-700">비밀번호</label>
                   <input
                     type="password"
-                    className="mt-2 w-full rounded-lg border p-3 text-base focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:outline-none"
                     value={portalPassword}
                     onChange={(e) => setPortalPassword(e.target.value)}
                     autoComplete="current-password"
@@ -98,59 +93,32 @@ export default function LoginPage() {
                   />
                 </div>
 
-                {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
+                {errorMessage && <p className="text-xs text-red-500">{errorMessage}</p>}
 
                 <button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full rounded-lg bg-teal-600 py-3 text-lg font-semibold text-white hover:bg-teal-700 disabled:opacity-60"
+                  className="mt-2 w-full rounded-lg bg-teal-600 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-60"
                 >
                   {loginMutation.isPending ? '로그인 중…' : '로그인'}
                 </button>
               </form>
+
+              {/* 모바일 전용 안내 */}
+              <div className="mt-6 md:hidden">
+                <p className="mb-2 text-xs font-medium text-gray-400">로그인 안내</p>
+                <ol className="list-decimal space-y-1.5 pl-4">
+                  {infoItems.map((item, i) => (
+                    <li key={i} className="text-xs leading-relaxed text-gray-400">
+                      {item}
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
           </section>
         </div>
       </section>
-
-      {isInfoOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 sm:p-6"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setIsInfoOpen(false);
-          }}
-        >
-          <div className="max-h-[88vh] w-full max-w-md overflow-auto rounded-2xl bg-white p-7 shadow-2xl md:max-w-lg md:p-8">
-            <div className="flex items-start justify-between">
-              <h3 className="text-xl font-extrabold tracking-tight md:text-2xl">로그인 안내</h3>
-              <button
-                type="button"
-                aria-label="닫기"
-                onClick={() => setIsInfoOpen(false)}
-                className="ml-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
-              >
-                ×
-              </button>
-            </div>
-
-            <ol className="mt-5 list-decimal space-y-4 pl-6 text-base leading-relaxed text-gray-700 md:text-lg">
-              <li>로그인을 위해선 세종대학교 포털에서 개인정보수집 동의가 되어있어야 합니다.</li>
-              <li>로그인 시 대양휴머니티칼리지를 통해 학생 기본 정보를 불러옵니다. (학번, 이름)</li>
-              <li>사용자의 포털 비밀번호는 절대 저장되지 않습니다.</li>
-            </ol>
-
-            <button
-              type="button"
-              onClick={() => setIsInfoOpen(false)}
-              className="mt-7 w-full rounded-lg bg-teal-600 py-3 text-base font-semibold text-white hover:bg-teal-700 md:text-lg"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
