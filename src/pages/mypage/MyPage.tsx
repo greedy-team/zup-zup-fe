@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSetSelectedMode } from '../../store/hooks/useMainStore';
 import toast from 'react-hot-toast';
 import { Inbox, Bell } from 'lucide-react';
 import { MyPageHeader } from '../../component/mypage/MyPageHeader';
@@ -20,6 +21,8 @@ export const MyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const redirectToLoginKeepPath = useRedirectToLoginKeepPath();
+  const navigate = useNavigate();
+  const setSelectedMode = useSetSelectedMode();
 
   const currentPage = getPageFromSearchParams(searchParams, DEFAULT_PAGE);
 
@@ -97,12 +100,13 @@ export const MyPage = () => {
               <Inbox className="h-6 w-6 text-slate-400" aria-hidden="true" />
             </div>
             <p className="text-sm font-medium text-slate-900">아직 서약한 분실물이 없습니다.</p>
-            <Link
-              to="/"
+            <button
+              type="button"
+              onClick={() => { setSelectedMode('find'); navigate('/'); }}
               className="mt-1 inline-flex items-center justify-center rounded-lg bg-teal-500 px-4 py-2 text-xs font-medium text-white hover:bg-teal-600"
             >
               분실물 찾으러 가기
-            </Link>
+            </button>
           </div>
         )}
 

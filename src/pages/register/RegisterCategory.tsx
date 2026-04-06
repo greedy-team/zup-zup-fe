@@ -15,42 +15,28 @@ import {
 import { COMMON_BUTTON_CLASSNAME } from '../../constants/common';
 import type { RegisterContextType } from '../../types/register';
 
-const getCategoryIcon = (name: string) => {
-  const trimmed = name.trim();
-
-  switch (trimmed) {
-    case '핸드폰':
+const getCategoryIcon = (id: number) => {
+  switch (id) {
+    case 1:
       return Smartphone;
-
-    case '가방':
+    case 2:
       return Briefcase;
-
-    case '결제 카드':
+    case 3:
       return CreditCard;
-
-    case 'ID 카드':
+    case 4:
       return IdCard;
-
-    case '기숙사 카드':
+    case 5:
       return IdCardLanyard;
-
-    case '지갑':
+    case 6:
       return Wallet;
-
-    case '액세서리':
+    case 7:
       return Gem;
-
-    case '패드':
+    case 8:
       return Tablet;
-
-    case '노트북':
+    case 9:
       return Laptop;
-
-    case '전자 음향기기':
-    case '음향기기':
+    case 10:
       return Headphones;
-
-    case '기타':
     default:
       return Ellipsis;
   }
@@ -65,7 +51,7 @@ const RegisterCategory = () => {
       <h2 className="mb-4 text-lg font-normal text-gray-700">카테고리를 선택해주세요</h2>
       <div role="radiogroup" className="mb-4 grid grid-cols-4 gap-4">
         {categories.map((category) => {
-          const Icon = getCategoryIcon(category.name);
+          const Icon = getCategoryIcon(category.id);
           const isSelected = selectedCategory?.id === category.id;
 
           return (

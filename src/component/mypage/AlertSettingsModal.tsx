@@ -52,7 +52,11 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
 
   const handleSave = () => {
     updateAlertSettingsMutation.mutate(
-      { email: emailEdit.email, emailAlertEnabled: emailEdit.emailAlertEnabled, categoryIds: selectedCategoryIds },
+      {
+        email: emailEdit.email,
+        emailAlertEnabled: emailEdit.emailAlertEnabled,
+        categoryIds: selectedCategoryIds,
+      },
       { onSuccess: onClose },
     );
   };
@@ -106,7 +110,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
                       onKeyDown={emailEdit.handleKeyDown}
                       placeholder="example@sju.ac.kr"
                       autoFocus
-                      className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
+                      className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:outline-none ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
                     />
                   ) : (
                     <>
@@ -119,13 +123,13 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
                         placeholder="이메일"
                         disabled={isEmailLoading}
                         autoFocus
-                        className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 disabled:bg-slate-100 disabled:text-slate-400 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
+                        className={`h-10 min-w-0 flex-1 rounded-lg border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:outline-none disabled:bg-slate-100 disabled:text-slate-400 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
                       />
                       <span className="shrink-0 text-sm font-medium text-slate-400">@</span>
                       <select
                         value={emailEdit.selectedDomain}
                         onChange={emailEdit.handleDomainChange}
-                        className={`h-10 rounded-lg border bg-white px-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
+                        className={`h-10 rounded-lg border bg-white px-2 text-sm text-slate-900 focus-visible:ring-2 focus-visible:outline-none ${showEmailError ? 'border-red-400 focus-visible:ring-red-400' : 'border-teal-400 focus-visible:ring-teal-400'}`}
                       >
                         {DOMAIN_OPTIONS.map((d) => (
                           <option key={d} value={d}>
@@ -176,7 +180,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
                 role="switch"
                 aria-checked={emailEdit.emailAlertEnabled}
                 onClick={() => emailEdit.setEmailAlertEnabled((prev) => !prev)}
-                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none ${
                   emailEdit.emailAlertEnabled ? 'bg-teal-500' : 'bg-slate-200'
                 }`}
               >
@@ -202,7 +206,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
             )}
 
             {!isSubLoading && !isCatLoading && categories && (
-              <ul className="grid grid-cols-3 gap-2">
+              <ul className="grid grid-cols-4 gap-1.5">
                 {categories.map((category) => {
                   const isSelected = selectedCategoryIds.includes(category.categoryId);
                   return (
@@ -210,7 +214,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
                       <button
                         type="button"
                         onClick={() => handleToggleCategory(category.categoryId)}
-                        className={`flex w-full flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+                        className={`flex w-full flex-col items-center gap-1 rounded-xl border px-1.5 py-2 text-xs transition focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none ${
                           isSelected
                             ? 'border-teal-400 bg-teal-50 text-teal-700'
                             : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -220,9 +224,9 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
                           src={category.categoryIconUrl}
                           alt=""
                           aria-hidden="true"
-                          className="h-6 w-6 shrink-0 object-contain"
+                          className="h-5 w-5 shrink-0 object-contain"
                         />
-                        <span className="w-full truncate text-center leading-tight">
+                        <span className="w-full truncate text-center text-[11px] leading-tight">
                           {category.categoryName}
                         </span>
                       </button>
@@ -239,7 +243,7 @@ export const AlertSettingsModal = ({ isOpen, onClose }: AlertSettingsModalProps)
             type="button"
             onClick={handleSave}
             disabled={isPending || isLoading || !emailEdit.isEmailValid}
-            className="h-12 w-full rounded-xl bg-teal-500 text-sm font-semibold text-white transition hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-10 w-full rounded-xl bg-teal-500 text-sm font-semibold text-white transition hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? '저장 중...' : '저장'}
           </button>
