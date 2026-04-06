@@ -4,7 +4,7 @@ import InfoBox from '../../../component/register/InfoBox';
 export default function RegisterTourReview() {
   return (
     <div>
-      <h2 className="mb-4 text-xl font-normal text-gray-700">입력 정보를 확인해주세요</h2>
+      <h2 className="mb-4 text-lg font-normal text-gray-700">입력 정보를 확인해주세요</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* 왼쪽 */}
         <div className="space-y-3 md:col-span-1">
@@ -51,7 +51,7 @@ export default function RegisterTourReview() {
             </p>
           </InfoBox>
           <InfoBox title="상세 정보">
-            <p className="whitespace-pre-wrap text-base font-normal text-black">
+            <p className="text-base font-normal whitespace-pre-wrap text-black">
               검정색 안드로이드 핸드폰입니다. 뒷면에 투명 케이스가 있습니다.
             </p>
           </InfoBox>

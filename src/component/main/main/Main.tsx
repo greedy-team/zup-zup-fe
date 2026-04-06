@@ -293,6 +293,7 @@ const Main = () => {
             >
               {/* 드래그 핸들 */}
               <div
+                data-tour="mobile-sheet-handle"
                 className="flex shrink-0 select-none flex-col items-center pb-2 pt-3"
                 style={{ touchAction: 'none', cursor: isDragging ? 'grabbing' : 'grab' }}
                 onMouseDown={(e) => onDragStart(e.clientY)}

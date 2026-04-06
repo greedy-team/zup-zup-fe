@@ -33,10 +33,10 @@ export const STEPS: Step[] = [
     icon: <CirclePlus className="h-10 w-10 text-teal-500" />,
     title: '분실물 목록',
     description:
-      '구역을 클릭하면 분실물 목록이 나타나요.\n분실물을 선택해 퀴즈를 풀고 보관장소를 확인해요.',
+      '회색 바를 위로 올리면 분실물 목록이 나타나요.\n분실물을 선택해 퀴즈를 풀고 보관장소를 확인해요.',
     selector: '[data-tour="lost-list"]',
     placement: 'right',
-    mobileSelector: '[data-tour="mobile-list-btn"]',
+    mobileSelector: '[data-tour="mobile-sheet-handle"]',
     mobilePlacement: 'top',
   },
   {
@@ -154,7 +154,7 @@ export const SECTIONS: OnboardingSection[] = [
         tip: '상단 카테고리 필터를 먼저 설정하면 목록을 더 빠르게 좁힐 수 있어요.',
         selector: '[data-tour="lost-list"]',
         placement: 'right',
-        mobileSelector: '[data-tour="mobile-list-btn"]',
+        mobileSelector: '[data-tour="mobile-sheet-handle"]',
         mobilePlacement: 'top',
       },
       {
